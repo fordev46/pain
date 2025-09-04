@@ -54,43 +54,90 @@
       <span>صحنه / زمین بازی</span>
     </div>
 
-    <!-- Seat grid -->
-    <div class="seat-grid" 
-         [style.--rows]="seatMap.rows" 
-         [style.--columns]="seatMap.columns">
+    <!-- Seat grid with conditional virtual scrolling -->
+    <div #seatMapContainer 
+         class="seat-grid-container"
+         [class.virtual-scroll]="useVirtualScroll">
       
-      <div 
-        *ngFor="let row of seatMap.seats; let rowIndex = index; trackBy: trackByRow" 
-        class="seat-row">
+      <!-- Virtual scrolling mode for large maps -->
+      <div *ngIf="useVirtualScroll" 
+           class="virtual-seat-grid"
+           [style.height.px]="getTotalHeight()"
+           [style.width.px]="getTotalWidth()">
         
-        <!-- Row number -->
-        <div class="row-label">{{ rowIndex + 1 }}</div>
-        
-        <!-- Seats in row -->
         <div 
-          *ngFor="let seat of row; let colIndex = index; trackBy: trackBySeat"
-          class="seat-wrapper">
+          *ngFor="let row of virtualRows; let index = index; trackBy: trackByRow"
+          class="virtual-seat-row"
+          [style.transform]="'translateY(' + getRowOffset(index) + 'px)'">
           
+          <!-- Row number -->
+          <div class="row-label">{{ getVirtualRowIndex(index) + 1 }}</div>
+          
+          <!-- Visible seats in row -->
           <div 
-            [class]="getSeatClass(rowIndex, colIndex)"
-            (click)="onSeatClick(rowIndex, colIndex)"
-            [attr.aria-label]="'صندلی ردیف ' + (rowIndex + 1) + ' شماره ' + (colIndex + 1)"
-            [attr.aria-pressed]="getSeatStatus(rowIndex, colIndex) === SeatStatus.SELECTED"
-            [attr.disabled]="getSeatStatus(rowIndex, colIndex) === SeatStatus.RESERVED ? true : null"
-            tabindex="0"
-            role="button"
-            (keydown.enter)="onSeatClick(rowIndex, colIndex)"
-            (keydown.space)="onSeatClick(rowIndex, colIndex)">
+            *ngFor="let seatInfo of getVisibleSeats(row); trackBy: trackBySeat"
+            class="seat-wrapper"
+            [style.transform]="'translateX(' + (seatInfo.index * 22) + 'px)'">
             
-            <!-- Seat content - can be customized for different seat types -->
-            <span class="seat-number" *ngIf="seatMap.columns <= 50">
-              {{ colIndex + 1 }}
-            </span>
+            <div 
+              [class]="getSeatClass(getVirtualRowIndex(index), seatInfo.index)"
+              (click)="onSeatClick(getVirtualRowIndex(index), seatInfo.index)"
+              [attr.aria-label]="'صندلی ردیف ' + (getVirtualRowIndex(index) + 1) + ' شماره ' + (seatInfo.index + 1)"
+              [attr.aria-pressed]="getSeatStatus(getVirtualRowIndex(index), seatInfo.index) === SeatStatus.SELECTED"
+              [attr.disabled]="getSeatStatus(getVirtualRowIndex(index), seatInfo.index) === SeatStatus.RESERVED ? true : null"
+              tabindex="0"
+              role="button"
+              (keydown.enter)="onSeatClick(getVirtualRowIndex(index), seatInfo.index)"
+              (keydown.space)="onSeatClick(getVirtualRowIndex(index), seatInfo.index)">
+              
+              <!-- No seat numbers in virtual mode for performance -->
+            </div>
           </div>
+          
+          <!-- Row number (right side) -->
+          <div class="row-label right">{{ getVirtualRowIndex(index) + 1 }}</div>
         </div>
+      </div>
+
+      <!-- Standard rendering mode for smaller maps -->
+      <div *ngIf="!useVirtualScroll" 
+           class="standard-seat-grid" 
+           [style.--rows]="seatMap.rows" 
+           [style.--columns]="seatMap.columns">
         
-        <!-- Row number (right side) -->
-        <div class="row-label">{{ rowIndex + 1 }}</div>
+        <div 
+          *ngFor="let row of seatMap.seats; let rowIndex = index; trackBy: trackByRow" 
+          class="seat-row">
+          
+          <!-- Row number -->
+          <div class="row-label">{{ rowIndex + 1 }}</div>
+          
+          <!-- Seats in row -->
+          <div 
+            *ngFor="let seat of row; let colIndex = index; trackBy: trackBySeat"
+            class="seat-wrapper">
+            
+            <div 
+              [class]="getSeatClass(rowIndex, colIndex)"
+              (click)="onSeatClick(rowIndex, colIndex)"
+              [attr.aria-label]="'صندلی ردیف ' + (rowIndex + 1) + ' شماره ' + (colIndex + 1)"
+              [attr.aria-pressed]="getSeatStatus(rowIndex, colIndex) === SeatStatus.SELECTED"
+              [attr.disabled]="getSeatStatus(rowIndex, colIndex) === SeatStatus.RESERVED ? true : null"
+              tabindex="0"
+              role="button"
+              (keydown.enter)="onSeatClick(rowIndex, colIndex)"
+              (keydown.space)="onSeatClick(rowIndex, colIndex)">
+              
+              <!-- Seat content - can be customized for different seat types -->
+              <span class="seat-number" *ngIf="seatMap.columns <= 50">
+                {{ colIndex + 1 }}
+              </span>
+            </div>
+          </div>
+          
+          <!-- Row number (right side) -->
+          <div class="row-label">{{ rowIndex + 1 }}</div>
+        </div>
       </div>
     </div>
 

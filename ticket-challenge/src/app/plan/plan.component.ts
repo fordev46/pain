@@ -1,7 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, combineLatest, fromEvent } from 'rxjs';
+import { debounceTime, throttleTime } from 'rxjs/operators';
 import { MapService } from '../services/map.service';
+import { VirtualScrollService } from '../services/virtual-scroll.service';
 import { SeatMap, SeatStatus, Coordinates } from '../models';
 
 /**
@@ -12,9 +14,13 @@ import { SeatMap, SeatStatus, Coordinates } from '../models';
 @Component({
   selector: 'app-plan',
   templateUrl: './plan.component.html',
-  styleUrls: ['./plan.component.scss']
+  styleUrls: ['./plan.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PlanComponent implements OnInit, OnDestroy {
+export class PlanComponent implements OnInit, OnDestroy, AfterViewInit {
+  // ViewChild references
+  @ViewChild('seatMapContainer', { static: false }) seatMapContainer!: ElementRef<HTMLDivElement>;
+  
   // Component state
   seatMap: SeatMap | null = null;
   loading = false;
@@ -23,6 +29,12 @@ export class PlanComponent implements OnInit, OnDestroy {
   
   // Selected seats tracking
   selectedSeats: Set<string> = new Set();
+  
+  // Virtual scrolling state
+  useVirtualScroll = false;
+  visibleRows: {start: number, end: number} = {start: 0, end: 0};
+  visibleCols: {start: number, end: number} = {start: 0, end: 0};
+  virtualRows: number[][] = [];
   
   // Component lifecycle
   private destroy$ = new Subject<void>();
@@ -33,7 +45,9 @@ export class PlanComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private mapService: MapService
+    private mapService: MapService,
+    private virtualScrollService: VirtualScrollService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -50,7 +64,13 @@ export class PlanComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngAfterViewInit(): void {
+    // Setup virtual scrolling after view is initialized
+    this.setupVirtualScrolling();
+  }
+
   ngOnDestroy(): void {
+    this.virtualScrollService.reset();
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -70,12 +90,24 @@ export class PlanComponent implements OnInit, OnDestroy {
       next: (seatMap: SeatMap) => {
         this.seatMap = seatMap;
         this.loading = false;
-        console.log(`Loaded seat map: ${seatMap.rows}x${seatMap.columns} (${seatMap.rows * seatMap.columns} seats)`);
+        
+        // Determine if virtual scrolling should be used
+        this.useVirtualScroll = this.virtualScrollService.shouldUseVirtualScroll(seatMap.rows, seatMap.columns);
+        
+        if (this.useVirtualScroll) {
+          console.log(`Large seat map detected: ${seatMap.rows}x${seatMap.columns} (${seatMap.rows * seatMap.columns} seats) - Using virtual scrolling`);
+          this.initializeVirtualScrolling();
+        } else {
+          console.log(`Standard seat map: ${seatMap.rows}x${seatMap.columns} (${seatMap.rows * seatMap.columns} seats) - Using regular rendering`);
+        }
+        
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error loading seat map:', err);
         this.error = 'خطا در بارگذاری نقشه صندلی‌ها. لطفا دوباره تلاش کنید.';
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -206,10 +238,171 @@ export class PlanComponent implements OnInit, OnDestroy {
   /**
    * TrackBy function for seat columns
    * @param index Column index
-   * @param seat Seat value
+   * @param seat Seat value or seat info object
    * @returns Unique identifier for the seat
    */
-  trackBySeat(index: number, seat: number): number {
-    return index;
+  trackBySeat(index: number, seat: any): number {
+    return typeof seat === 'object' ? seat.index : index;
+  }
+
+  /**
+   * Sets up virtual scrolling event listeners and configuration
+   */
+  private setupVirtualScrolling(): void {
+    if (!this.seatMapContainer) return;
+
+    // Setup scroll event listener with throttling for performance
+    fromEvent(this.seatMapContainer.nativeElement, 'scroll')
+      .pipe(
+        throttleTime(16), // ~60fps
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.updateVirtualScrollViewport();
+      });
+
+    // Setup resize event listener
+    fromEvent(window, 'resize')
+      .pipe(
+        debounceTime(250),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.updateVirtualScrollViewport();
+      });
+
+    // Subscribe to visible range changes
+    combineLatest([
+      this.virtualScrollService.visibleRows$,
+      this.virtualScrollService.visibleCols$
+    ]).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(([visibleRows, visibleCols]) => {
+      this.visibleRows = visibleRows;
+      this.visibleCols = visibleCols;
+      this.updateVirtualRows();
+      this.cdr.detectChanges();
+    });
+  }
+
+  /**
+   * Initializes virtual scrolling for large maps
+   */
+  private initializeVirtualScrolling(): void {
+    if (!this.seatMap || !this.seatMapContainer) return;
+
+    // Update item size based on current screen size
+    const itemSize = this.getOptimalSeatSize();
+    this.virtualScrollService.updateItemSize(itemSize);
+
+    // Initial viewport update
+    setTimeout(() => {
+      this.updateVirtualScrollViewport();
+    }, 0);
+  }
+
+  /**
+   * Updates the virtual scroll viewport dimensions and position
+   */
+  private updateVirtualScrollViewport(): void {
+    if (!this.seatMapContainer) return;
+
+    const container = this.seatMapContainer.nativeElement;
+    this.virtualScrollService.updateViewport({
+      width: container.clientWidth,
+      height: container.clientHeight,
+      scrollTop: container.scrollTop,
+      scrollLeft: container.scrollLeft
+    });
+  }
+
+  /**
+   * Updates the virtual rows array with only visible rows
+   */
+  private updateVirtualRows(): void {
+    if (!this.seatMap || !this.useVirtualScroll) return;
+
+    this.virtualRows = [];
+    const { start, end } = this.visibleRows;
+    
+    for (let i = start; i < Math.min(end, this.seatMap.rows); i++) {
+      if (this.seatMap.seats[i]) {
+        this.virtualRows.push(this.seatMap.seats[i]);
+      }
+    }
+  }
+
+  /**
+   * Gets optimal seat size based on screen size and map dimensions
+   */
+  private getOptimalSeatSize(): {width: number, height: number, marginX: number, marginY: number} {
+    if (!this.seatMap) {
+      return { width: 20, height: 20, marginX: 2, marginY: 2 };
+    }
+
+    const screenWidth = window.innerWidth;
+    const totalSeats = this.seatMap.rows * this.seatMap.columns;
+
+    // Optimize seat size based on map size and screen width
+    if (totalSeats > 50000 || screenWidth < 768) {
+      return { width: 12, height: 12, marginX: 1, marginY: 1 };
+    } else if (totalSeats > 20000) {
+      return { width: 16, height: 16, marginX: 1, marginY: 1 };
+    } else {
+      return { width: 20, height: 20, marginX: 2, marginY: 2 };
+    }
+  }
+
+  /**
+   * Gets the total height for virtual scrolling container
+   */
+  getTotalHeight(): number {
+    if (!this.seatMap || !this.useVirtualScroll) return 0;
+    return this.virtualScrollService.getTotalHeight(this.seatMap.rows);
+  }
+
+  /**
+   * Gets the total width for virtual scrolling container
+   */
+  getTotalWidth(): number {
+    if (!this.seatMap || !this.useVirtualScroll) return 0;
+    return this.virtualScrollService.getTotalWidth(this.seatMap.columns);
+  }
+
+  /**
+   * Gets the offset for a virtual row
+   */
+  getRowOffset(index: number): number {
+    return this.virtualScrollService.getRowOffset(this.visibleRows.start + index);
+  }
+
+  /**
+   * Gets visible row index adjusted for virtual scrolling
+   */
+  getVirtualRowIndex(index: number): number {
+    return this.visibleRows.start + index;
+  }
+
+  /**
+   * Checks if a column is visible in virtual scrolling mode
+   */
+  isColumnVisible(colIndex: number): boolean {
+    if (!this.useVirtualScroll) return true;
+    return colIndex >= this.visibleCols.start && colIndex < this.visibleCols.end;
+  }
+
+  /**
+   * Gets visible seats in a row for virtual scrolling
+   */
+  getVisibleSeats(row: number[]): {seat: number, index: number}[] {
+    if (!this.useVirtualScroll) {
+      return row.map((seat, index) => ({seat, index}));
+    }
+
+    const visibleSeats: {seat: number, index: number}[] = [];
+    for (let i = this.visibleCols.start; i < Math.min(this.visibleCols.end, row.length); i++) {
+      visibleSeats.push({seat: row[i], index: i});
+    }
+    return visibleSeats;
   }
 }
