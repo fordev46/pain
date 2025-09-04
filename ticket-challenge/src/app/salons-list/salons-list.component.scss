@@ -3,9 +3,28 @@
     width: 100%;
     min-height: 100vh;
     background: #242639;
-    padding: 1rem;
+    padding: 0.75rem;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     direction: rtl; /* Right-to-left for Persian text */
+    position: relative;
+    overflow-x: hidden;
+    
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        
+        /* Prevent zoom on double tap */
+        touch-action: manipulation;
+        
+        /* Improve scrolling on iOS */
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    @media (max-width: 480px) {
+        padding: 0.25rem;
+    }
 }
 
 /* Header with title and random button */
@@ -154,6 +173,11 @@
     min-height: 80px;
     position: relative;
     overflow: hidden;
+    
+    /* Touch-friendly optimizations */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 
     &:hover {
         transform: translateY(-2px);
@@ -163,6 +187,7 @@
 
     &:active {
         transform: translateY(0);
+        background: #f5f5f5;
     }
 
     &:focus {
@@ -179,6 +204,38 @@
         right: 0;
         height: 4px;
         background: linear-gradient(90deg, #4caf50, #2196f3);
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+        padding: 1.25rem;
+        min-height: 70px;
+        border-radius: 6px;
+        
+        /* More prominent touch feedback */
+        &:active {
+            transform: scale(0.98);
+            background: #f0f0f0;
+        }
+        
+        /* Disable hover effects on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            &:hover {
+                transform: none;
+                box-shadow: none;
+                border-color: transparent;
+            }
+        }
+    }
+    
+    @media (max-width: 480px) {
+        padding: 1rem;
+        min-height: 60px;
+        border-radius: 4px;
+        
+        &::before {
+            height: 3px;
+        }
     }
 }
 

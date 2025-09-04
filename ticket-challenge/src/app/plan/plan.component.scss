@@ -4,10 +4,30 @@
   min-height: 100vh;
   background: #242639;
   color: #fff;
-  padding: 1rem;
+  padding: 0.75rem;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   direction: rtl;
-  overflow-x: auto;
+  overflow-x: hidden;
+  position: relative;
+  
+  /* Mobile-specific optimizations */
+  @media (max-width: 768px) {
+    padding: 0.5rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    
+    /* Prevent zoom on double tap */
+    touch-action: manipulation;
+    
+    /* Improve scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Very small screens */
+  @media (max-width: 480px) {
+    padding: 0.25rem;
+  }
 }
 
 /* Header with navigation and stadium info */
@@ -15,14 +35,47 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.75rem;
   position: sticky;
   top: 0;
   background: #242639;
   z-index: 100;
-  padding: 1rem 0;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #333;
+  
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0;
+    gap: 0.5rem;
+    flex-direction: column;
+    align-items: stretch;
+    
+    /* Stack items vertically on mobile */
+    .back-btn {
+      align-self: flex-start;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stadium-info {
+      order: 2;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .legend {
+      order: 3;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0;
+  }
 }
 
 .back-btn {
@@ -194,6 +247,50 @@
   background: #1a1a2e;
   padding: 1rem;
   position: relative;
+  flex: 1;
+  
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    height: 65vh;
+    padding: 0.75rem;
+    border-radius: 6px;
+    
+    /* Improve touch scrolling */
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+    
+    /* Larger scrollbars on mobile for easier grabbing */
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: #242639;
+      border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: #666;
+      border-radius: 4px;
+      
+      &:hover {
+        background: #777;
+      }
+    }
+  }
+  
+  @media (max-width: 480px) {
+    height: 60vh;
+    padding: 0.5rem;
+    border-radius: 4px;
+    
+    /* Even larger scrollbars for small screens */
+    &::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+  }
 
   &.virtual-scroll {
     /* Optimized scrolling for large maps */
@@ -295,6 +392,35 @@
   font-weight: bold;
   position: relative;
   user-select: none;
+  
+  /* Touch-friendly optimizations */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  
+  /* Mobile-specific seat sizing */
+  @media (max-width: 768px) {
+    width: 24px;
+    height: 24px;
+    margin: 1.5px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    
+    /* Larger touch targets for easier interaction */
+    min-width: 24px;
+    min-height: 24px;
+  }
+  
+  @media (max-width: 480px) {
+    width: 28px;
+    height: 28px;
+    margin: 2px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    
+    /* Even larger touch targets for small screens */
+    min-width: 28px;
+    min-height: 28px;
+  }
 
   /* Virtual scrolling mode optimizations */
   .virtual-scroll & {
@@ -311,6 +437,21 @@
 
     &.selected {
       transform: none;
+    }
+    
+    /* Mobile virtual scroll adjustments */
+    @media (max-width: 768px) {
+      width: 16px;
+      height: 16px;
+      margin: 1px;
+      border-radius: 3px;
+    }
+    
+    @media (max-width: 480px) {
+      width: 18px;
+      height: 18px;
+      margin: 1.5px;
+      border-radius: 4px;
     }
   }
 
@@ -550,23 +691,60 @@
   }
 }
 
-/* Responsive breakpoints */
+/* Enhanced responsive breakpoints with mobile-first improvements */
+
+/* Small tablets and large phones in landscape */
+@media (min-width: 576px) {
+  .plan-container {
+    padding: 1rem;
+  }
+  
+  .header {
+    flex-direction: row;
+    align-items: center;
+    
+    .stadium-info {
+      order: 0;
+      margin-bottom: 0;
+    }
+    
+    .legend {
+      order: 0;
+    }
+  }
+  
+  .seat-grid-container {
+    height: 68vh;
+  }
+}
+
+/* Tablets */
 @media (min-width: 768px) {
   .plan-container {
     padding: 2rem;
   }
 
   .header {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
+    flex-direction: row;
+    
+    .back-btn {
+      margin-bottom: 0;
+    }
   }
 
   .stadium-info .stadium-name {
     font-size: 1.5rem;
   }
 
+  .seat-grid-container {
+    height: 70vh;
+    padding: 1rem;
+  }
+
   .seat {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     margin: 1.5px;
     border-radius: 4px;
     font-size: 0.7rem;
@@ -575,7 +753,7 @@
   .seat-row {
     gap: 3px;
     margin-bottom: 3px;
-    min-height: 28px;
+    min-height: 26px;
 
     .row-label {
       min-width: 35px;
