@@ -1,0 +1,495 @@
+/* Mobile-first responsive design for seat map visualization */
+.plan-container {
+  width: 100%;
+  min-height: 100vh;
+  background: #242639;
+  color: #fff;
+  padding: 1rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  direction: rtl;
+  overflow-x: auto;
+}
+
+/* Header with navigation and stadium info */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  position: sticky;
+  top: 0;
+  background: #242639;
+  z-index: 100;
+  padding: 1rem 0;
+}
+
+.back-btn {
+  background: #2196f3;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  min-height: 44px;
+
+  &:hover {
+    background: #1976d2;
+  }
+
+  &:focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+}
+
+.stadium-info {
+  flex: 1;
+  text-align: center;
+
+  .stadium-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0 0 0.25rem 0;
+  }
+
+  .stadium-id {
+    font-size: 0.8rem;
+    color: #ccc;
+    font-family: monospace;
+  }
+}
+
+.legend {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+
+    .legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
+      border: 1px solid #333;
+
+      &.available {
+        background: #4caf50;
+      }
+
+      &.reserved {
+        background: #f44336;
+      }
+
+      &.selected {
+        background: #ff9800;
+      }
+    }
+  }
+}
+
+/* Loading and error states */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #333;
+    border-top: 4px solid #4caf50;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  text-align: center;
+
+  p {
+    color: #ff6b6b;
+    margin-bottom: 1rem;
+  }
+}
+
+.retry-btn {
+  background: #2196f3;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  min-height: 44px;
+
+  &:hover {
+    background: #1976d2;
+  }
+}
+
+/* Seat map wrapper */
+.seat-map-wrapper {
+  width: 100%;
+  max-width: 100%;
+}
+
+.map-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #ccc;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.stage {
+  background: linear-gradient(90deg, #333, #555, #333);
+  text-align: center;
+  padding: 1rem;
+  margin: 0 auto 2rem auto;
+  border-radius: 8px;
+  max-width: 80%;
+  border: 2px solid #666;
+
+  span {
+    font-weight: bold;
+    color: #fff;
+  }
+}
+
+/* Seat grid - optimized for performance */
+.seat-grid {
+  width: 100%;
+  overflow: auto;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #1a1a2e;
+  padding: 1rem;
+  min-width: fit-content;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin-bottom: 2px;
+  min-height: 24px;
+
+  .row-label {
+    min-width: 30px;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #999;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.seat-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Seat styling with performance optimizations */
+.seat {
+  width: 20px;
+  height: 20px;
+  margin: 1px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: bold;
+  position: relative;
+  user-select: none;
+
+  &.available {
+    background: #4caf50;
+    border-color: #45a049;
+
+    &:hover {
+      background: #66bb6a;
+      transform: scale(1.1);
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+    }
+
+    &:active {
+      transform: scale(1.05);
+    }
+  }
+
+  &.reserved {
+    background: #f44336;
+    border-color: #d32f2f;
+    cursor: not-allowed;
+    opacity: 0.7;
+
+    &:hover {
+      background: #f44336;
+      transform: none;
+    }
+  }
+
+  &.selected {
+    background: #ff9800;
+    border-color: #f57c00;
+    transform: scale(1.1);
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.4);
+
+    &:hover {
+      background: #ffb74d;
+    }
+  }
+
+  &:focus {
+    outline: 2px solid #2196f3;
+    outline-offset: 1px;
+    z-index: 15;
+  }
+
+  .seat-number {
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Selection summary */
+.selection-summary {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #1a1a2e;
+  border-radius: 8px;
+  border: 1px solid #333;
+
+  h3 {
+    margin: 0 0 1rem 0;
+    color: #ff9800;
+    font-size: 1rem;
+  }
+
+  .selected-seats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    .selected-coord {
+      background: #ff9800;
+      color: #fff;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-family: monospace;
+    }
+  }
+
+  .clear-btn {
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    min-height: 40px;
+
+    &:hover {
+      background: #d32f2f;
+    }
+  }
+}
+
+/* Responsive breakpoints */
+@media (min-width: 768px) {
+  .plan-container {
+    padding: 2rem;
+  }
+
+  .header {
+    margin-bottom: 3rem;
+  }
+
+  .stadium-info .stadium-name {
+    font-size: 1.5rem;
+  }
+
+  .seat {
+    width: 24px;
+    height: 24px;
+    margin: 1.5px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+  }
+
+  .seat-row {
+    gap: 3px;
+    margin-bottom: 3px;
+    min-height: 28px;
+
+    .row-label {
+      min-width: 35px;
+      font-size: 0.8rem;
+    }
+  }
+
+  .legend {
+    gap: 1.5rem;
+
+    .legend-item {
+      font-size: 0.9rem;
+
+      .legend-color {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .plan-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+
+  .seat {
+    width: 28px;
+    height: 28px;
+    margin: 2px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+  }
+
+  .seat-row {
+    gap: 4px;
+    margin-bottom: 4px;
+    min-height: 32px;
+
+    .row-label {
+      min-width: 40px;
+      font-size: 0.9rem;
+    }
+  }
+
+  .stage {
+    max-width: 60%;
+  }
+}
+
+/* Large maps optimization */
+@media (min-width: 1440px) {
+  .seat {
+    width: 16px;
+    height: 16px;
+    margin: 1px;
+    border-radius: 2px;
+    font-size: 0.5rem;
+
+    .seat-number {
+      display: none; /* Hide numbers on large maps for performance */
+    }
+  }
+
+  .seat-row {
+    gap: 1px;
+    margin-bottom: 1px;
+    min-height: 18px;
+
+    .row-label {
+      min-width: 25px;
+      font-size: 0.7rem;
+    }
+  }
+}
+
+/* Performance optimizations for very large maps */
+@supports (contain: layout style paint) {
+  .seat-grid {
+    contain: layout style paint;
+  }
+
+  .seat-row {
+    contain: layout style;
+  }
+
+  .seat {
+    contain: layout style paint;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .seat {
+    border-width: 2px;
+
+    &.available {
+      background: #00ff00;
+      border-color: #000;
+    }
+
+    &.reserved {
+      background: #ff0000;
+      border-color: #000;
+    }
+
+    &.selected {
+      background: #ffff00;
+      border-color: #000;
+      color: #000;
+    }
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .seat {
+    transition: none;
+
+    &:hover,
+    &.selected {
+      transform: none;
+    }
+  }
+
+  .spinner {
+    animation: none;
+  }
+}

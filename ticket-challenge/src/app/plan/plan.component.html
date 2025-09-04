@@ -1,1 +1,114 @@
-<!-- You should implement the UI just like the plan-desing file -->
+<div class="plan-container">
+  <!-- Header with navigation and stadium info -->
+  <header class="header">
+    <button 
+      class="back-btn" 
+      (click)="goBackToStadiums()"
+      title="بازگشت به لیست سالن‌ها">
+      ← بازگشت
+    </button>
+    
+    <div class="stadium-info" *ngIf="seatMap">
+      <h1 class="stadium-name">{{ seatMap.name || 'نقشه سالن' }}</h1>
+      <span class="stadium-id">{{ seatMap.id }}</span>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color available"></div>
+        <span>آزاد</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color reserved"></div>
+        <span>رزرو شده</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color selected"></div>
+        <span>انتخاب شده</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Loading state -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>در حال بارگذاری نقشه صندلی‌ها...</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="error && !loading" class="error">
+    <p>{{ error }}</p>
+    <button class="retry-btn" (click)="retry()">تلاش مجدد</button>
+  </div>
+
+  <!-- Seat map visualization -->
+  <div *ngIf="!loading && !error && seatMap" class="seat-map-wrapper">
+    <!-- Map info -->
+    <div class="map-info">
+      <span>تعداد صندلی‌ها: {{ seatMap.rows * seatMap.columns }}</span>
+      <span *ngIf="getSelectedSeatCount() > 0">انتخاب شده: {{ getSelectedSeatCount() }}</span>
+    </div>
+
+    <!-- Stage/Screen indicator -->
+    <div class="stage">
+      <span>صحنه / زمین بازی</span>
+    </div>
+
+    <!-- Seat grid -->
+    <div class="seat-grid" 
+         [style.--rows]="seatMap.rows" 
+         [style.--columns]="seatMap.columns">
+      
+      <div 
+        *ngFor="let row of seatMap.seats; let rowIndex = index; trackBy: trackByRow" 
+        class="seat-row">
+        
+        <!-- Row number -->
+        <div class="row-label">{{ rowIndex + 1 }}</div>
+        
+        <!-- Seats in row -->
+        <div 
+          *ngFor="let seat of row; let colIndex = index; trackBy: trackBySeat"
+          class="seat-wrapper">
+          
+          <div 
+            [class]="getSeatClass(rowIndex, colIndex)"
+            (click)="onSeatClick(rowIndex, colIndex)"
+            [attr.aria-label]="'صندلی ردیف ' + (rowIndex + 1) + ' شماره ' + (colIndex + 1)"
+            [attr.aria-pressed]="getSeatStatus(rowIndex, colIndex) === SeatStatus.SELECTED"
+            [attr.disabled]="getSeatStatus(rowIndex, colIndex) === SeatStatus.RESERVED ? true : null"
+            tabindex="0"
+            role="button"
+            (keydown.enter)="onSeatClick(rowIndex, colIndex)"
+            (keydown.space)="onSeatClick(rowIndex, colIndex)">
+            
+            <!-- Seat content - can be customized for different seat types -->
+            <span class="seat-number" *ngIf="seatMap.columns <= 50">
+              {{ colIndex + 1 }}
+            </span>
+          </div>
+        </div>
+        
+        <!-- Row number (right side) -->
+        <div class="row-label">{{ rowIndex + 1 }}</div>
+      </div>
+    </div>
+
+    <!-- Selection summary -->
+    <div *ngIf="getSelectedSeatCount() > 0" class="selection-summary">
+      <h3>صندلی‌های انتخاب شده:</h3>
+      <div class="selected-seats">
+        <span *ngFor="let coord of getSelectedCoordinates()" class="selected-coord">
+          ({{ coord.x + 1 }}, {{ coord.y + 1 }})
+        </span>
+      </div>
+      <button class="clear-btn" (click)="clearSelection()">پاک کردن انتخاب‌ها</button>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!loading && !error && !seatMap" class="empty-state">
+    <p>نقشه‌ای یافت نشد</p>
+    <button class="back-btn" (click)="goBackToStadiums()">بازگشت به لیست سالن‌ها</button>
+  </div>
+</div>
