@@ -4,7 +4,7 @@ import { Subject, takeUntil, combineLatest, fromEvent } from 'rxjs';
 import { debounceTime, throttleTime } from 'rxjs/operators';
 import { MapService } from '../services/map.service';
 import { VirtualScrollService } from '../services/virtual-scroll.service';
-import { SeatMap, SeatStatus, Coordinates } from '../models';
+import { SeatMap, SeatStatus, Coordinates, TicketPurchaseRequest, TicketPurchaseResponse } from '../models';
 
 /**
  * Component responsible for displaying and managing the stadium seat map
@@ -29,6 +29,11 @@ export class PlanComponent implements OnInit, OnDestroy, AfterViewInit {
   
   // Selected seats tracking
   selectedSeats: Set<string> = new Set();
+  
+  // Purchase state
+  purchasing = false;
+  purchaseError: string | null = null;
+  purchaseSuccess: string | null = null;
   
   // Virtual scrolling state
   useVirtualScroll = false;
@@ -222,7 +227,125 @@ export class PlanComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   clearSelection(): void {
     this.selectedSeats.clear();
+    this.purchaseError = null;
+    this.purchaseSuccess = null;
     console.log('All seat selections cleared');
+  }
+
+  /**
+   * Purchases tickets for all selected seats
+   * Implements the POST /map/<map_id>/ticket requirement
+   */
+  purchaseSelectedSeats(): void {
+    if (!this.mapId || this.selectedSeats.size === 0 || this.purchasing) {
+      return;
+    }
+
+    this.purchasing = true;
+    this.purchaseError = null;
+    this.purchaseSuccess = null;
+    this.cdr.detectChanges();
+
+    // Convert selected seats to coordinate array
+    const selectedCoordinates = this.getSelectedCoordinates();
+    const totalSeats = selectedCoordinates.length;
+    let completedPurchases = 0;
+    let successfulPurchases = 0;
+    let failedPurchases: string[] = [];
+
+    console.log(`Starting purchase process for ${totalSeats} seat(s)`);
+
+    // Purchase each seat individually (as per API specification)
+    selectedCoordinates.forEach((coord, index) => {
+      const request: TicketPurchaseRequest = {
+        x: coord.x,
+        y: coord.y
+      };
+
+      console.log(`Purchasing seat at coordinates (${coord.x}, ${coord.y})`);
+
+      this.mapService.purchaseTicket(this.mapId!, request).pipe(
+        takeUntil(this.destroy$)
+      ).subscribe({
+        next: (response: TicketPurchaseResponse) => {
+          completedPurchases++;
+          
+          if (response.success) {
+            successfulPurchases++;
+            console.log(`Purchase successful for seat (${coord.x}, ${coord.y}):`, response);
+            
+            // Update seat status to reserved
+            if (this.seatMap && this.seatMap.seats[coord.y] && this.seatMap.seats[coord.y][coord.x] !== undefined) {
+              this.seatMap.seats[coord.y][coord.x] = SeatStatus.RESERVED;
+            }
+            
+            // Remove from selection
+            const seatKey = `${coord.y}-${coord.x}`;
+            this.selectedSeats.delete(seatKey);
+          } else {
+            failedPurchases.push(`(${coord.x + 1}, ${coord.y + 1}): ${response.message}`);
+            console.log(`Purchase failed for seat (${coord.x}, ${coord.y}):`, response.message);
+          }
+
+          // Check if all purchases completed
+          if (completedPurchases === totalSeats) {
+            this.handlePurchaseCompletion(successfulPurchases, failedPurchases);
+          }
+        },
+        error: (err) => {
+          completedPurchases++;
+          failedPurchases.push(`(${coord.x + 1}, ${coord.y + 1}): خطا در اتصال به سرور`);
+          console.error(`Error purchasing seat (${coord.x}, ${coord.y}):`, err);
+
+          // Check if all purchases completed
+          if (completedPurchases === totalSeats) {
+            this.handlePurchaseCompletion(successfulPurchases, failedPurchases);
+          }
+        }
+      });
+    });
+  }
+
+  /**
+   * Handles the completion of purchase process
+   * @param successCount Number of successful purchases
+   * @param failures Array of failure messages
+   */
+  private handlePurchaseCompletion(successCount: number, failures: string[]): void {
+    this.purchasing = false;
+
+    if (successCount > 0 && failures.length === 0) {
+      // All purchases successful
+      this.purchaseSuccess = `تمام ${successCount} صندلی با موفقیت خریداری شد!`;
+      this.purchaseError = null;
+    } else if (successCount > 0 && failures.length > 0) {
+      // Partial success
+      this.purchaseSuccess = `${successCount} صندلی با موفقیت خریداری شد.`;
+      this.purchaseError = `خطا در خرید ${failures.length} صندلی: ${failures.join(', ')}`;
+    } else {
+      // All purchases failed
+      this.purchaseSuccess = null;
+      this.purchaseError = `خطا در خرید تمام صندلی‌ها: ${failures.join(', ')}`;
+    }
+
+    // Auto-hide success message after 5 seconds
+    if (this.purchaseSuccess) {
+      setTimeout(() => {
+        this.purchaseSuccess = null;
+        this.cdr.detectChanges();
+      }, 5000);
+    }
+
+    this.cdr.detectChanges();
+    console.log(`Purchase process completed: ${successCount} successful, ${failures.length} failed`);
+  }
+
+  /**
+   * Dismisses purchase messages
+   */
+  dismissPurchaseMessages(): void {
+    this.purchaseError = null;
+    this.purchaseSuccess = null;
   }
 
   /**

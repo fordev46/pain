@@ -141,7 +141,22 @@
       </div>
     </div>
 
-    <!-- Selection summary -->
+    <!-- Purchase messages -->
+    <div *ngIf="purchaseSuccess" class="purchase-message success">
+      <div class="message-content">
+        <span class="message-text">{{ purchaseSuccess }}</span>
+        <button class="close-btn" (click)="dismissPurchaseMessages()" title="بستن پیام">×</button>
+      </div>
+    </div>
+
+    <div *ngIf="purchaseError" class="purchase-message error">
+      <div class="message-content">
+        <span class="message-text">{{ purchaseError }}</span>
+        <button class="close-btn" (click)="dismissPurchaseMessages()" title="بستن پیام">×</button>
+      </div>
+    </div>
+
+    <!-- Selection summary and purchase -->
     <div *ngIf="getSelectedSeatCount() > 0" class="selection-summary">
       <h3>صندلی‌های انتخاب شده:</h3>
       <div class="selected-seats">
@@ -149,7 +164,28 @@
           ({{ coord.x + 1 }}, {{ coord.y + 1 }})
         </span>
       </div>
-      <button class="clear-btn" (click)="clearSelection()">پاک کردن انتخاب‌ها</button>
+      
+      <div class="action-buttons">
+        <button 
+          class="purchase-btn" 
+          (click)="purchaseSelectedSeats()"
+          [disabled]="purchasing"
+          [attr.aria-label]="'خرید ' + getSelectedSeatCount() + ' صندلی انتخاب شده'">
+          <span *ngIf="!purchasing">خرید بلیت ({{ getSelectedSeatCount() }} صندلی)</span>
+          <span *ngIf="purchasing" class="purchasing-text">
+            <span class="spinner-small"></span>
+            در حال خرید...
+          </span>
+        </button>
+        
+        <button 
+          class="clear-btn" 
+          (click)="clearSelection()"
+          [disabled]="purchasing"
+          title="پاک کردن تمام انتخاب‌ها">
+          پاک کردن انتخاب‌ها
+        </button>
+      </div>
     </div>
   </div>
 
