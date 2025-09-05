@@ -1,5 +1,113 @@
 /* Global styles for the ticket booking application */
 
+/* IRANSansX Font Family Definitions */
+@font-face {
+  font-family: 'IRANSansX';
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+  src: url('./assets/fonts/IRANSansX-UltraLight.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url('./assets/fonts/IRANSansX-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('./assets/fonts/IRANSansX-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./assets/fonts/IRANSansX-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('./assets/fonts/IRANSansX-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./assets/fonts/IRANSansX-DemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./assets/fonts/IRANSansX-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('./assets/fonts/IRANSansX-ExtraBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('./assets/fonts/IRANSansX-Heavy.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  font-style: normal;
+  font-weight: 950;
+  font-display: swap;
+  src: url('./assets/fonts/IRANSansX-ExtraBlack.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IRANSansX';
+  font-style: normal;
+  font-weight: 1000;
+  font-display: swap;
+  src: url('./assets/fonts/IRANSansX-Black.woff2') format('woff2');
+}
+
+/* CSS Custom Properties for Font Management */
+:root {
+  --font-family-primary: 'IRANSansX', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-family-monospace: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* Font weights */
+  --font-weight-ultra-light: 100;
+  --font-weight-thin: 200;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-demi-bold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extra-bold: 800;
+  --font-weight-heavy: 900;
+  --font-weight-extra-black: 950;
+  --font-weight-black: 1000;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -15,13 +123,14 @@ html {
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-family-primary);
   line-height: 1.4;
   color: #333;
   background: #242639;
   overflow-x: hidden; /* Prevent horizontal scroll */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-weight: var(--font-weight-regular);
 }
 
 /* Responsive font sizes */

@@ -4,7 +4,7 @@
   min-height: 100vh;
   background: #242639;
   padding: 0.75rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-family-primary);
   direction: rtl; /* Right-to-left for Persian text */
   position: relative;
   overflow-x: hidden;
@@ -40,7 +40,7 @@
 .salons-list__title {
   color: #fff;
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   margin: 0;
 }
 
@@ -51,7 +51,7 @@
   padding: 0.75rem 1.5rem;
   border-radius: 6px;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   transition: all 0.3s ease;
   min-height: 44px; /* Touch-friendly minimum */
@@ -241,7 +241,7 @@
 
 .salons-list__stadium-name {
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   color: #242639;
   margin-bottom: 0.5rem;
 }
@@ -249,7 +249,8 @@
 .salons-list__stadium-id {
   font-size: 0.9rem;
   color: #666;
-  font-family: monospace;
+  font-family: var(--font-family-monospace);
+  font-weight: var(--font-weight-regular);
 }
 
 /* Tablet styles */

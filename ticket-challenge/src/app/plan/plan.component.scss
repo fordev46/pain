@@ -5,7 +5,7 @@
   background: #242639;
   color: #fff;
   padding: 0.75rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-family-primary);
   direction: rtl;
   overflow-x: hidden;
   position: relative;
@@ -105,14 +105,15 @@
 
   .plan__stadium-name {
     font-size: 1.2rem;
-    font-weight: bold;
+    font-weight: var(--font-weight-bold);
     margin: 0 0 0.25rem 0;
   }
 
   .plan__stadium-id {
     font-size: 0.8rem;
     color: #ccc;
-    font-family: monospace;
+    font-family: var(--font-family-monospace);
+    font-weight: var(--font-weight-regular);
   }
 }
 
@@ -243,7 +244,7 @@
   border: 2px solid #666;
 
   span {
-    font-weight: bold;
+    font-weight: var(--font-weight-bold);
     color: #fff;
   }
 }
@@ -318,7 +319,7 @@
     text-align: center;
     font-size: 0.7rem;
     color: #999;
-    font-weight: bold;
+    font-weight: var(--font-weight-demi-bold);
     vertical-align: middle;
     padding: 1px;
   }
@@ -446,7 +447,7 @@
   .plan__seat-number {
     color: #fff;
     font-size: 0.6rem;
-    font-weight: bold;
+    font-weight: var(--font-weight-bold);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     pointer-events: none;
     position: absolute;
@@ -544,7 +545,8 @@
       padding: 0.25rem 0.5rem;
       border-radius: 4px;
       font-size: 0.8rem;
-      font-family: monospace;
+      font-family: var(--font-family-monospace);
+      font-weight: var(--font-weight-medium);
     }
   }
 
@@ -563,7 +565,7 @@
     border-radius: 6px;
     cursor: pointer;
     font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: var(--font-weight-medium);
     min-height: 44px;
     transition: all 0.3s ease;
     position: relative;
