@@ -59,6 +59,8 @@
         class="virtual-seat-grid"
         [style.height.px]="getTotalHeight()"
         [style.width.px]="getTotalWidth()"
+        (click)="onSeatGridClick($event)"
+        (keydown)="onSeatGridKeydown($event)"
       >
         <div
           *ngFor="let row of virtualRows; let index = index; trackBy: trackByRow"
@@ -77,7 +79,8 @@
             <div
               class="seat-container"
               [class]="getSeatClass(getVirtualRowIndex(index), seatInfo.index)"
-              (click)="onSeatClick(getVirtualRowIndex(index), seatInfo.index)"
+              [attr.data-row]="getVirtualRowIndex(index)"
+              [attr.data-col]="seatInfo.index"
               [attr.aria-label]="
                 'صندلی ردیف ' + (getVirtualRowIndex(index) + 1) + ' شماره ' + (seatInfo.index + 1)
               "
@@ -91,8 +94,6 @@
               "
               tabindex="0"
               role="button"
-              (keydown.enter)="onSeatClick(getVirtualRowIndex(index), seatInfo.index)"
-              (keydown.space)="onSeatClick(getVirtualRowIndex(index), seatInfo.index)"
             >
               <svg class="seat-icon">
                 <use href="assets/icons.svg#seat-icon"></use>
@@ -112,6 +113,8 @@
         class="standard-seat-grid"
         [style.--rows]="seatMap.rows"
         [style.--columns]="seatMap.columns"
+        (click)="onSeatGridClick($event)"
+        (keydown)="onSeatGridKeydown($event)"
       >
         <div
           *ngFor="let row of seatMap.seats; let rowIndex = index; trackBy: trackByRow"
@@ -128,7 +131,8 @@
             <div
               class="seat-container"
               [class]="getSeatClass(rowIndex, colIndex)"
-              (click)="onSeatClick(rowIndex, colIndex)"
+              [attr.data-row]="rowIndex"
+              [attr.data-col]="colIndex"
               [attr.aria-label]="'صندلی ردیف ' + (rowIndex + 1) + ' شماره ' + (colIndex + 1)"
               [attr.aria-pressed]="getSeatStatus(rowIndex, colIndex) === SeatStatus.SELECTED"
               [attr.disabled]="
@@ -136,8 +140,6 @@
               "
               tabindex="0"
               role="button"
-              (keydown.enter)="onSeatClick(rowIndex, colIndex)"
-              (keydown.space)="onSeatClick(rowIndex, colIndex)"
             >
               <svg class="seat-icon">
                 <use href="assets/icons.svg#seat-icon"></use>

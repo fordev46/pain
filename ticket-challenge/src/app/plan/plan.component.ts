@@ -144,6 +144,57 @@ export class PlanComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /**
+   * Handles seat grid click events using event delegation
+   * @param event The click event from the seat grid container
+   */
+  onSeatGridClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    const seatContainer = this.findSeatContainer(target);
+
+    if (seatContainer) {
+      const rowIndex = parseInt(seatContainer.getAttribute('data-row') || '0', 10);
+      const colIndex = parseInt(seatContainer.getAttribute('data-col') || '0', 10);
+
+      this.onSeatClick(rowIndex, colIndex);
+    }
+  }
+
+  /**
+   * Handles seat grid keydown events using event delegation
+   * @param event The keydown event from the seat grid container
+   */
+  onSeatGridKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      const target = event.target as HTMLElement;
+      const seatContainer = this.findSeatContainer(target);
+
+      if (seatContainer) {
+        const rowIndex = parseInt(seatContainer.getAttribute('data-row') || '0', 10);
+        const colIndex = parseInt(seatContainer.getAttribute('data-col') || '0', 10);
+
+        this.onSeatClick(rowIndex, colIndex);
+      }
+    }
+  }
+
+  /**
+   * Finds the seat container element from a click target
+   * @param target The event target element
+   * @returns The seat container element or null if not found
+   */
+  private findSeatContainer(target: HTMLElement): HTMLElement | null {
+    // Check if target itself is a seat container
+    if (target.classList.contains('seat-container')) {
+      return target;
+    }
+
+    // Check if target is inside a seat container (e.g., SVG icon)
+    const seatContainer = target.closest('.seat-container') as HTMLElement;
+    return seatContainer;
+  }
+
+  /**
    * Handles seat click events - implements seat selection logic
    * @param rowIndex Row position (y coordinate)
    * @param colIndex Column position (x coordinate)
