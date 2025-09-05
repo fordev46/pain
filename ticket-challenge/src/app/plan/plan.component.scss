@@ -211,8 +211,8 @@
   max-width: 100%;
 }
 
-/* Seat grid wrapper with screen background */
-.seat-grid-wrapper {
+/* Seat table wrapper with screen background */
+.seat-table-wrapper {
   padding-top: 4rem;
   width: 100%;
   background-image: url('../../assets/icon/screen.svg');
@@ -248,8 +248,8 @@
   }
 }
 
-/* Seat grid container */
-.seat-grid-container {
+/* Seat table container */
+.seat-table-container {
   width: 100%;
   height: 70vh;
   overflow: auto;
@@ -303,36 +303,33 @@
   }
 }
 
-/* Standard seat grid rendering */
-.standard-seat-grid {
+/* Seat table rendering */
+.seat-table {
   width: 100%;
   min-width: fit-content;
+  border-collapse: separate;
+  border-spacing: 2px;
 }
 
 .seat-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  margin-bottom: 2px;
-  min-height: 24px;
-
   .row-label {
     min-width: 30px;
+    width: 30px;
     text-align: center;
     font-size: 0.7rem;
     color: #999;
     font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    vertical-align: middle;
+    padding: 1px;
   }
 }
 
-.seat-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.seat-cell {
+  width: 22px;
+  height: 22px;
+  padding: 1px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 /* Seat styling with SVG sprite approach */
@@ -663,7 +660,7 @@
     }
   }
 
-  .seat-grid-container {
+  .seat-table-container {
     height: 68vh;
   }
 }
@@ -687,7 +684,7 @@
     font-size: 1.5rem;
   }
 
-  .seat-grid-container {
+  .seat-table-container {
     height: 70vh;
     padding: 1rem;
   }
@@ -781,7 +778,7 @@
 
 /* Performance optimizations for very large maps */
 @supports (contain: layout style paint) {
-  .seat-grid {
+  .seat-table {
     contain: layout style paint;
   }
 
