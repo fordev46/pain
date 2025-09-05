@@ -1,57 +1,57 @@
-<div class="plan-container">
+<div class="plan">
   <!-- Header with navigation and stadium info -->
-  <header class="header">
-    <button class="back-btn" (click)="goBackToStadiums()" title="بازگشت به لیست سالن‌ها">
+  <header class="plan__header">
+    <button class="plan__back-btn" (click)="goBackToStadiums()" title="بازگشت به لیست سالن‌ها">
       ← بازگشت
     </button>
 
-    <div class="stadium-info" *ngIf="seatMap">
-      <h1 class="stadium-name">{{ seatMap.name || 'نقشه سالن' }}</h1>
-      <span class="stadium-id">{{ seatMap.id }}</span>
+    <div class="plan__stadium-info" *ngIf="seatMap">
+      <h1 class="plan__stadium-name">{{ seatMap.name || 'نقشه سالن' }}</h1>
+      <span class="plan__stadium-id">{{ seatMap.id }}</span>
     </div>
 
-    <div class="legend">
-      <div class="legend-item">
-        <div class="legend-color available"></div>
+    <div class="plan__legend">
+      <div class="plan__legend-item">
+        <div class="plan__legend-color plan__legend-color--available"></div>
         <span>آزاد</span>
       </div>
-      <div class="legend-item">
-        <div class="legend-color reserved"></div>
+      <div class="plan__legend-item">
+        <div class="plan__legend-color plan__legend-color--reserved"></div>
         <span>رزرو شده</span>
       </div>
-      <div class="legend-item">
-        <div class="legend-color selected"></div>
+      <div class="plan__legend-item">
+        <div class="plan__legend-color plan__legend-color--selected"></div>
         <span>انتخاب شده</span>
       </div>
     </div>
   </header>
 
   <!-- Loading state -->
-  <div *ngIf="loading" class="loading">
-    <div class="spinner"></div>
+  <div *ngIf="loading" class="plan__loading">
+    <div class="plan__spinner"></div>
     <p>در حال بارگذاری نقشه صندلی‌ها...</p>
   </div>
 
   <!-- Error state -->
-  <div *ngIf="error && !loading" class="error">
+  <div *ngIf="error && !loading" class="plan__error">
     <p>{{ error }}</p>
-    <button class="retry-btn" (click)="retry()">تلاش مجدد</button>
+    <button class="plan__retry-btn" (click)="retry()">تلاش مجدد</button>
   </div>
 
   <!-- Seat map visualization -->
-  <div *ngIf="!loading && !error && seatMap" class="seat-map-wrapper">
+  <div *ngIf="!loading && !error && seatMap" class="plan__seat-map">
     <!-- Map info -->
-    <div class="map-info">
+    <div class="plan__map-info">
       <span>تعداد صندلی‌ها: {{ seatMap.rows * seatMap.columns }}</span>
       <span *ngIf="getSelectedSeatCount() > 0">انتخاب شده: {{ getSelectedSeatCount() }}</span>
     </div>
 
     <!-- Seat table -->
-    <div class="seat-table-wrapper">
-      <div class="seat-table-container">
+    <div class="plan__seat-table-wrapper">
+      <div class="plan__seat-table-container">
         <!-- Table rendering mode -->
         <table
-          class="seat-table"
+          class="plan__seat-table"
           (click)="onSeatGridClick($event)"
           (keydown)="onSeatGridKeydown($event)"
           tabindex="-1"
@@ -59,18 +59,18 @@
           <tbody>
             <tr
               *ngFor="let row of seatMap.seats; let rowIndex = index; trackBy: trackByRow"
-              class="seat-row"
+              class="plan__seat-row"
             >
               <!-- Row number -->
-              <td class="row-label">{{ rowIndex + 1 }}</td>
+              <td class="plan__row-label">{{ rowIndex + 1 }}</td>
 
               <!-- Seats in row -->
               <td
                 *ngFor="let seat of row; let colIndex = index; trackBy: trackBySeat"
-                class="seat-cell"
+                class="plan__seat-cell"
               >
                 <div
-                  class="seat-container"
+                  class="plan__seat-container"
                   [class]="getSeatClass(rowIndex, colIndex)"
                   [attr.data-row]="rowIndex"
                   [attr.data-col]="colIndex"
@@ -82,18 +82,18 @@
                   tabindex="0"
                   role="button"
                 >
-                  <svg class="seat-icon">
+                  <svg class="plan__seat-icon">
                     <use href="assets/icons.svg#seat-icon"></use>
                   </svg>
                   <!-- Seat content - can be customized for different seat types -->
-                  <span class="seat-number" *ngIf="seatMap.columns <= 50">
+                  <span class="plan__seat-number" *ngIf="seatMap.columns <= 50">
                     {{ colIndex + 1 }}
                   </span>
                 </div>
               </td>
 
               <!-- Row number (right side) -->
-              <td class="row-label">{{ rowIndex + 1 }}</td>
+              <td class="plan__row-label">{{ rowIndex + 1 }}</td>
             </tr>
           </tbody>
         </table>
@@ -101,45 +101,49 @@
     </div>
 
     <!-- Purchase messages -->
-    <div *ngIf="purchaseSuccess" class="purchase-message success">
-      <div class="message-content">
-        <span class="message-text">{{ purchaseSuccess }}</span>
-        <button class="close-btn" (click)="dismissPurchaseMessages()" title="بستن پیام">×</button>
+    <div *ngIf="purchaseSuccess" class="plan__purchase-message plan__purchase-message--success">
+      <div class="plan__message-content">
+        <span class="plan__message-text">{{ purchaseSuccess }}</span>
+        <button class="plan__close-btn" (click)="dismissPurchaseMessages()" title="بستن پیام">
+          ×
+        </button>
       </div>
     </div>
 
-    <div *ngIf="purchaseError" class="purchase-message error">
-      <div class="message-content">
-        <span class="message-text">{{ purchaseError }}</span>
-        <button class="close-btn" (click)="dismissPurchaseMessages()" title="بستن پیام">×</button>
+    <div *ngIf="purchaseError" class="plan__purchase-message plan__purchase-message--error">
+      <div class="plan__message-content">
+        <span class="plan__message-text">{{ purchaseError }}</span>
+        <button class="plan__close-btn" (click)="dismissPurchaseMessages()" title="بستن پیام">
+          ×
+        </button>
       </div>
     </div>
 
     <!-- Selection summary and purchase -->
-    <div *ngIf="getSelectedSeatCount() > 0" class="selection-summary">
+    <div *ngIf="getSelectedSeatCount() > 0" class="plan__selection-summary">
       <h3>صندلی‌های انتخاب شده:</h3>
-      <div class="selected-seats">
-        <span *ngFor="let coord of getSelectedCoordinates()" class="selected-coord">
+      <div class="plan__selected-seats">
+        <span *ngFor="let coord of getSelectedCoordinates()" class="plan__selected-coord">
           ({{ coord.x + 1 }}, {{ coord.y + 1 }})
         </span>
       </div>
 
-      <div class="action-buttons">
+      <div class="plan__action-buttons">
         <button
-          class="purchase-btn"
+          class="plan__purchase-btn"
           (click)="purchaseSelectedSeats()"
           [disabled]="purchasing"
           [attr.aria-label]="'خرید ' + getSelectedSeatCount() + ' صندلی انتخاب شده'"
         >
           <span *ngIf="!purchasing">خرید بلیت ({{ getSelectedSeatCount() }} صندلی)</span>
-          <span *ngIf="purchasing" class="purchasing-text">
-            <span class="spinner-small"></span>
+          <span *ngIf="purchasing" class="plan__purchasing-text">
+            <span class="plan__spinner-small"></span>
             در حال خرید...
           </span>
         </button>
 
         <button
-          class="clear-btn"
+          class="plan__clear-btn"
           (click)="clearSelection()"
           [disabled]="purchasing"
           title="پاک کردن تمام انتخاب‌ها"
@@ -151,8 +155,8 @@
   </div>
 
   <!-- Empty state -->
-  <div *ngIf="!loading && !error && !seatMap" class="empty-state">
+  <div *ngIf="!loading && !error && !seatMap" class="plan__empty-state">
     <p>نقشه‌ای یافت نشد</p>
-    <button class="back-btn" (click)="goBackToStadiums()">بازگشت به لیست سالن‌ها</button>
+    <button class="plan__back-btn" (click)="goBackToStadiums()">بازگشت به لیست سالن‌ها</button>
   </div>
 </div>

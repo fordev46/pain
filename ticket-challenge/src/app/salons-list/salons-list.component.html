@@ -1,9 +1,9 @@
-<div class="container">
+<div class="salons-list">
   <!-- Header with title and random selection button -->
-  <header class="header">
-    <h1 class="title">انتخاب سالن</h1>
+  <header class="salons-list__header">
+    <h1 class="salons-list__title">انتخاب سالن</h1>
     <button
-      class="random-btn"
+      class="salons-list__random-btn"
       (click)="selectRandomStadium()"
       [disabled]="loading || stadiums.length === 0"
       title="انتخاب تصادفی سالن"
@@ -13,36 +13,36 @@
   </header>
 
   <!-- Loading state -->
-  <div *ngIf="loading" class="loading">
-    <div class="spinner"></div>
+  <div *ngIf="loading" class="salons-list__loading">
+    <div class="salons-list__spinner"></div>
     <p>در حال بارگذاری سالن‌ها...</p>
   </div>
 
   <!-- Error state -->
-  <div *ngIf="error && !loading" class="error">
+  <div *ngIf="error && !loading" class="salons-list__error">
     <p>{{ error }}</p>
-    <button class="retry-btn" (click)="retry()">تلاش مجدد</button>
+    <button class="salons-list__retry-btn" (click)="retry()">تلاش مجدد</button>
   </div>
 
   <!-- Stadiums list -->
-  <section *ngIf="!loading && !error" class="stadiums-grid">
+  <section *ngIf="!loading && !error" class="salons-list__stadiums-grid">
     <div
       *ngFor="let stadium of stadiums; trackBy: trackByStadium"
-      class="stadium-card"
+      class="salons-list__stadium-card"
       (click)="onStadiumSelect(stadium)"
       [attr.aria-label]="'انتخاب ' + stadium.name"
       tabindex="0"
       (keydown.enter)="onStadiumSelect(stadium)"
       (keydown.space)="onStadiumSelect(stadium)"
     >
-      <span class="stadium-name">{{ stadium.name }}</span>
-      <span class="stadium-id">{{ stadium.id }}</span>
+      <span class="salons-list__stadium-name">{{ stadium.name }}</span>
+      <span class="salons-list__stadium-id">{{ stadium.id }}</span>
     </div>
   </section>
 
   <!-- Empty state -->
-  <div *ngIf="!loading && !error && stadiums.length === 0" class="empty-state">
+  <div *ngIf="!loading && !error && stadiums.length === 0" class="salons-list__empty-state">
     <p>هیچ سالنی یافت نشد</p>
-    <button class="retry-btn" (click)="retry()">تلاش مجدد</button>
+    <button class="salons-list__retry-btn" (click)="retry()">تلاش مجدد</button>
   </div>
 </div>

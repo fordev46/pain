@@ -1,5 +1,5 @@
 /* Mobile-first responsive design for seat map visualization */
-.plan-container {
+.plan {
   width: 100%;
   min-height: 100vh;
   background: #242639;
@@ -31,7 +31,7 @@
 }
 
 /* Header with navigation and stadium info */
-.header {
+.plan__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -54,18 +54,18 @@
     align-items: stretch;
 
     /* Stack items vertically on mobile */
-    .back-btn {
+    .plan__back-btn {
       align-self: flex-start;
       margin-bottom: 0.5rem;
     }
 
-    .stadium-info {
+    .plan__stadium-info {
       order: 2;
       text-align: center;
       margin-bottom: 0.5rem;
     }
 
-    .legend {
+    .plan__legend {
       order: 3;
       justify-content: center;
       gap: 0.5rem;
@@ -78,7 +78,7 @@
   }
 }
 
-.back-btn {
+.plan__back-btn {
   background: #2196f3;
   color: white;
   border: none;
@@ -99,49 +99,49 @@
   }
 }
 
-.stadium-info {
+.plan__stadium-info {
   flex: 1;
   text-align: center;
 
-  .stadium-name {
+  .plan__stadium-name {
     font-size: 1.2rem;
     font-weight: bold;
     margin: 0 0 0.25rem 0;
   }
 
-  .stadium-id {
+  .plan__stadium-id {
     font-size: 0.8rem;
     color: #ccc;
     font-family: monospace;
   }
 }
 
-.legend {
+.plan__legend {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 
-  .legend-item {
+  .plan__legend-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.8rem;
 
-    .legend-color {
+    .plan__legend-color {
       width: 16px;
       height: 16px;
       border-radius: 2px;
       border: 1px solid #333;
 
-      &.available {
+      &--available {
         background: #4caf50; /* Green for available */
       }
 
-      &.reserved {
+      &--reserved {
         background: #757575; /* Gray for reserved */
       }
 
-      &.selected {
+      &--selected {
         background: #9c27b0; /* Purple for selected/taken */
       }
     }
@@ -149,14 +149,14 @@
 }
 
 /* Loading and error states */
-.loading {
+.plan__loading {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 300px;
 
-  .spinner {
+  .plan__spinner {
     width: 40px;
     height: 40px;
     border: 4px solid #333;
@@ -176,8 +176,8 @@
   }
 }
 
-.error,
-.empty-state {
+.plan__error,
+.plan__empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -191,7 +191,7 @@
   }
 }
 
-.retry-btn {
+.plan__retry-btn {
   background: #2196f3;
   color: white;
   border: none;
@@ -206,13 +206,13 @@
 }
 
 /* Seat map wrapper */
-.seat-map-wrapper {
+.plan__seat-map {
   width: 100%;
   max-width: 100%;
 }
 
 /* Seat table wrapper with screen background */
-.seat-table-wrapper {
+.plan__seat-table-wrapper {
   padding-top: 4rem;
   width: 100%;
   background-image: url('../../assets/icon/screen.svg');
@@ -222,7 +222,7 @@
   position: relative;
 }
 
-.map-info {
+.plan__map-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -249,7 +249,7 @@
 }
 
 /* Seat table container */
-.seat-table-container {
+.plan__seat-table-container {
   width: 100%;
   height: 70vh;
   overflow: auto;
@@ -304,15 +304,15 @@
 }
 
 /* Seat table rendering */
-.seat-table {
+.plan__seat-table {
   width: 100%;
   min-width: fit-content;
   border-collapse: separate;
   border-spacing: 2px;
 }
 
-.seat-row {
-  .row-label {
+.plan__seat-row {
+  .plan__row-label {
     min-width: 30px;
     width: 30px;
     text-align: center;
@@ -324,7 +324,7 @@
   }
 }
 
-.seat-cell {
+.plan__seat-cell {
   width: 22px;
   height: 22px;
   padding: 1px;
@@ -333,7 +333,7 @@
 }
 
 /* Seat styling with SVG sprite approach */
-.seat-container {
+.plan__seat-container {
   width: 20px;
   height: 20px;
   margin: 1px;
@@ -350,7 +350,7 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 
-  .seat-icon {
+  .plan__seat-icon {
     width: 100%;
     height: 100%;
     display: block;
@@ -387,8 +387,8 @@
     min-height: 28px;
   }
 
-  &.available {
-    .seat-icon {
+  &--available {
+    .plan__seat-icon {
       fill: #4caf50; /* Green for available */
     }
 
@@ -397,7 +397,7 @@
       z-index: 10;
       filter: drop-shadow(0 2px 8px rgba(76, 175, 80, 0.4));
 
-      .seat-icon {
+      .plan__seat-icon {
         fill: #66bb6a; /* Lighter green on hover */
       }
     }
@@ -407,11 +407,11 @@
     }
   }
 
-  &.reserved {
+  &--reserved {
     cursor: not-allowed;
     opacity: 0.7;
 
-    .seat-icon {
+    .plan__seat-icon {
       fill: #757575; /* Gray for selected/taken */
     }
 
@@ -421,17 +421,17 @@
     }
   }
 
-  &.selected {
+  &--selected {
     transform: scale(1.1);
     z-index: 5;
     filter: drop-shadow(0 2px 8px rgba(158, 158, 158, 0.4));
 
-    .seat-icon {
+    .plan__seat-icon {
       fill: #9c27b0; /* Purple for reserved */
     }
 
     &:hover {
-      .seat-icon {
+      .plan__seat-icon {
         fill: #9c27b0; /* Lighter gray on hover */
       }
     }
@@ -443,7 +443,7 @@
     z-index: 15;
   }
 
-  .seat-number {
+  .plan__seat-number {
     color: #fff;
     font-size: 0.6rem;
     font-weight: bold;
@@ -455,36 +455,36 @@
 }
 
 /* Purchase messages */
-.purchase-message {
+.plan__purchase-message {
   margin: 1rem 0;
   padding: 1rem;
   border-radius: 6px;
   animation: slideIn 0.3s ease-out;
 
-  &.success {
+  &--success {
     background: #e8f5e8;
     border: 1px solid #4caf50;
     color: #2e7d32;
   }
 
-  &.error {
+  &--error {
     background: #ffeaea;
     border: 1px solid #f44336;
     color: #c62828;
   }
 
-  .message-content {
+  .plan__message-content {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: 1rem;
 
-    .message-text {
+    .plan__message-text {
       flex: 1;
       line-height: 1.4;
     }
 
-    .close-btn {
+    .plan__close-btn {
       background: none;
       border: none;
       font-size: 1.2rem;
@@ -519,7 +519,7 @@
 }
 
 /* Selection summary with purchase functionality */
-.selection-summary {
+.plan__selection-summary {
   margin-top: 2rem;
   padding: 1.5rem;
   background: #1a1a2e;
@@ -532,13 +532,13 @@
     font-size: 1rem;
   }
 
-  .selected-seats {
+  .plan__selected-seats {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 1.5rem;
 
-    .selected-coord {
+    .plan__selected-coord {
       background: #757575; /* Gray to match selected seats */
       color: #fff;
       padding: 0.25rem 0.5rem;
@@ -548,14 +548,14 @@
     }
   }
 
-  .action-buttons {
+  .plan__action-buttons {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
     align-items: center;
   }
 
-  .purchase-btn {
+  .plan__purchase-btn {
     background: #4caf50;
     color: white;
     border: none;
@@ -594,13 +594,13 @@
       outline-offset: 2px;
     }
 
-    .purchasing-text {
+    .plan__purchasing-text {
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .spinner-small {
+    .plan__spinner-small {
       width: 16px;
       height: 16px;
       border: 2px solid transparent;
@@ -610,7 +610,7 @@
     }
   }
 
-  .clear-btn {
+  .plan__clear-btn {
     background: #f44336;
     color: white;
     border: none;
@@ -642,78 +642,78 @@
 
 /* Small tablets and large phones in landscape */
 @media (min-width: 576px) {
-  .plan-container {
+  .plan {
     padding: 1rem;
   }
 
-  .header {
+  .plan__header {
     flex-direction: row;
     align-items: center;
 
-    .stadium-info {
+    .plan__stadium-info {
       order: 0;
       margin-bottom: 0;
     }
 
-    .legend {
+    .plan__legend {
       order: 0;
     }
   }
 
-  .seat-table-container {
+  .plan__seat-table-container {
     height: 68vh;
   }
 }
 
 /* Tablets */
 @media (min-width: 768px) {
-  .plan-container {
+  .plan {
     padding: 2rem;
   }
 
-  .header {
+  .plan__header {
     margin-bottom: 2rem;
     flex-direction: row;
 
-    .back-btn {
+    .plan__back-btn {
       margin-bottom: 0;
     }
   }
 
-  .stadium-info .stadium-name {
+  .plan__stadium-info .plan__stadium-name {
     font-size: 1.5rem;
   }
 
-  .seat-table-container {
+  .plan__seat-table-container {
     height: 70vh;
     padding: 1rem;
   }
 
-  .seat-container {
+  .plan__seat-container {
     width: 22px;
     height: 22px;
     margin: 1.5px;
     font-size: 0.7rem;
   }
 
-  .seat-row {
+  .plan__seat-row {
     gap: 3px;
     margin-bottom: 3px;
     min-height: 26px;
 
-    .row-label {
+    .plan__row-label {
       min-width: 35px;
       font-size: 0.8rem;
     }
   }
 
-  .legend {
+  .plan__legend {
     gap: 1.5rem;
 
-    .legend-item {
+    .plan__legend-item {
       font-size: 0.9rem;
 
-      .legend-color {
+      .plan__legend-color {
         width: 18px;
         height: 18px;
       }
@@ -722,25 +722,25 @@
 }
 
 @media (min-width: 1024px) {
-  .plan-container {
+  .plan {
     max-width: 1400px;
     margin: 0 auto;
     padding: 3rem 2rem;
   }
 
-  .seat-container {
+  .plan__seat-container {
     width: 28px;
     height: 28px;
     margin: 2px;
     font-size: 0.8rem;
   }
 
-  .seat-row {
+  .plan__seat-row {
     gap: 4px;
     margin-bottom: 4px;
     min-height: 32px;
 
-    .row-label {
+    .plan__row-label {
       min-width: 40px;
       font-size: 0.9rem;
     }
@@ -753,23 +753,23 @@
 
 /* Large maps optimization */
 @media (min-width: 1440px) {
-  .seat-container {
+  .plan__seat-container {
     width: 16px;
     height: 16px;
     margin: 1px;
     font-size: 0.5rem;
 
-    .seat-number {
+    .plan__seat-number {
       display: none; /* Hide numbers on large maps for performance */
     }
   }
 
-  .seat-row {
+  .plan__seat-row {
     gap: 1px;
     margin-bottom: 1px;
     min-height: 18px;
 
-    .row-label {
+    .plan__row-label {
       min-width: 25px;
       font-size: 0.7rem;
     }
@@ -778,46 +778,46 @@
 
 /* Performance optimizations for very large maps */
 @supports (contain: layout style paint) {
-  .seat-table {
+  .plan__seat-table {
     contain: layout style paint;
   }
 
-  .seat-row {
+  .plan__seat-row {
     contain: layout style;
   }
 
-  .seat-container {
+  .plan__seat-container {
     contain: layout style paint;
   }
 }
 
 /* High contrast mode */
 @media (prefers-contrast: high) {
-  .seat-container {
-    &.available {
-      .seat-icon {
+  .plan__seat-container {
+    &--available {
+      .plan__seat-icon {
         fill: #00ff00; /* Bright green for high contrast available */
         stroke: #000;
         stroke-width: 8;
       }
     }
 
-    &.reserved {
-      .seat-icon {
+    &--reserved {
+      .plan__seat-icon {
         fill: #ff00ff; /* Bright magenta/purple for high contrast reserved */
         stroke: #000;
         stroke-width: 8;
       }
     }
 
-    &.selected {
-      .seat-icon {
+    &--selected {
+      .plan__seat-icon {
         fill: #808080; /* Gray for high contrast selected/taken */
         stroke: #000;
         stroke-width: 8;
       }
 
-      .seat-number {
+      .plan__seat-number {
         color: #000;
       }
     }
@@ -826,21 +826,21 @@
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .seat-container {
+  .plan__seat-container {
     transition: none;
 
-    .seat-icon {
+    .plan__seat-icon {
       transition: none;
     }
 
     &:hover,
-    &.selected {
+    &--selected {
       transform: none;
       filter: none;
     }
   }
 
-  .spinner {
+  .plan__spinner {
     animation: none;
   }
 }

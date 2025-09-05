@@ -146,12 +146,12 @@ export class PlanComponent implements OnInit, OnDestroy {
    */
   private findSeatContainer(target: HTMLElement): HTMLElement | null {
     // Check if target itself is a seat container
-    if (target.classList.contains('seat-container')) {
+    if (target.classList.contains('plan__seat-container')) {
       return target;
     }
 
     // Check if target is inside a seat container (e.g., SVG icon)
-    const seatContainer = target.closest('.seat-container') as HTMLElement;
+    const seatContainer = target.closest('.plan__seat-container') as HTMLElement;
     return seatContainer;
   }
 
@@ -215,13 +215,13 @@ export class PlanComponent implements OnInit, OnDestroy {
 
     switch (status) {
       case SeatStatus.AVAILABLE:
-        return 'seat-container available';
+        return 'plan__seat-container plan__seat-container--available';
       case SeatStatus.RESERVED:
-        return 'seat-container reserved';
+        return 'plan__seat-container plan__seat-container--reserved';
       case SeatStatus.SELECTED:
-        return 'seat-container selected';
+        return 'plan__seat-container plan__seat-container--selected';
       default:
-        return 'seat-container';
+        return 'plan__seat-container';
     }
   }
 

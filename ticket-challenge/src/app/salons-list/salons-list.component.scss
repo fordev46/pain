@@ -1,5 +1,5 @@
 /* Mobile-first responsive design for stadium list */
-.container {
+.salons-list {
   width: 100%;
   min-height: 100vh;
   background: #242639;
@@ -28,7 +28,7 @@
 }
 
 /* Header with title and random button */
-.header {
+.salons-list__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -37,14 +37,14 @@
   gap: 1rem;
 }
 
-.title {
+.salons-list__title {
   color: #fff;
   font-size: 1.5rem;
   font-weight: bold;
   margin: 0;
 }
 
-.random-btn {
+.salons-list__random-btn {
   background: #4caf50;
   color: white;
   border: none;
@@ -78,7 +78,7 @@
 }
 
 /* Loading state */
-.loading {
+.salons-list__loading {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -86,7 +86,7 @@
   min-height: 200px;
   color: #fff;
 
-  .spinner {
+  .salons-list__spinner {
     width: 40px;
     height: 40px;
     border: 4px solid #333;
@@ -112,8 +112,8 @@
 }
 
 /* Error and empty states */
-.error,
-.empty-state {
+.salons-list__error,
+.salons-list__empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -129,7 +129,7 @@
   }
 }
 
-.retry-btn {
+.salons-list__retry-btn {
   background: #2196f3;
   color: white;
   border: none;
@@ -151,7 +151,7 @@
 }
 
 /* Stadiums grid */
-.stadiums-grid {
+.salons-list__stadiums-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
@@ -159,7 +159,7 @@
 }
 
 /* Stadium card */
-.stadium-card {
+.salons-list__stadium-card {
   background: #fff;
   border-radius: 8px;
   padding: 1.5rem;
@@ -239,14 +239,14 @@
   }
 }
 
-.stadium-name {
+.salons-list__stadium-name {
   font-size: 1.2rem;
   font-weight: bold;
   color: #242639;
   margin-bottom: 0.5rem;
 }
 
-.stadium-id {
+.salons-list__stadium-id {
   font-size: 0.9rem;
   color: #666;
   font-family: monospace;
@@ -254,47 +254,47 @@
 
 /* Tablet styles */
 @media (min-width: 768px) {
-  .container {
+  .salons-list {
     padding: 2rem;
   }
 
-  .header {
+  .salons-list__header {
     margin-bottom: 3rem;
   }
 
-  .title {
+  .salons-list__title {
     font-size: 2rem;
   }
 
-  .stadiums-grid {
+  .salons-list__stadiums-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
 
-  .stadium-card {
+  .salons-list__stadium-card {
     padding: 2rem;
     min-height: 120px;
   }
 
-  .stadium-name {
+  .salons-list__stadium-name {
     font-size: 1.4rem;
   }
 }
 
 /* Desktop styles */
 @media (min-width: 1024px) {
-  .container {
+  .salons-list {
     max-width: 1200px;
     margin: 0 auto;
     padding: 3rem 2rem;
   }
 
-  .stadiums-grid {
+  .salons-list__stadiums-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
   }
 
-  .stadium-card {
+  .salons-list__stadium-card {
     padding: 2.5rem;
     min-height: 140px;
 
@@ -303,42 +303,42 @@
     }
   }
 
-  .stadium-name {
+  .salons-list__stadium-name {
     font-size: 1.5rem;
   }
 }
 
 /* Large desktop */
 @media (min-width: 1440px) {
-  .stadiums-grid {
+  .salons-list__stadiums-grid {
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
-  .container {
+  .salons-list {
     background: #000;
   }
 
-  .stadium-card {
+  .salons-list__stadium-card {
     border: 3px solid #333;
   }
 }
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .stadium-card,
-  .random-btn,
-  .retry-btn {
+  .salons-list__stadium-card,
+  .salons-list__random-btn,
+  .salons-list__retry-btn {
     transition: none;
   }
 
-  .spinner {
+  .salons-list__spinner {
     animation: none;
   }
 
-  .stadium-card:hover {
+  .salons-list__stadium-card:hover {
     transform: none;
   }
 }
