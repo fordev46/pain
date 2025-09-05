@@ -8,10 +8,10 @@
   gap: 0.75rem;
   position: sticky;
   top: 0;
-  background: #242639;
+  background: var(--color-background-primary);
   z-index: 100;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid var(--color-border-primary);
 
   /* Mobile optimizations */
   @media (max-width: 768px) {
@@ -58,7 +58,7 @@
 
   .plan-header__stadium-id {
     font-size: 0.8rem;
-    color: #ccc;
+    color: var(--color-text-lighter);
     font-family: var(--font-family-monospace);
     font-weight: var(--font-weight-regular);
   }
@@ -79,18 +79,18 @@
       width: 16px;
       height: 16px;
       border-radius: 2px;
-      border: 1px solid #333;
+      border: 1px solid var(--color-border-primary);
 
       &--available {
-        background: #4caf50; /* Green for available */
+        background: var(--color-success); /* Green for available */
       }
 
       &--reserved {
-        background: #757575; /* Gray for reserved */
+        background: var(--color-secondary); /* Gray for reserved */
       }
 
       &--selected {
-        background: #9c27b0; /* Purple for selected/taken */
+        background: var(--color-purple); /* Purple for selected/taken */
       }
     }
   }
@@ -102,7 +102,7 @@
   align-items: center;
   margin-bottom: 1rem;
   font-size: 0.9rem;
-  color: #ccc;
+  color: var(--color-text-lighter);
   flex-wrap: wrap;
   gap: 1rem;
 }

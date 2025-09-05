@@ -6,15 +6,15 @@
   animation: slideIn 0.3s ease-out;
 
   &--success {
-    background: #e8f5e8;
-    border: 1px solid #4caf50;
-    color: #2e7d32;
+    background: var(--color-message-success-bg);
+    border: 1px solid var(--color-success);
+    color: var(--color-message-success-text);
   }
 
   &--error {
-    background: #ffeaea;
-    border: 1px solid #f44336;
-    color: #c62828;
+    background: var(--color-message-error-bg);
+    border: 1px solid var(--color-danger);
+    color: var(--color-message-error-text);
   }
 
   .purchase-messages__content {

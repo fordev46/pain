@@ -2,13 +2,13 @@
 .selection-summary {
   margin-top: 2rem;
   padding: 1.5rem;
-  background: #1a1a2e;
+  background: var(--color-background-secondary);
   border-radius: 8px;
-  border: 1px solid #333;
+  border: 1px solid var(--color-border-primary);
 
   h3 {
     margin: 0 0 1rem 0;
-    color: #757575; /* Gray to match selected seats */
+    color: var(--color-secondary); /* Gray to match selected seats */
     font-size: 1rem;
   }
 
@@ -19,8 +19,8 @@
     margin-bottom: 1.5rem;
 
     .selection-summary__selected-coord {
-      background: #757575; /* Gray to match selected seats */
-      color: #fff;
+      background: var(--color-secondary); /* Gray to match selected seats */
+      color: var(--color-text-white);
       padding: 0.25rem 0.5rem;
       border-radius: 4px;
       font-size: 0.8rem;

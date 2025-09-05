@@ -1,5 +1,8 @@
 /* Global styles for the ticket booking application */
 
+/* Import color variables */
+@import './styles/colors';
+
 /* IRANSansX Font Family Definitions */
 @font-face {
   font-family: 'IRANSansX';
@@ -125,8 +128,8 @@ html {
 body {
   font-family: var(--font-family-primary);
   line-height: 1.4;
-  color: #333;
-  background: #242639;
+  color: var(--color-text-primary);
+  background: var(--color-background-primary);
   overflow-x: hidden; /* Prevent horizontal scroll */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -159,7 +162,7 @@ input[type='submit'] {
 
 /* Focus styles for accessibility */
 :focus {
-  outline: 2px solid #2196f3;
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 
@@ -170,8 +173,8 @@ input[type='submit'] {
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   body {
-    background: #000;
-    color: #fff;
+    background: var(--color-high-contrast-bg);
+    color: var(--color-high-contrast-text);
   }
 }
 
@@ -191,8 +194,8 @@ input[type='submit'] {
 /* Print styles */
 @media print {
   body {
-    background: white;
-    color: black;
+    background: var(--color-background-white);
+    color: var(--color-text-black);
   }
 
   .no-print {

@@ -19,7 +19,7 @@
 
   /* Focus styles */
   &:focus {
-    outline: 2px solid #fff;
+    outline: 2px solid var(--color-focus-white);
     outline-offset: 2px;
   }
 
@@ -51,96 +51,96 @@
 
   /* Variant styles */
   &--primary {
-    background: #2196f3;
-    color: white;
+    background: var(--color-primary);
+    color: var(--color-text-white);
 
     &:hover:not(.app-button--disabled):not(.app-button--loading) {
-      background: #1976d2;
+      background: var(--color-primary-dark);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+      box-shadow: 0 4px 12px var(--color-shadow-primary);
     }
 
     &:active:not(.app-button--disabled):not(.app-button--loading) {
       transform: translateY(0);
-      background: #1565c0;
+      background: var(--color-primary-darker);
     }
   }
 
   &--secondary {
-    background: #757575;
-    color: white;
+    background: var(--color-secondary);
+    color: var(--color-text-white);
 
     &:hover:not(.app-button--disabled):not(.app-button--loading) {
-      background: #616161;
+      background: var(--color-secondary-dark);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(117, 117, 117, 0.3);
+      box-shadow: 0 4px 12px var(--color-shadow-secondary);
     }
 
     &:active:not(.app-button--disabled):not(.app-button--loading) {
       transform: translateY(0);
-      background: #424242;
+      background: var(--color-secondary-darker);
     }
   }
 
   &--success {
-    background: #4caf50;
-    color: white;
+    background: var(--color-success);
+    color: var(--color-text-white);
 
     &:hover:not(.app-button--disabled):not(.app-button--loading) {
-      background: #45a049;
+      background: var(--color-success-dark);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+      box-shadow: 0 4px 12px var(--color-shadow-success);
     }
 
     &:active:not(.app-button--disabled):not(.app-button--loading) {
       transform: translateY(0);
-      background: #388e3c;
+      background: var(--color-success-darker);
     }
   }
 
   &--danger {
-    background: #f44336;
-    color: white;
+    background: var(--color-danger);
+    color: var(--color-text-white);
 
     &:hover:not(.app-button--disabled):not(.app-button--loading) {
-      background: #d32f2f;
+      background: var(--color-danger-dark);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+      box-shadow: 0 4px 12px var(--color-shadow-danger);
     }
 
     &:active:not(.app-button--disabled):not(.app-button--loading) {
       transform: translateY(0);
-      background: #c62828;
+      background: var(--color-danger-darker);
     }
   }
 
   &--ghost {
-    background: transparent;
-    color: #2196f3;
-    border: 2px solid #2196f3;
+    background: var(--color-transparent);
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
 
     &:hover:not(.app-button--disabled):not(.app-button--loading) {
-      background: #2196f3;
-      color: white;
+      background: var(--color-primary);
+      color: var(--color-text-white);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+      box-shadow: 0 4px 12px var(--color-shadow-primary);
     }
 
     &:active:not(.app-button--disabled):not(.app-button--loading) {
       transform: translateY(0);
-      background: #1976d2;
+      background: var(--color-primary-dark);
     }
   }
 
   /* State modifiers */
   &--disabled {
-    background: #666 !important;
-    color: #ccc !important;
+    background: var(--color-disabled-bg) !important;
+    color: var(--color-disabled-text) !important;
     cursor: not-allowed !important;
     opacity: 0.6;
     transform: none !important;
     box-shadow: none !important;
-    border-color: #666 !important;
+    border-color: var(--color-disabled-bg) !important;
   }
 
   &--loading {
@@ -259,24 +259,24 @@
     border: 2px solid currentColor;
 
     &--primary {
-      background: #0066cc;
-      border-color: #0066cc;
+      background: var(--color-high-contrast-primary);
+      border-color: var(--color-high-contrast-primary);
     }
 
     &--success {
-      background: #006600;
-      border-color: #006600;
+      background: var(--color-high-contrast-success);
+      border-color: var(--color-high-contrast-success);
     }
 
     &--danger {
-      background: #cc0000;
-      border-color: #cc0000;
+      background: var(--color-high-contrast-danger);
+      border-color: var(--color-high-contrast-danger);
     }
 
     &--disabled {
-      background: #666;
-      border-color: #666;
-      color: #fff;
+      background: var(--color-disabled-bg);
+      border-color: var(--color-disabled-bg);
+      color: var(--color-high-contrast-text);
     }
   }
 }
