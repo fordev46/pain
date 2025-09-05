@@ -211,6 +211,17 @@
   max-width: 100%;
 }
 
+/* Seat grid wrapper with screen background */
+.seat-grid-wrapper {
+  padding-top: 4rem;
+  width: 100%;
+  background-image: url('../../assets/icon/screen.svg');
+  background-size: contain;
+  background-position: top;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
 .map-info {
   display: flex;
   justify-content: space-between;
@@ -244,7 +255,6 @@
   overflow: auto;
   border: 1px solid #333;
   border-radius: 8px;
-  background: #1a1a2e;
   padding: 1rem;
   position: relative;
   flex: 1;
@@ -388,6 +398,7 @@
   justify-content: center;
   position: relative;
   user-select: none;
+  padding: 8px;
 
   /* Touch-friendly optimizations */
   touch-action: manipulation;
@@ -400,6 +411,10 @@
     transition: fill 0.2s ease;
   }
 
+  @media (max-width: 1024px) {
+    padding: 4px;
+  }
+
   /* Mobile-specific seat sizing */
   @media (max-width: 768px) {
     width: 24px;
@@ -407,6 +422,7 @@
     margin: 1.5px;
     border-radius: 4px;
     font-size: 0.7rem;
+    padding: 0px;
 
     /* Larger touch targets for easier interaction */
     min-width: 24px;
@@ -483,7 +499,7 @@
     opacity: 0.7;
 
     .seat-icon {
-      fill: #9c27b0; /* Purple for reserved */
+      fill: #757575; /* Gray for selected/taken */
     }
 
     &:hover {
@@ -498,12 +514,12 @@
     filter: drop-shadow(0 2px 8px rgba(158, 158, 158, 0.4));
 
     .seat-icon {
-      fill: #757575; /* Gray for selected/taken */
+      fill: #9c27b0; /* Purple for reserved */
     }
 
     &:hover {
       .seat-icon {
-        fill: #9e9e9e; /* Lighter gray on hover */
+        fill: #9c27b0; /* Lighter gray on hover */
       }
     }
   }
