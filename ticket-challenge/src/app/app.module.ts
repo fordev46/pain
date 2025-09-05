@@ -6,9 +6,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PlanComponent } from './plan/plan.component';
 import { SalonsListComponent } from './salons-list/salons-list.component';
+import { ButtonComponent } from './shared/button/button.component';
 
 @NgModule({
-  declarations: [AppComponent, PlanComponent, SalonsListComponent],
+  declarations: [AppComponent, PlanComponent, SalonsListComponent, ButtonComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],

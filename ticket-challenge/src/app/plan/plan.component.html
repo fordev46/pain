@@ -1,9 +1,14 @@
 <div class="plan">
   <!-- Header with navigation and stadium info -->
   <header class="plan__header">
-    <button class="plan__back-btn" (click)="goBackToStadiums()" title="بازگشت به لیست سالن‌ها">
-      ← بازگشت
-    </button>
+    <app-button
+      text="← بازگشت"
+      variant="primary"
+      size="medium"
+      title="بازگشت به لیست سالن‌ها"
+      (clicked)="goBackToStadiums()"
+    >
+    </app-button>
 
     <div class="plan__stadium-info" *ngIf="seatMap">
       <h1 class="plan__stadium-name">{{ seatMap.name || 'نقشه سالن' }}</h1>
@@ -35,7 +40,7 @@
   <!-- Error state -->
   <div *ngIf="error && !loading" class="plan__error">
     <p>{{ error }}</p>
-    <button class="plan__retry-btn" (click)="retry()">تلاش مجدد</button>
+    <app-button text="تلاش مجدد" variant="primary" size="medium" (clicked)="retry()"> </app-button>
   </div>
 
   <!-- Seat map visualization -->
@@ -104,18 +109,28 @@
     <div *ngIf="purchaseSuccess" class="plan__purchase-message plan__purchase-message--success">
       <div class="plan__message-content">
         <span class="plan__message-text">{{ purchaseSuccess }}</span>
-        <button class="plan__close-btn" (click)="dismissPurchaseMessages()" title="بستن پیام">
-          ×
-        </button>
+        <app-button
+          text="×"
+          variant="ghost"
+          size="small"
+          title="بستن پیام"
+          (clicked)="dismissPurchaseMessages()"
+        >
+        </app-button>
       </div>
     </div>
 
     <div *ngIf="purchaseError" class="plan__purchase-message plan__purchase-message--error">
       <div class="plan__message-content">
         <span class="plan__message-text">{{ purchaseError }}</span>
-        <button class="plan__close-btn" (click)="dismissPurchaseMessages()" title="بستن پیام">
-          ×
-        </button>
+        <app-button
+          text="×"
+          variant="ghost"
+          size="small"
+          title="بستن پیام"
+          (clicked)="dismissPurchaseMessages()"
+        >
+        </app-button>
       </div>
     </div>
 
@@ -129,27 +144,27 @@
       </div>
 
       <div class="plan__action-buttons">
-        <button
-          class="plan__purchase-btn"
-          (click)="purchaseSelectedSeats()"
+        <app-button
+          [text]="'خرید بلیت (' + getSelectedSeatCount() + ' صندلی)'"
+          variant="success"
+          size="medium"
+          [loading]="purchasing"
+          loadingText="در حال خرید..."
           [disabled]="purchasing"
-          [attr.aria-label]="'خرید ' + getSelectedSeatCount() + ' صندلی انتخاب شده'"
+          [ariaLabel]="'خرید ' + getSelectedSeatCount() + ' صندلی انتخاب شده'"
+          (clicked)="purchaseSelectedSeats()"
         >
-          <span *ngIf="!purchasing">خرید بلیت ({{ getSelectedSeatCount() }} صندلی)</span>
-          <span *ngIf="purchasing" class="plan__purchasing-text">
-            <span class="plan__spinner-small"></span>
-            در حال خرید...
-          </span>
-        </button>
+        </app-button>
 
-        <button
-          class="plan__clear-btn"
-          (click)="clearSelection()"
+        <app-button
+          text="پاک کردن انتخاب‌ها"
+          variant="danger"
+          size="medium"
           [disabled]="purchasing"
           title="پاک کردن تمام انتخاب‌ها"
+          (clicked)="clearSelection()"
         >
-          پاک کردن انتخاب‌ها
-        </button>
+        </app-button>
       </div>
     </div>
   </div>
@@ -157,6 +172,12 @@
   <!-- Empty state -->
   <div *ngIf="!loading && !error && !seatMap" class="plan__empty-state">
     <p>نقشه‌ای یافت نشد</p>
-    <button class="plan__back-btn" (click)="goBackToStadiums()">بازگشت به لیست سالن‌ها</button>
+    <app-button
+      text="بازگشت به لیست سالن‌ها"
+      variant="primary"
+      size="medium"
+      (clicked)="goBackToStadiums()"
+    >
+    </app-button>
   </div>
 </div>
