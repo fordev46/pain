@@ -1,0 +1,33 @@
+<!-- Selection summary and purchase -->
+<div *ngIf="getSelectedSeatCount() > 0" class="selection-summary">
+  <h3>صندلی‌های انتخاب شده:</h3>
+  <div class="selection-summary__selected-seats">
+    <span *ngFor="let coord of getSelectedCoordinates()" class="selection-summary__selected-coord">
+      ({{ coord.x + 1 }}, {{ coord.y + 1 }})
+    </span>
+  </div>
+
+  <div class="selection-summary__action-buttons">
+    <app-button
+      [text]="'خرید بلیت (' + getSelectedSeatCount() + ' صندلی)'"
+      variant="success"
+      size="medium"
+      [loading]="purchasing"
+      loadingText="در حال خرید..."
+      [disabled]="purchasing"
+      [ariaLabel]="'خرید ' + getSelectedSeatCount() + ' صندلی انتخاب شده'"
+      (clicked)="onPurchaseClick()"
+    >
+    </app-button>
+
+    <app-button
+      text="پاک کردن انتخاب‌ها"
+      variant="danger"
+      size="medium"
+      [disabled]="purchasing"
+      title="پاک کردن تمام انتخاب‌ها"
+      (clicked)="onClearSelectionClick()"
+    >
+    </app-button>
+  </div>
+</div>

@@ -1,35 +1,10 @@
 <div class="plan">
   <!-- Header with navigation and stadium info -->
-  <header class="plan__header">
-    <app-button
-      text="← بازگشت"
-      variant="primary"
-      size="medium"
-      title="بازگشت به لیست سالن‌ها"
-      (clicked)="goBackToStadiums()"
-    >
-    </app-button>
-
-    <div class="plan__stadium-info" *ngIf="seatMap">
-      <h1 class="plan__stadium-name">{{ seatMap.name || 'نقشه سالن' }}</h1>
-      <span class="plan__stadium-id">{{ seatMap.id }}</span>
-    </div>
-
-    <div class="plan__legend">
-      <div class="plan__legend-item">
-        <div class="plan__legend-color plan__legend-color--available"></div>
-        <span>آزاد</span>
-      </div>
-      <div class="plan__legend-item">
-        <div class="plan__legend-color plan__legend-color--reserved"></div>
-        <span>رزرو شده</span>
-      </div>
-      <div class="plan__legend-item">
-        <div class="plan__legend-color plan__legend-color--selected"></div>
-        <span>انتخاب شده</span>
-      </div>
-    </div>
-  </header>
+  <app-plan-header
+    [seatMap]="seatMap"
+    [selectedSeatCount]="getSelectedSeatCount()"
+    (backClicked)="onBackToStadiums()"
+  ></app-plan-header>
 
   <!-- Loading state -->
   <div *ngIf="loading" class="plan__loading">
@@ -45,131 +20,28 @@
 
   <!-- Seat map visualization -->
   <div *ngIf="!loading && !error && seatMap" class="plan__seat-map">
-    <!-- Map info -->
-    <div class="plan__map-info">
-      <span>تعداد صندلی‌ها: {{ seatMap.rows * seatMap.columns }}</span>
-      <span *ngIf="getSelectedSeatCount() > 0">انتخاب شده: {{ getSelectedSeatCount() }}</span>
-    </div>
-
-    <!-- Seat table with virtual scrolling -->
-    <div class="plan__seat-table-wrapper">
-      <div class="plan__seat-table-container">
-        <!-- Virtual scroll viewport containing table -->
-        <cdk-virtual-scroll-viewport [itemSize]="getRowHeight()" class="plan__virtual-viewport">
-          <table
-            class="plan__seat-table"
-            (click)="onSeatGridClick($event)"
-            (keydown)="onSeatGridKeydown($event)"
-            tabindex="-1"
-          >
-            <tbody>
-              <tr
-                *cdkVirtualFor="let row of seatMap.seats; let rowIndex = index; trackBy: trackByRow"
-                class="plan__seat-row"
-              >
-                <!-- Row number -->
-                <td class="plan__row-label">{{ rowIndex + 1 }}</td>
-
-                <!-- Seats in row -->
-                <td
-                  *ngFor="let seat of row; let colIndex = index; trackBy: trackBySeat"
-                  class="plan__seat-cell"
-                >
-                  <div
-                    class="plan__seat-container"
-                    [class]="getSeatClass(rowIndex, colIndex)"
-                    [attr.data-row]="rowIndex"
-                    [attr.data-col]="colIndex"
-                    [attr.aria-label]="'صندلی ردیف ' + (rowIndex + 1) + ' شماره ' + (colIndex + 1)"
-                    [attr.aria-pressed]="getSeatStatus(rowIndex, colIndex) === SeatStatus.SELECTED"
-                    [attr.disabled]="
-                      getSeatStatus(rowIndex, colIndex) === SeatStatus.RESERVED ? true : null
-                    "
-                    [attr.title]="'موقعیت: X=' + colIndex + ', Y=' + rowIndex"
-                    tabindex="0"
-                    role="button"
-                  >
-                    <svg class="plan__seat-icon">
-                      <use href="assets/icons.svg#seat-icon"></use>
-                    </svg>
-                    <!-- Seat content - can be customized for different seat types -->
-                    <span class="plan__seat-number" *ngIf="seatMap.columns <= 50">
-                      {{ colIndex + 1 }}
-                    </span>
-                  </div>
-                </td>
-
-                <!-- Row number (right side) -->
-                <td class="plan__row-label">{{ rowIndex + 1 }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </cdk-virtual-scroll-viewport>
-      </div>
-    </div>
+    <!-- Seat table component -->
+    <app-seat-table
+      [seatMap]="seatMap"
+      [selectedSeats]="selectedSeats"
+      [disabled]="purchasing"
+      (seatClick)="onSeatClick($event)"
+    ></app-seat-table>
 
     <!-- Purchase messages -->
-    <div *ngIf="purchaseSuccess" class="plan__purchase-message plan__purchase-message--success">
-      <div class="plan__message-content">
-        <span class="plan__message-text">{{ purchaseSuccess }}</span>
-        <app-button
-          text="×"
-          variant="ghost"
-          size="small"
-          title="بستن پیام"
-          (clicked)="dismissPurchaseMessages()"
-        >
-        </app-button>
-      </div>
-    </div>
-
-    <div *ngIf="purchaseError" class="plan__purchase-message plan__purchase-message--error">
-      <div class="plan__message-content">
-        <span class="plan__message-text">{{ purchaseError }}</span>
-        <app-button
-          text="×"
-          variant="ghost"
-          size="small"
-          title="بستن پیام"
-          (clicked)="dismissPurchaseMessages()"
-        >
-        </app-button>
-      </div>
-    </div>
+    <app-purchase-messages
+      [successMessage]="purchaseSuccess"
+      [errorMessage]="purchaseError"
+      (dismissMessages)="onDismissPurchaseMessages()"
+    ></app-purchase-messages>
 
     <!-- Selection summary and purchase -->
-    <div *ngIf="getSelectedSeatCount() > 0" class="plan__selection-summary">
-      <h3>صندلی‌های انتخاب شده:</h3>
-      <div class="plan__selected-seats">
-        <span *ngFor="let coord of getSelectedCoordinates()" class="plan__selected-coord">
-          ({{ coord.x + 1 }}, {{ coord.y + 1 }})
-        </span>
-      </div>
-
-      <div class="plan__action-buttons">
-        <app-button
-          [text]="'خرید بلیت (' + getSelectedSeatCount() + ' صندلی)'"
-          variant="success"
-          size="medium"
-          [loading]="purchasing"
-          loadingText="در حال خرید..."
-          [disabled]="purchasing"
-          [ariaLabel]="'خرید ' + getSelectedSeatCount() + ' صندلی انتخاب شده'"
-          (clicked)="purchaseSelectedSeats()"
-        >
-        </app-button>
-
-        <app-button
-          text="پاک کردن انتخاب‌ها"
-          variant="danger"
-          size="medium"
-          [disabled]="purchasing"
-          title="پاک کردن تمام انتخاب‌ها"
-          (clicked)="clearSelection()"
-        >
-        </app-button>
-      </div>
-    </div>
+    <app-selection-summary
+      [selectedSeats]="selectedSeats"
+      [purchasing]="purchasing"
+      (purchaseClicked)="onPurchaseSelectedSeats()"
+      (clearSelectionClicked)="onClearSelection()"
+    ></app-selection-summary>
   </div>
 
   <!-- Empty state -->
@@ -179,7 +51,7 @@
       text="بازگشت به لیست سالن‌ها"
       variant="primary"
       size="medium"
-      (clicked)="goBackToStadiums()"
+      (clicked)="onBackToStadiums()"
     >
     </app-button>
   </div>

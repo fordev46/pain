@@ -1,0 +1,379 @@
+/* Seat table component styles - extracted from plan component */
+.seat-table__wrapper {
+  padding-top: 4rem;
+  width: 100%;
+  background-image: url('../../../assets/icon/screen.svg');
+  background-size: contain;
+  background-position: top;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* Seat table container */
+.seat-table__container {
+  width: 100%;
+  height: 70vh;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1rem;
+  position: relative;
+  flex: 1;
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    height: 65vh;
+    padding: 0.75rem;
+    border-radius: 6px;
+
+    /* Improve touch scrolling */
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+
+    /* Larger scrollbars on mobile for easier grabbing */
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #242639;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #666;
+      border-radius: 4px;
+
+      &:hover {
+        background: #777;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    height: 60vh;
+    padding: 0.5rem;
+    border-radius: 4px;
+
+    /* Even larger scrollbars for small screens */
+    &::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+  }
+}
+
+/* Virtual scroll viewport */
+.seat-table__virtual-viewport {
+  width: 100%;
+  height: calc(70vh - 2rem); /* Account for padding */
+  min-height: 400px;
+}
+
+/* Seat table rendering - updated for virtual scrolling */
+.seat-table__table {
+  width: 100%;
+  min-width: fit-content;
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+
+.seat-table__row {
+  .seat-table__row-label {
+    background-color: #242639;
+    min-width: 30px;
+    width: 30px;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #999;
+    font-weight: var(--font-weight-demi-bold);
+    vertical-align: middle;
+    padding: 1px;
+    z-index: 1;
+
+    &.label--freeze-right {
+      position: sticky;
+      right: 0;
+    }
+    &.label--freeze-left {
+      position: sticky;
+      left: 0;
+    }
+  }
+}
+
+/* Seat styling with SVG sprite approach */
+.seat-table__seat-container {
+  width: 20px;
+  height: 20px;
+  margin: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  user-select: none;
+  padding: 8px;
+
+  /* Touch-friendly optimizations */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  .seat-table__seat-icon {
+    width: 100%;
+    height: 100%;
+    display: block;
+    transition: fill 0.2s ease;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 4px;
+  }
+
+  /* Mobile-specific seat sizing */
+  @media (max-width: 768px) {
+    width: 24px;
+    height: 24px;
+    margin: 1.5px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    padding: 0px;
+
+    /* Larger touch targets for easier interaction */
+    min-width: 24px;
+    min-height: 24px;
+  }
+
+  @media (max-width: 480px) {
+    width: 28px;
+    height: 28px;
+    margin: 2px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+
+    /* Even larger touch targets for small screens */
+    min-width: 28px;
+    min-height: 28px;
+  }
+
+  &--available {
+    .seat-table__seat-icon {
+      fill: #4caf50; /* Green for available */
+    }
+
+    &:hover {
+      transform: scale(1.1);
+      z-index: 10;
+      filter: drop-shadow(0 2px 8px rgba(76, 175, 80, 0.4));
+
+      .seat-table__seat-icon {
+        fill: #66bb6a; /* Lighter green on hover */
+      }
+    }
+
+    &:active {
+      transform: scale(1.05);
+    }
+  }
+
+  &--reserved {
+    cursor: not-allowed;
+    opacity: 0.7;
+
+    .seat-table__seat-icon {
+      fill: #757575; /* Gray for selected/taken */
+    }
+
+    &:hover {
+      transform: none;
+      filter: none;
+    }
+  }
+
+  &--selected {
+    transform: scale(1.1);
+    z-index: 5;
+    filter: drop-shadow(0 2px 8px rgba(158, 158, 158, 0.4));
+
+    .seat-table__seat-icon {
+      fill: #9c27b0; /* Purple for reserved */
+    }
+
+    &:hover {
+      .seat-table__seat-icon {
+        fill: #9c27b0; /* Lighter gray on hover */
+      }
+    }
+  }
+
+  &:focus {
+    outline: 2px solid #2196f3;
+    outline-offset: 1px;
+    z-index: 15;
+  }
+
+  .seat-table__seat-number {
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: var(--font-weight-bold);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
+  }
+}
+
+/* Enhanced responsive breakpoints */
+
+/* Small tablets and large phones in landscape */
+@media (min-width: 576px) {
+  .seat-table__container {
+    height: 68vh;
+  }
+
+  .seat-table__virtual-viewport {
+    height: calc(68vh - 1.5rem);
+    min-height: 300px;
+  }
+}
+
+/* Tablets */
+@media (min-width: 768px) {
+  .seat-table__container {
+    height: 70vh;
+    padding: 1rem;
+  }
+
+  .seat-table__virtual-viewport {
+    height: calc(70vh - 2rem);
+    min-height: 400px;
+  }
+
+  .seat-table__seat-container {
+    width: 22px;
+    height: 22px;
+    margin: 1.5px;
+    font-size: 0.7rem;
+  }
+
+  .seat-table__row {
+    gap: 3px;
+    margin-bottom: 3px;
+    min-height: 26px;
+
+    .seat-table__row-label {
+      min-width: 35px;
+      font-size: 0.8rem;
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .seat-table__seat-container {
+    width: 28px;
+    height: 28px;
+    margin: 2px;
+    font-size: 0.8rem;
+  }
+
+  .seat-table__row {
+    gap: 4px;
+    margin-bottom: 4px;
+    min-height: 32px;
+
+    .seat-table__row-label {
+      min-width: 40px;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+/* Large maps optimization */
+@media (min-width: 1440px) {
+  .seat-table__seat-container {
+    width: 16px;
+    height: 16px;
+    margin: 1px;
+    font-size: 0.5rem;
+
+    .seat-table__seat-number {
+      display: none; /* Hide numbers on large maps for performance */
+    }
+  }
+
+  .seat-table__row {
+    gap: 1px;
+    margin-bottom: 1px;
+    min-height: 18px;
+
+    .seat-table__row-label {
+      min-width: 25px;
+      font-size: 0.7rem;
+    }
+  }
+}
+
+/* Performance optimizations for very large maps */
+@supports (contain: layout style paint) {
+  .seat-table__table {
+    contain: layout style paint;
+  }
+
+  .seat-table__row {
+    contain: layout style;
+  }
+
+  .seat-table__seat-container {
+    contain: layout style paint;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .seat-table__seat-container {
+    &--available {
+      .seat-table__seat-icon {
+        fill: #00ff00; /* Bright green for high contrast available */
+        stroke: #000;
+        stroke-width: 8;
+      }
+    }
+
+    &--reserved {
+      .seat-table__seat-icon {
+        fill: #ff00ff; /* Bright magenta/purple for high contrast reserved */
+        stroke: #000;
+        stroke-width: 8;
+      }
+    }
+
+    &--selected {
+      .seat-table__seat-icon {
+        fill: #808080; /* Gray for high contrast selected/taken */
+        stroke: #000;
+        stroke-width: 8;
+      }
+
+      .seat-table__seat-number {
+        color: #000;
+      }
+    }
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .seat-table__seat-container {
+    transition: none;
+
+    .seat-table__seat-icon {
+      transition: none;
+    }
+
+    &:hover,
+    &--selected {
+      transform: none;
+      filter: none;
+    }
+  }
+}

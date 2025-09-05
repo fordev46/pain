@@ -1,0 +1,48 @@
+<!-- Seat table with virtual scrolling -->
+<div class="seat-table__wrapper">
+  <div class="seat-table__container">
+    <!-- Virtual scroll viewport containing table -->
+    <cdk-virtual-scroll-viewport [itemSize]="getRowHeight()" class="seat-table__virtual-viewport">
+      <table
+        class="seat-table__table"
+        (click)="onSeatTableClick($event)"
+        (keydown)="onSeatTableKeydown($event)"
+        tabindex="-1"
+      >
+        <tbody>
+          <tr
+            *cdkVirtualFor="let row of seatMap!.seats; let rowIndex = index; trackBy: trackByRow"
+            class="seat-table__row"
+          >
+            <!-- Row number -->
+            <td class="seat-table__row-label label--freeze-right">{{ rowIndex + 1 }}</td>
+
+            <!-- Seats in row -->
+            <td
+              *ngFor="let seat of row; let colIndex = index; trackBy: trackBySeat"
+              class="seat-table__seat-container"
+              [class]="getSeatClass(rowIndex, colIndex)"
+              [attr.data-row]="rowIndex"
+              [attr.data-col]="colIndex"
+              [attr.aria-label]="'صندلی ردیف ' + (rowIndex + 1) + ' شماره ' + (colIndex + 1)"
+              [attr.aria-pressed]="getSeatStatus(rowIndex, colIndex) === SeatStatus.SELECTED"
+              [attr.disabled]="
+                getSeatStatus(rowIndex, colIndex) === SeatStatus.RESERVED ? true : null
+              "
+              [attr.title]="'موقعیت: X=' + colIndex + ', Y=' + rowIndex"
+              tabindex="0"
+              role="button"
+            >
+              <svg class="seat-table__seat-icon">
+                <use href="assets/icons.svg#seat-icon"></use>
+              </svg>
+            </td>
+
+            <!-- Row number (right side) -->
+            <td class="seat-table__row-label label--freeze-left">{{ rowIndex + 1 }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </cdk-virtual-scroll-viewport>
+  </div>
+</div>

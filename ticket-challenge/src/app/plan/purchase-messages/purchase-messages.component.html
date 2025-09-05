@@ -1,0 +1,28 @@
+<!-- Purchase messages -->
+<div *ngIf="successMessage" class="purchase-messages__message purchase-messages__message--success">
+  <div class="purchase-messages__content">
+    <span class="purchase-messages__text">{{ successMessage }}</span>
+    <app-button
+      text="×"
+      variant="ghost"
+      size="small"
+      title="بستن پیام"
+      (clicked)="onDismissMessages()"
+    >
+    </app-button>
+  </div>
+</div>
+
+<div *ngIf="errorMessage" class="purchase-messages__message purchase-messages__message--error">
+  <div class="purchase-messages__content">
+    <span class="purchase-messages__text">{{ errorMessage }}</span>
+    <app-button
+      text="×"
+      variant="ghost"
+      size="small"
+      title="بستن پیام"
+      (clicked)="onDismissMessages()"
+    >
+    </app-button>
+  </div>
+</div>

@@ -17,9 +17,9 @@ import {
 } from '../models';
 
 /**
- * Component responsible for displaying and managing the stadium seat map
- * Handles seat visualization, selection, and coordinate logging
- * Implements efficient rendering for large maps (up to 100k+ seats)
+ * Main plan component that orchestrates seat map functionality
+ * Uses sub-components for better organization and maintainability
+ * Manages state and coordinates interactions between child components
  */
 @Component({
   selector: 'app-plan',
@@ -105,65 +105,13 @@ export class PlanComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles seat grid click events using event delegation
-   * @param event The click event from the seat grid container
+   * Handles seat click events from the seat grid component
+   * @param coordinates The coordinates of the clicked seat
    */
-  onSeatGridClick(event: Event): void {
-    const target = event.target as HTMLElement;
-    const seatContainer = this.findSeatContainer(target);
-
-    if (seatContainer) {
-      const rowIndex = parseInt(seatContainer.getAttribute('data-row') || '0', 10);
-      const colIndex = parseInt(seatContainer.getAttribute('data-col') || '0', 10);
-
-      this.onSeatClick(rowIndex, colIndex);
-    }
-  }
-
-  /**
-   * Handles seat grid keydown events using event delegation
-
-  * @param event The keydown event from the seat grid container
-   */
-  onSeatGridKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      const target = event.target as HTMLElement;
-      const seatContainer = this.findSeatContainer(target);
-
-      if (seatContainer) {
-        const rowIndex = parseInt(seatContainer.getAttribute('data-row') || '0', 10);
-        const colIndex = parseInt(seatContainer.getAttribute('data-col') || '0', 10);
-
-        this.onSeatClick(rowIndex, colIndex);
-      }
-    }
-  }
-
-  /**
-   * Finds the seat container element from a click target
-   * @param target The event target element
-   * @returns The seat container element or null if not found
-   */
-  private findSeatContainer(target: HTMLElement): HTMLElement | null {
-    // Check if target itself is a seat container
-    if (target.classList.contains('plan__seat-container')) {
-      return target;
-    }
-
-    // Check if target is inside a seat container (e.g., SVG icon)
-    const seatContainer = target.closest('.plan__seat-container') as HTMLElement;
-    return seatContainer;
-  }
-
-  /**
-   * Handles seat click events - implements seat selection logic
-   * @param rowIndex Row position (y coordinate)
-   * @param colIndex Column position (x coordinate)
-   */
-  onSeatClick(rowIndex: number, colIndex: number): void {
+  onSeatClick(coordinates: Coordinates): void {
     if (!this.seatMap) return;
 
+    const { x: colIndex, y: rowIndex } = coordinates;
     const seatStatus = this.seatMap.seats[rowIndex][colIndex];
 
     // Only allow selection of available seats
@@ -173,63 +121,29 @@ export class PlanComponent implements OnInit, OnDestroy {
     }
 
     const seatKey = `${rowIndex}-${colIndex}`;
-    const coordinates: Coordinates = { x: colIndex, y: rowIndex };
 
     if (this.selectedSeats.has(seatKey)) {
       // Deselect seat
       this.selectedSeats.delete(seatKey);
+      // Create new Set reference to trigger change detection in child components
+      this.selectedSeats = new Set(this.selectedSeats);
       console.log(`Seat deselected at coordinates:`, coordinates);
     } else {
       // Select seat
       this.selectedSeats.add(seatKey);
+      // Create new Set reference to trigger change detection in child components
+      this.selectedSeats = new Set(this.selectedSeats);
       console.log(`Seat selected at coordinates:`, coordinates);
     }
-  }
 
-  /**
-   * Gets the current status of a seat (available, reserved, or selected)
-   * @param rowIndex Row position
-   * @param colIndex Column position
-   * @returns The current seat status
-   */
-  getSeatStatus(rowIndex: number, colIndex: number): SeatStatus {
-    if (!this.seatMap) return SeatStatus.AVAILABLE;
-
-    const originalStatus = this.seatMap.seats[rowIndex][colIndex];
-    const seatKey = `${rowIndex}-${colIndex}`;
-
-    if (originalStatus === SeatStatus.RESERVED) {
-      return SeatStatus.RESERVED;
-    }
-
-    return this.selectedSeats.has(seatKey) ? SeatStatus.SELECTED : SeatStatus.AVAILABLE;
-  }
-
-  /**
-   * Gets CSS class for seat styling based on its status
-   * @param rowIndex Row position
-   * @param colIndex Column position
-   * @returns CSS class name
-   */
-  getSeatClass(rowIndex: number, colIndex: number): string {
-    const status = this.getSeatStatus(rowIndex, colIndex);
-
-    switch (status) {
-      case SeatStatus.AVAILABLE:
-        return 'plan__seat-container plan__seat-container--available';
-      case SeatStatus.RESERVED:
-        return 'plan__seat-container plan__seat-container--reserved';
-      case SeatStatus.SELECTED:
-        return 'plan__seat-container plan__seat-container--selected';
-      default:
-        return 'plan__seat-container';
-    }
+    // Trigger change detection since we're using OnPush strategy
+    this.cdr.detectChanges();
   }
 
   /**
    * Navigates back to the stadium selection
    */
-  goBackToStadiums(): void {
+  onBackToStadiums(): void {
     this.router.navigate(['/salons']);
   }
 
@@ -262,20 +176,27 @@ export class PlanComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Handles clear selection request from selection summary component
    * Clears all selected seats
    */
-  clearSelection(): void {
+  onClearSelection(): void {
     this.selectedSeats.clear();
+    // Create new Set reference to trigger change detection in child components
+    this.selectedSeats = new Set();
     this.purchaseError = null;
     this.purchaseSuccess = null;
     console.log('All seat selections cleared');
+
+    // Trigger change detection since we're using OnPush strategy
+    this.cdr.detectChanges();
   }
 
   /**
+   * Handles purchase request from selection summary component
    * Purchases tickets for all selected seats
    * Implements the POST /map/<map_id>/ticket requirement
    */
-  purchaseSelectedSeats(): void {
+  onPurchaseSelectedSeats(): void {
     if (!this.mapId || this.selectedSeats.size === 0 || this.purchasing) {
       return;
     }
@@ -326,6 +247,8 @@ export class PlanComponent implements OnInit, OnDestroy {
               // Remove from selection
               const seatKey = `${coord.y}-${coord.x}`;
               this.selectedSeats.delete(seatKey);
+              // Create new Set reference to trigger change detection in child components
+              this.selectedSeats = new Set(this.selectedSeats);
             } else {
               failedPurchases.push(`(${coord.x + 1}, ${coord.y + 1}): ${response.message}`);
               console.log(`Purchase failed for seat (${coord.x}, ${coord.y}):`, response.message);
@@ -387,50 +310,11 @@ export class PlanComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Handles dismiss messages request from purchase messages component
    * Dismisses purchase messages
    */
-  dismissPurchaseMessages(): void {
+  onDismissPurchaseMessages(): void {
     this.purchaseError = null;
     this.purchaseSuccess = null;
-  }
-
-  /**
-   * TrackBy function for ngFor optimization in seat rendering
-   * @param index Row index
-   * @param row Row data
-   * @returns Unique identifier for the row
-   */
-  trackByRow(index: number, _row: number[]): number {
-    return index;
-  }
-
-  /**
-   * TrackBy function for seat columns
-   * @param index Column index
-   * @param seat Seat value or seat info object
-   * @returns Unique identifier for the seat
-   */
-  trackBySeat(index: number, seat: unknown): number {
-    return typeof seat === 'object' && seat !== null && 'index' in seat
-      ? (seat as { index: number }).index
-      : index;
-  }
-
-  /**
-   * Gets the height of each row for virtual scrolling
-   * This should match the CSS height of .plan__seat-row
-   * @returns Height in pixels
-   */
-  getRowHeight(): number {
-    // Height matches CSS min-height + border-spacing + any margins
-    // Values from CSS: Mobile: 18px, Tablet: 26px, Desktop: 32px
-    if (window.innerWidth <= 480) {
-      return 20; // Mobile: 18px min-height + 2px border-spacing
-    } else if (window.innerWidth <= 768) {
-      return 28; // Tablet: 26px min-height + 2px border-spacing
-    } else if (window.innerWidth > 1024) {
-      return 36; // Desktop: 32px min-height + 4px border-spacing
-    }
-    return 26; // Default: ~24px with border-spacing
   }
 }
