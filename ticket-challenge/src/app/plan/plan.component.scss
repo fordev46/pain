@@ -134,15 +134,15 @@
       border: 1px solid #333;
 
       &.available {
-        background: #4caf50;
+        background: #4caf50; /* Green for available */
       }
 
       &.reserved {
-        background: #f44336;
+        background: #757575; /* Gray for reserved */
       }
 
       &.selected {
-        background: #ff9800;
+        background: #9c27b0; /* Purple for selected/taken */
       }
     }
   }
@@ -376,26 +376,29 @@
   justify-content: center;
 }
 
-/* Seat styling with performance optimizations */
-.seat {
+/* Seat styling with SVG sprite approach */
+.seat-container {
   width: 20px;
   height: 20px;
   margin: 1px;
-  border-radius: 3px;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: 1px solid transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.6rem;
-  font-weight: bold;
   position: relative;
   user-select: none;
 
   /* Touch-friendly optimizations */
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+
+  .seat-icon {
+    width: 100%;
+    height: 100%;
+    display: block;
+    transition: fill 0.2s ease;
+  }
 
   /* Mobile-specific seat sizing */
   @media (max-width: 768px) {
@@ -456,14 +459,18 @@
   }
 
   &.available {
-    background: #4caf50;
-    border-color: #45a049;
+    .seat-icon {
+      fill: #4caf50; /* Green for available */
+    }
 
     &:hover {
-      background: #66bb6a;
       transform: scale(1.1);
       z-index: 10;
-      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+      filter: drop-shadow(0 2px 8px rgba(76, 175, 80, 0.4));
+
+      .seat-icon {
+        fill: #66bb6a; /* Lighter green on hover */
+      }
     }
 
     &:active {
@@ -472,26 +479,32 @@
   }
 
   &.reserved {
-    background: #f44336;
-    border-color: #d32f2f;
     cursor: not-allowed;
     opacity: 0.7;
 
+    .seat-icon {
+      fill: #9c27b0; /* Purple for reserved */
+    }
+
     &:hover {
-      background: #f44336;
       transform: none;
+      filter: none;
     }
   }
 
   &.selected {
-    background: #ff9800;
-    border-color: #f57c00;
     transform: scale(1.1);
     z-index: 5;
-    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.4);
+    filter: drop-shadow(0 2px 8px rgba(158, 158, 158, 0.4));
+
+    .seat-icon {
+      fill: #757575; /* Gray for selected/taken */
+    }
 
     &:hover {
-      background: #ffb74d;
+      .seat-icon {
+        fill: #9e9e9e; /* Lighter gray on hover */
+      }
     }
   }
 
@@ -503,7 +516,12 @@
 
   .seat-number {
     color: #fff;
+    font-size: 0.6rem;
+    font-weight: bold;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
   }
 }
 
@@ -581,7 +599,7 @@
 
   h3 {
     margin: 0 0 1rem 0;
-    color: #ff9800;
+    color: #757575; /* Gray to match selected seats */
     font-size: 1rem;
   }
 
@@ -592,7 +610,7 @@
     margin-bottom: 1.5rem;
 
     .selected-coord {
-      background: #ff9800;
+      background: #757575; /* Gray to match selected seats */
       color: #fff;
       padding: 0.25rem 0.5rem;
       border-radius: 4px;
@@ -742,11 +760,10 @@
     padding: 1rem;
   }
 
-  .seat {
+  .seat-container {
     width: 22px;
     height: 22px;
     margin: 1.5px;
-    border-radius: 4px;
     font-size: 0.7rem;
   }
 
@@ -782,11 +799,10 @@
     padding: 3rem 2rem;
   }
 
-  .seat {
+  .seat-container {
     width: 28px;
     height: 28px;
     margin: 2px;
-    border-radius: 5px;
     font-size: 0.8rem;
   }
 
@@ -808,11 +824,10 @@
 
 /* Large maps optimization */
 @media (min-width: 1440px) {
-  .seat {
+  .seat-container {
     width: 16px;
     height: 16px;
     margin: 1px;
-    border-radius: 2px;
     font-size: 0.5rem;
 
     .seat-number {
@@ -842,42 +857,57 @@
     contain: layout style;
   }
 
-  .seat {
+  .seat-container {
     contain: layout style paint;
   }
 }
 
 /* High contrast mode */
 @media (prefers-contrast: high) {
-  .seat {
-    border-width: 2px;
-
+  .seat-container {
     &.available {
-      background: #00ff00;
-      border-color: #000;
+      .seat-icon {
+        fill: #00ff00; /* Bright green for high contrast available */
+        stroke: #000;
+        stroke-width: 8;
+      }
     }
 
     &.reserved {
-      background: #ff0000;
-      border-color: #000;
+      .seat-icon {
+        fill: #ff00ff; /* Bright magenta/purple for high contrast reserved */
+        stroke: #000;
+        stroke-width: 8;
+      }
     }
 
     &.selected {
-      background: #ffff00;
-      border-color: #000;
-      color: #000;
+      .seat-icon {
+        fill: #808080; /* Gray for high contrast selected/taken */
+        stroke: #000;
+        stroke-width: 8;
+      }
+
+      .seat-number {
+        color: #000;
+      }
     }
   }
 }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .seat {
+  .seat-container {
     transition: none;
+
+    .seat-icon {
+      transition: none;
+    }
 
     &:hover,
     &.selected {
       transform: none;
+      filter: none;
     }
   }
 

@@ -75,6 +75,7 @@
             [style.transform]="'translateX(' + seatInfo.index * 22 + 'px)'"
           >
             <div
+              class="seat-container"
               [class]="getSeatClass(getVirtualRowIndex(index), seatInfo.index)"
               (click)="onSeatClick(getVirtualRowIndex(index), seatInfo.index)"
               [attr.aria-label]="
@@ -93,6 +94,9 @@
               (keydown.enter)="onSeatClick(getVirtualRowIndex(index), seatInfo.index)"
               (keydown.space)="onSeatClick(getVirtualRowIndex(index), seatInfo.index)"
             >
+              <svg class="seat-icon">
+                <use href="assets/icons.svg#seat-icon"></use>
+              </svg>
               <!-- No seat numbers in virtual mode for performance -->
             </div>
           </div>
@@ -122,6 +126,7 @@
             class="seat-wrapper"
           >
             <div
+              class="seat-container"
               [class]="getSeatClass(rowIndex, colIndex)"
               (click)="onSeatClick(rowIndex, colIndex)"
               [attr.aria-label]="'صندلی ردیف ' + (rowIndex + 1) + ' شماره ' + (colIndex + 1)"
@@ -134,6 +139,9 @@
               (keydown.enter)="onSeatClick(rowIndex, colIndex)"
               (keydown.space)="onSeatClick(rowIndex, colIndex)"
             >
+              <svg class="seat-icon">
+                <use href="assets/icons.svg#seat-icon"></use>
+              </svg>
               <!-- Seat content - can be customized for different seat types -->
               <span class="seat-number" *ngIf="seatMap.columns <= 50">
                 {{ colIndex + 1 }}

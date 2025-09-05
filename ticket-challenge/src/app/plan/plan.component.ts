@@ -203,13 +203,13 @@ export class PlanComponent implements OnInit, OnDestroy, AfterViewInit {
 
     switch (status) {
       case SeatStatus.AVAILABLE:
-        return 'seat available';
+        return 'seat-container available';
       case SeatStatus.RESERVED:
-        return 'seat reserved';
+        return 'seat-container reserved';
       case SeatStatus.SELECTED:
-        return 'seat selected';
+        return 'seat-container selected';
       default:
-        return 'seat';
+        return 'seat-container';
     }
   }
 
