@@ -4,7 +4,7 @@ import { MapService } from '../services/map.service';
 import { Stadium } from '../models';
 
 /**
- * Component responsible for displaying the list of available stadiums
+ * Component responsible for displaying the list of available Iranian stadiums
  * Fetches stadium data from the API and allows users to select a stadium
  */
 @Component({
@@ -27,8 +27,8 @@ export class SalonsListComponent implements OnInit {
   }
 
   /**
-   * Loads the list of available stadiums from the API
-   * Converts map IDs to Stadium objects for display
+   * Loads the list of available Iranian stadiums from the API
+   * Converts map IDs to Stadium objects with proper Iranian names for display
    */
   private loadStadiums(): void {
     this.loading = true;
@@ -36,10 +36,10 @@ export class SalonsListComponent implements OnInit {
 
     this.mapService.getMapIds().subscribe({
       next: (mapIds: string[]) => {
-        // Convert map IDs to Stadium objects for better UX
+        // Convert map IDs to Stadium objects with Iranian stadium names
         this.stadiums = mapIds.map((id, index) => ({
           id: id,
-          name: `سالن ${this.convertToFarsiNumber(index + 1)}`,
+          name: this.mapService.getStadiumName(id),
           mapId: id,
           image: `assets/bad-static-images-without-cdn/salon-${index + 1}.webp`,
         }));
@@ -47,7 +47,7 @@ export class SalonsListComponent implements OnInit {
       },
       error: err => {
         console.error('Error loading stadiums:', err);
-        this.error = 'خطا در بارگذاری سالن‌ها. لطفا دوباره تلاش کنید.';
+        this.error = 'خطا در بارگذاری ورزشگاه‌ها. لطفا دوباره تلاش کنید.';
         this.loading = false;
       },
     });
@@ -76,15 +76,5 @@ export class SalonsListComponent implements OnInit {
    */
   trackByStadium(index: number, stadium: Stadium): string {
     return stadium.id;
-  }
-
-  /**
-   * Converts English numbers to Farsi numbers for display
-   * @param num Number to convert
-   * @returns Farsi number string
-   */
-  private convertToFarsiNumber(num: number): string {
-    const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-    return num.toString().replace(/\d/g, digit => farsiDigits[parseInt(digit)]);
   }
 }

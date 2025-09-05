@@ -1,13 +1,13 @@
 <div class="salons-list">
   <!-- Header with title -->
   <header class="salons-list__header">
-    <h1 class="salons-list__title">انتخاب سالن</h1>
+    <h1 class="salons-list__title">انتخاب ورزشگاه</h1>
   </header>
 
   <!-- Loading state -->
   <div *ngIf="loading" class="salons-list__loading">
     <div class="salons-list__spinner"></div>
-    <p>در حال بارگذاری سالن‌ها...</p>
+    <p>در حال بارگذاری ورزشگاه‌ها...</p>
   </div>
 
   <!-- Error state -->
@@ -39,7 +39,7 @@
 
   <!-- Empty state -->
   <div *ngIf="!loading && !error && stadiums.length === 0" class="salons-list__empty-state">
-    <p>هیچ سالنی یافت نشد</p>
+    <p>هیچ ورزشگاهی یافت نشد</p>
     <button class="salons-list__retry-btn" (click)="retry()">تلاش مجدد</button>
   </div>
 </div>

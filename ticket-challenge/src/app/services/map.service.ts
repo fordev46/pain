@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { SeatMap, TicketPurchaseRequest, TicketPurchaseResponse } from '../models';
 
@@ -18,7 +18,34 @@ export class MapService {
   // Mock data for development since backend might not be ready
   private mockMapIds = ['m213', 'm654', 'm63', 'm6888', 'm1001', 'm2002'];
 
+  // Iranian stadium names mapped to map IDs
+  private iranianStadiumNames: { [key: string]: string } = {
+    m213: 'ورزشگاه آزادی', // Azadi Stadium
+    m654: 'ورزشگاه انقلاب', // Enqelab Stadium
+    m63: 'ورزشگاه تختی', // Takhti Stadium
+    m6888: 'ورزشگاه شهید کاظمی', // Shahid Kazemi Stadium
+    m1001: 'ورزشگاه امام رضا', // Imam Reza Stadium
+    m2002: 'ورزشگاه شهید شیرودی', // Shahid Shirudi Stadium
+  };
+
   constructor(private http: HttpClient) {}
+
+  /**
+   * Gets the Iranian stadium name for a given map ID
+   */
+  getStadiumName(mapId: string): string {
+    return this.iranianStadiumNames[mapId] || `Stadium ${mapId}`;
+  }
+
+  /**
+   * Gets all Iranian stadiums with their map IDs
+   */
+  getAllIranianStadiums(): { id: string; name: string }[] {
+    return this.mockMapIds.map(mapId => ({
+      id: mapId,
+      name: this.getStadiumName(mapId),
+    }));
+  }
 
   /**
    * Fetches the list of available map IDs
@@ -45,7 +72,7 @@ export class MapService {
     ).pipe(
       map(seats => ({
         id: mapId,
-        name: `Stadium ${mapId}`,
+        name: this.getStadiumName(mapId),
         seats: seats,
         rows: seats.length,
         columns: seats[0]?.length || 0,
@@ -82,11 +109,11 @@ export class MapService {
   }
 
   /**
-   * Generates mock seat map data for testing
+   * Generates mock seat map data for Iranian stadiums
    * Creates various sizes to test performance with large maps
    */
   private generateMockSeatMap(mapId: string): number[][] {
-    // Generate different sizes based on mapId for testing
+    // Generate different sizes based on mapId for testing Iranian stadiums
     const sizeMap: { [key: string]: { rows: number; cols: number } } = {
       m213: { rows: 20, cols: 30 },
       m654: { rows: 50, cols: 80 },
