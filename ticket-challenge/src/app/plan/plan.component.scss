@@ -5,25 +5,25 @@
   background: #242639;
   color: #fff;
   padding: 0.75rem;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   direction: rtl;
   overflow-x: hidden;
   position: relative;
-  
+
   /* Mobile-specific optimizations */
   @media (max-width: 768px) {
     padding: 0.5rem;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    
+
     /* Prevent zoom on double tap */
     touch-action: manipulation;
-    
+
     /* Improve scrolling on iOS */
     -webkit-overflow-scrolling: touch;
   }
-  
+
   /* Very small screens */
   @media (max-width: 480px) {
     padding: 0.25rem;
@@ -44,7 +44,7 @@
   z-index: 100;
   padding: 0.75rem 0;
   border-bottom: 1px solid #333;
-  
+
   /* Mobile optimizations */
   @media (max-width: 768px) {
     margin-bottom: 0.75rem;
@@ -52,26 +52,26 @@
     gap: 0.5rem;
     flex-direction: column;
     align-items: stretch;
-    
+
     /* Stack items vertically on mobile */
     .back-btn {
       align-self: flex-start;
       margin-bottom: 0.5rem;
     }
-    
+
     .stadium-info {
       order: 2;
       text-align: center;
       margin-bottom: 0.5rem;
     }
-    
+
     .legend {
       order: 3;
       justify-content: center;
       gap: 0.5rem;
     }
   }
-  
+
   @media (max-width: 480px) {
     margin-bottom: 0.5rem;
     padding: 0.25rem 0;
@@ -248,43 +248,43 @@
   padding: 1rem;
   position: relative;
   flex: 1;
-  
+
   /* Mobile optimizations */
   @media (max-width: 768px) {
     height: 65vh;
     padding: 0.75rem;
     border-radius: 6px;
-    
+
     /* Improve touch scrolling */
     -webkit-overflow-scrolling: touch;
     touch-action: pan-x pan-y;
-    
+
     /* Larger scrollbars on mobile for easier grabbing */
     &::-webkit-scrollbar {
       width: 8px;
       height: 8px;
     }
-    
+
     &::-webkit-scrollbar-track {
       background: #242639;
       border-radius: 4px;
     }
-    
+
     &::-webkit-scrollbar-thumb {
       background: #666;
       border-radius: 4px;
-      
+
       &:hover {
         background: #777;
       }
     }
   }
-  
+
   @media (max-width: 480px) {
     height: 60vh;
     padding: 0.5rem;
     border-radius: 4px;
-    
+
     /* Even larger scrollbars for small screens */
     &::-webkit-scrollbar {
       width: 12px;
@@ -392,11 +392,11 @@
   font-weight: bold;
   position: relative;
   user-select: none;
-  
+
   /* Touch-friendly optimizations */
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  
+
   /* Mobile-specific seat sizing */
   @media (max-width: 768px) {
     width: 24px;
@@ -404,19 +404,19 @@
     margin: 1.5px;
     border-radius: 4px;
     font-size: 0.7rem;
-    
+
     /* Larger touch targets for easier interaction */
     min-width: 24px;
     min-height: 24px;
   }
-  
+
   @media (max-width: 480px) {
     width: 28px;
     height: 28px;
     margin: 2px;
     border-radius: 5px;
     font-size: 0.8rem;
-    
+
     /* Even larger touch targets for small screens */
     min-width: 28px;
     min-height: 28px;
@@ -438,7 +438,7 @@
     &.selected {
       transform: none;
     }
-    
+
     /* Mobile virtual scroll adjustments */
     @media (max-width: 768px) {
       width: 16px;
@@ -446,7 +446,7 @@
       margin: 1px;
       border-radius: 3px;
     }
-    
+
     @media (max-width: 480px) {
       width: 18px;
       height: 18px;
@@ -698,21 +698,21 @@
   .plan-container {
     padding: 1rem;
   }
-  
+
   .header {
     flex-direction: row;
     align-items: center;
-    
+
     .stadium-info {
       order: 0;
       margin-bottom: 0;
     }
-    
+
     .legend {
       order: 0;
     }
   }
-  
+
   .seat-grid-container {
     height: 68vh;
   }
@@ -727,7 +727,7 @@
   .header {
     margin-bottom: 2rem;
     flex-direction: row;
-    
+
     .back-btn {
       margin-bottom: 0;
     }

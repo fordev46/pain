@@ -15,9 +15,9 @@ export interface Coordinates {
  * Enum representing the possible states of a seat
  */
 export enum SeatStatus {
-  AVAILABLE = 0,    // Seat is available for purchase
-  RESERVED = 1,     // Seat is already reserved/sold
-  SELECTED = 2      // Seat is currently selected by user
+  AVAILABLE = 0, // Seat is available for purchase
+  RESERVED = 1, // Seat is already reserved/sold
+  SELECTED = 2, // Seat is currently selected by user
 }
 
 /**

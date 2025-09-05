@@ -7,24 +7,24 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: '/salons',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'salons',
-    component: SalonsListComponent
+    component: SalonsListComponent,
   },
   {
     path: 'plan/:mapId',
-    component: PlanComponent
+    component: PlanComponent,
   },
   {
     path: '**',
-    redirectTo: '/salons'
-  }
+    redirectTo: '/salons',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

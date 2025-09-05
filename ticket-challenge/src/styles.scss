@@ -1,92 +1,92 @@
 /* Global styles for the ticket booking application */
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 /* Responsive typography and base styles */
 html {
-    font-size: 16px;
-    scroll-behavior: smooth;
-    -webkit-text-size-adjust: 100%; /* Prevent font scaling in iOS */
-    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%; /* Prevent font scaling in iOS */
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
 }
 
 body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.4;
-    color: #333;
-    background: #242639;
-    overflow-x: hidden; /* Prevent horizontal scroll */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.4;
+  color: #333;
+  background: #242639;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Responsive font sizes */
 @media (max-width: 768px) {
-    html {
-        font-size: 14px;
-    }
+  html {
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 480px) {
-    html {
-        font-size: 13px;
-    }
+  html {
+    font-size: 13px;
+  }
 }
 
 /* Touch-friendly interactive elements */
-button, 
-[role="button"],
-input[type="button"],
-input[type="submit"] {
-    min-height: 44px; /* iOS HIG minimum touch target */
-    min-width: 44px;
-    cursor: pointer;
-    touch-action: manipulation; /* Disable double-tap zoom */
+button,
+[role='button'],
+input[type='button'],
+input[type='submit'] {
+  min-height: 44px; /* iOS HIG minimum touch target */
+  min-width: 44px;
+  cursor: pointer;
+  touch-action: manipulation; /* Disable double-tap zoom */
 }
 
 /* Focus styles for accessibility */
 :focus {
-    outline: 2px solid #2196f3;
-    outline-offset: 2px;
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
 }
 
 :focus:not(:focus-visible) {
-    outline: none;
+  outline: none;
 }
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
-    body {
-        background: #000;
-        color: #fff;
-    }
+  body {
+    background: #000;
+    color: #fff;
+  }
 }
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-    
-    html {
-        scroll-behavior: auto;
-    }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 /* Print styles */
 @media print {
-    body {
-        background: white;
-        color: black;
-    }
-    
-    .no-print {
-        display: none !important;
-    }
+  body {
+    background: white;
+    color: black;
+  }
+
+  .no-print {
+    display: none !important;
+  }
 }

@@ -10,15 +10,15 @@ import { SeatMap, TicketPurchaseRequest, TicketPurchaseResponse } from '../model
  * Following Domain Driven Design - this is our Repository pattern implementation
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MapService {
   private readonly baseUrl = 'https://ticket-challange.herokuapp.com';
-  
+
   // Mock data for development since backend might not be ready
   private mockMapIds = ['m213', 'm654', 'm63', 'm6888', 'm1001', 'm2002'];
-  
-  constructor(private http: HttpClient) { }
+
+  constructor(private http: HttpClient) {}
 
   /**
    * Fetches the list of available map IDs
@@ -48,7 +48,7 @@ export class MapService {
         name: `Stadium ${mapId}`,
         seats: seats,
         rows: seats.length,
-        columns: seats[0]?.length || 0
+        columns: seats[0]?.length || 0,
       }))
     );
   }
@@ -58,7 +58,10 @@ export class MapService {
    * API: POST /map/<map_id>/ticket
    * Body: { x: number, y: number }
    */
-  purchaseTicket(mapId: string, request: TicketPurchaseRequest): Observable<TicketPurchaseResponse> {
+  purchaseTicket(
+    mapId: string,
+    request: TicketPurchaseRequest
+  ): Observable<TicketPurchaseResponse> {
     return this.tryRealApiOrFallback<TicketPurchaseResponse>(
       () => this.http.post<TicketPurchaseResponse>(`${this.baseUrl}/map/${mapId}/ticket`, request),
       () => of(this.generateMockPurchaseResponse(request)).pipe(delay(1000))
@@ -97,13 +100,13 @@ export class MapService {
    */
   private generateMockSeatMap(mapId: string): number[][] {
     // Generate different sizes based on mapId for testing
-    const sizeMap: { [key: string]: { rows: number, cols: number } } = {
-      'm213': { rows: 20, cols: 30 },
-      'm654': { rows: 50, cols: 80 },
-      'm63': { rows: 100, cols: 200 }, // Large map for performance testing
-      'm6888': { rows: 300, cols: 350 }, // Very large map (105k seats)
-      'm1001': { rows: 25, cols: 40 },
-      'm2002': { rows: 15, cols: 25 }
+    const sizeMap: { [key: string]: { rows: number; cols: number } } = {
+      m213: { rows: 20, cols: 30 },
+      m654: { rows: 50, cols: 80 },
+      m63: { rows: 100, cols: 200 }, // Large map for performance testing
+      m6888: { rows: 300, cols: 350 }, // Very large map (105k seats)
+      m1001: { rows: 25, cols: 40 },
+      m2002: { rows: 15, cols: 25 },
     };
 
     const config = sizeMap[mapId] || { rows: 20, cols: 30 };
@@ -128,17 +131,17 @@ export class MapService {
   private generateMockPurchaseResponse(request: TicketPurchaseRequest): TicketPurchaseResponse {
     // Simulate occasional failures for testing error handling
     const success = Math.random() > 0.1; // 90% success rate
-    
+
     if (success) {
       return {
         success: true,
         message: `Ticket purchased successfully for seat (${request.x}, ${request.y})`,
-        ticketId: `ticket_${Date.now()}_${request.x}_${request.y}`
+        ticketId: `ticket_${Date.now()}_${request.x}_${request.y}`,
       };
     } else {
       return {
         success: false,
-        message: 'Purchase failed. Please try again.'
+        message: 'Purchase failed. Please try again.',
       };
     }
   }

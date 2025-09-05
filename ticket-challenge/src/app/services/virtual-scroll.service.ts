@@ -6,16 +6,15 @@ import { BehaviorSubject, Observable } from 'rxjs';
  * Implements viewport-based rendering to maintain smooth performance with 100k+ seats
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class VirtualScrollService {
-  
   // Viewport configuration
   private viewport = {
     width: 0,
     height: 0,
     scrollTop: 0,
-    scrollLeft: 0
+    scrollLeft: 0,
   };
 
   // Item dimensions
@@ -23,26 +22,32 @@ export class VirtualScrollService {
     width: 20,
     height: 20,
     marginX: 2,
-    marginY: 2
+    marginY: 2,
   };
 
   // Visible range subjects
-  private visibleRowsSubject = new BehaviorSubject<{start: number, end: number}>({start: 0, end: 0});
-  private visibleColsSubject = new BehaviorSubject<{start: number, end: number}>({start: 0, end: 0});
+  private visibleRowsSubject = new BehaviorSubject<{ start: number; end: number }>({
+    start: 0,
+    end: 0,
+  });
+  private visibleColsSubject = new BehaviorSubject<{ start: number; end: number }>({
+    start: 0,
+    end: 0,
+  });
 
-  constructor() { }
+  constructor() {}
 
   /**
    * Gets observable for visible row range
    */
-  get visibleRows$(): Observable<{start: number, end: number}> {
+  get visibleRows$(): Observable<{ start: number; end: number }> {
     return this.visibleRowsSubject.asObservable();
   }
 
   /**
    * Gets observable for visible column range
    */
-  get visibleCols$(): Observable<{start: number, end: number}> {
+  get visibleCols$(): Observable<{ start: number; end: number }> {
     return this.visibleColsSubject.asObservable();
   }
 
@@ -50,7 +55,12 @@ export class VirtualScrollService {
    * Updates viewport dimensions and scroll position
    * @param viewport Viewport configuration
    */
-  updateViewport(viewport: {width: number, height: number, scrollTop: number, scrollLeft: number}): void {
+  updateViewport(viewport: {
+    width: number;
+    height: number;
+    scrollTop: number;
+    scrollLeft: number;
+  }): void {
     this.viewport = { ...viewport };
     this.calculateVisibleRange();
   }
@@ -59,7 +69,12 @@ export class VirtualScrollService {
    * Updates item size configuration
    * @param itemSize Item dimensions
    */
-  updateItemSize(itemSize: {width: number, height: number, marginX: number, marginY: number}): void {
+  updateItemSize(itemSize: {
+    width: number;
+    height: number;
+    marginX: number;
+    marginY: number;
+  }): void {
     this.itemSize = { ...itemSize };
     this.calculateVisibleRange();
   }
@@ -70,22 +85,22 @@ export class VirtualScrollService {
    */
   private calculateVisibleRange(): void {
     const buffer = 5; // Extra items to render outside viewport for smooth scrolling
-    
+
     // Calculate visible rows
     const rowHeight = this.itemSize.height + this.itemSize.marginY;
     const visibleRowStart = Math.max(0, Math.floor(this.viewport.scrollTop / rowHeight) - buffer);
-    const visibleRowCount = Math.ceil(this.viewport.height / rowHeight) + (buffer * 2);
+    const visibleRowCount = Math.ceil(this.viewport.height / rowHeight) + buffer * 2;
     const visibleRowEnd = visibleRowStart + visibleRowCount;
 
     // Calculate visible columns
     const colWidth = this.itemSize.width + this.itemSize.marginX;
     const visibleColStart = Math.max(0, Math.floor(this.viewport.scrollLeft / colWidth) - buffer);
-    const visibleColCount = Math.ceil(this.viewport.width / colWidth) + (buffer * 2);
+    const visibleColCount = Math.ceil(this.viewport.width / colWidth) + buffer * 2;
     const visibleColEnd = visibleColStart + visibleColCount;
 
     // Update subjects
-    this.visibleRowsSubject.next({start: visibleRowStart, end: visibleRowEnd});
-    this.visibleColsSubject.next({start: visibleColStart, end: visibleColEnd});
+    this.visibleRowsSubject.next({ start: visibleRowStart, end: visibleRowEnd });
+    this.visibleColsSubject.next({ start: visibleColStart, end: visibleColEnd });
   }
 
   /**
@@ -155,7 +170,7 @@ export class VirtualScrollService {
    */
   reset(): void {
     this.viewport = { width: 0, height: 0, scrollTop: 0, scrollLeft: 0 };
-    this.visibleRowsSubject.next({start: 0, end: 0});
-    this.visibleColsSubject.next({start: 0, end: 0});
+    this.visibleRowsSubject.next({ start: 0, end: 0 });
+    this.visibleColsSubject.next({ start: 0, end: 0 });
   }
 }

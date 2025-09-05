@@ -1,47 +1,48 @@
 <div class="container">
-    <!-- Header with title and random selection button -->
-    <header class="header">
-        <h1 class="title">انتخاب سالن</h1>
-        <button 
-            class="random-btn" 
-            (click)="selectRandomStadium()"
-            [disabled]="loading || stadiums.length === 0"
-            title="انتخاب تصادفی سالن">
-            انتخاب تصادفی
-        </button>
-    </header>
+  <!-- Header with title and random selection button -->
+  <header class="header">
+    <h1 class="title">انتخاب سالن</h1>
+    <button
+      class="random-btn"
+      (click)="selectRandomStadium()"
+      [disabled]="loading || stadiums.length === 0"
+      title="انتخاب تصادفی سالن"
+    >
+      انتخاب تصادفی
+    </button>
+  </header>
 
-    <!-- Loading state -->
-    <div *ngIf="loading" class="loading">
-        <div class="spinner"></div>
-        <p>در حال بارگذاری سالن‌ها...</p>
+  <!-- Loading state -->
+  <div *ngIf="loading" class="loading">
+    <div class="spinner"></div>
+    <p>در حال بارگذاری سالن‌ها...</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="error && !loading" class="error">
+    <p>{{ error }}</p>
+    <button class="retry-btn" (click)="retry()">تلاش مجدد</button>
+  </div>
+
+  <!-- Stadiums list -->
+  <section *ngIf="!loading && !error" class="stadiums-grid">
+    <div
+      *ngFor="let stadium of stadiums; trackBy: trackByStadium"
+      class="stadium-card"
+      (click)="onStadiumSelect(stadium)"
+      [attr.aria-label]="'انتخاب ' + stadium.name"
+      tabindex="0"
+      (keydown.enter)="onStadiumSelect(stadium)"
+      (keydown.space)="onStadiumSelect(stadium)"
+    >
+      <span class="stadium-name">{{ stadium.name }}</span>
+      <span class="stadium-id">{{ stadium.id }}</span>
     </div>
+  </section>
 
-    <!-- Error state -->
-    <div *ngIf="error && !loading" class="error">
-        <p>{{ error }}</p>
-        <button class="retry-btn" (click)="retry()">تلاش مجدد</button>
-    </div>
-
-    <!-- Stadiums list -->
-    <section *ngIf="!loading && !error" class="stadiums-grid">
-        <div 
-            *ngFor="let stadium of stadiums; trackBy: trackByStadium"
-            class="stadium-card"
-            (click)="onStadiumSelect(stadium)"
-            [attr.aria-label]="'انتخاب ' + stadium.name"
-            tabindex="0"
-            (keydown.enter)="onStadiumSelect(stadium)"
-            (keydown.space)="onStadiumSelect(stadium)">
-            
-            <span class="stadium-name">{{ stadium.name }}</span>
-            <span class="stadium-id">{{ stadium.id }}</span>
-        </div>
-    </section>
-
-    <!-- Empty state -->
-    <div *ngIf="!loading && !error && stadiums.length === 0" class="empty-state">
-        <p>هیچ سالنی یافت نشد</p>
-        <button class="retry-btn" (click)="retry()">تلاش مجدد</button>
-    </div>
+  <!-- Empty state -->
+  <div *ngIf="!loading && !error && stadiums.length === 0" class="empty-state">
+    <p>هیچ سالنی یافت نشد</p>
+    <button class="retry-btn" (click)="retry()">تلاش مجدد</button>
+  </div>
 </div>
