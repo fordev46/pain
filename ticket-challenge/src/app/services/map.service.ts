@@ -69,19 +69,6 @@ export class MapService {
   }
 
   /**
-   * Selects a random map ID from the available maps
-   * This implements the requirement to "pick one randomly"
-   */
-  getRandomMapId(): Observable<string> {
-    return this.getMapIds().pipe(
-      map(mapIds => {
-        const randomIndex = Math.floor(Math.random() * mapIds.length);
-        return mapIds[randomIndex];
-      })
-    );
-  }
-
-  /**
    * Helper method to try real API first, then fallback to mock implementation
    * This ensures the app works even if the backend is not ready
    */

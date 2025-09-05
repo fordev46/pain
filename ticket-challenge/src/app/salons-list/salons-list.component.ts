@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { MapService } from '../services/map.service';
 import { Stadium } from '../models';
 
 /**
  * Component responsible for displaying the list of available stadiums
  * Fetches stadium data from the API and allows users to select a stadium
- * Implements random stadium selection as required
  */
 @Component({
   selector: 'app-salons-list',
@@ -60,26 +58,6 @@ export class SalonsListComponent implements OnInit {
    */
   onStadiumSelect(stadium: Stadium): void {
     this.router.navigate(['/plan', stadium.mapId]);
-  }
-
-  /**
-   * Implements the "pick one randomly" requirement
-   * Selects a random stadium and navigates to its plan
-   */
-  selectRandomStadium(): void {
-    if (this.stadiums.length === 0) {
-      return;
-    }
-
-    this.mapService.getRandomMapId().subscribe({
-      next: (randomMapId: string) => {
-        this.router.navigate(['/plan', randomMapId]);
-      },
-      error: err => {
-        console.error('Error selecting random stadium:', err);
-        this.error = 'خطا در انتخاب سالن تصادفی.';
-      },
-    });
   }
 
   /**

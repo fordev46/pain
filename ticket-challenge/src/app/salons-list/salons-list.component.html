@@ -1,15 +1,7 @@
 <div class="salons-list">
-  <!-- Header with title and random selection button -->
+  <!-- Header with title -->
   <header class="salons-list__header">
     <h1 class="salons-list__title">انتخاب سالن</h1>
-    <button
-      class="salons-list__random-btn"
-      (click)="selectRandomStadium()"
-      [disabled]="loading || stadiums.length === 0"
-      title="انتخاب تصادفی سالن"
-    >
-      انتخاب تصادفی
-    </button>
   </header>
 
   <!-- Loading state -->
