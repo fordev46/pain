@@ -253,7 +253,6 @@
 .plan__seat-table-container {
   width: 100%;
   height: 70vh;
-  overflow: auto;
   border: 1px solid #333;
   border-radius: 8px;
   padding: 1rem;
@@ -304,7 +303,14 @@
   }
 }
 
-/* Seat table rendering */
+/* Virtual scroll viewport */
+.plan__virtual-viewport {
+  width: 100%;
+  height: calc(70vh - 2rem); /* Account for padding */
+  min-height: 400px;
+}
+
+/* Seat table rendering - updated for virtual scrolling */
 .plan__seat-table {
   width: 100%;
   min-width: fit-content;
@@ -665,6 +671,11 @@
   .plan__seat-table-container {
     height: 68vh;
   }
+
+  .plan__virtual-viewport {
+    height: calc(68vh - 1.5rem);
+    min-height: 300px;
+  }
 }
 
 /* Tablets */
@@ -689,6 +700,11 @@
   .plan__seat-table-container {
     height: 70vh;
     padding: 1rem;
+  }
+
+  .plan__virtual-viewport {
+    height: calc(70vh - 2rem);
+    min-height: 400px;
   }
 
   .plan__seat-container {

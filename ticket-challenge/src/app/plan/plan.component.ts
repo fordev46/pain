@@ -122,7 +122,8 @@ export class PlanComponent implements OnInit, OnDestroy {
 
   /**
    * Handles seat grid keydown events using event delegation
-   * @param event The keydown event from the seat grid container
+
+  * @param event The keydown event from the seat grid container
    */
   onSeatGridKeydown(event: KeyboardEvent): void {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -294,7 +295,7 @@ export class PlanComponent implements OnInit, OnDestroy {
     console.log(`Starting purchase process for ${totalSeats} seat(s)`);
 
     // Purchase each seat individually (as per API specification)
-    selectedCoordinates.forEach((coord, index) => {
+    selectedCoordinates.forEach((coord, _index) => {
       const request: TicketPurchaseRequest = {
         x: coord.x,
         y: coord.y,
@@ -399,7 +400,7 @@ export class PlanComponent implements OnInit, OnDestroy {
    * @param row Row data
    * @returns Unique identifier for the row
    */
-  trackByRow(index: number, row: number[]): number {
+  trackByRow(index: number, _row: number[]): number {
     return index;
   }
 
@@ -409,7 +410,27 @@ export class PlanComponent implements OnInit, OnDestroy {
    * @param seat Seat value or seat info object
    * @returns Unique identifier for the seat
    */
-  trackBySeat(index: number, seat: any): number {
-    return typeof seat === 'object' ? seat.index : index;
+  trackBySeat(index: number, seat: unknown): number {
+    return typeof seat === 'object' && seat !== null && 'index' in seat
+      ? (seat as { index: number }).index
+      : index;
+  }
+
+  /**
+   * Gets the height of each row for virtual scrolling
+   * This should match the CSS height of .plan__seat-row
+   * @returns Height in pixels
+   */
+  getRowHeight(): number {
+    // Height matches CSS min-height + border-spacing + any margins
+    // Values from CSS: Mobile: 18px, Tablet: 26px, Desktop: 32px
+    if (window.innerWidth <= 480) {
+      return 20; // Mobile: 18px min-height + 2px border-spacing
+    } else if (window.innerWidth <= 768) {
+      return 28; // Tablet: 26px min-height + 2px border-spacing
+    } else if (window.innerWidth > 1024) {
+      return 36; // Desktop: 32px min-height + 4px border-spacing
+    }
+    return 26; // Default: ~24px with border-spacing
   }
 }

@@ -11,6 +11,9 @@ importers:
       '@angular/animations':
         specifier: ~13.3.0
         version: 13.3.12(@angular/core@13.3.12(rxjs@7.5.7)(zone.js@0.11.8))
+      '@angular/cdk':
+        specifier: ^13.3.9
+        version: 13.3.9(@angular/common@13.3.12(@angular/core@13.3.12(rxjs@7.5.7)(zone.js@0.11.8))(rxjs@7.5.7))(@angular/core@13.3.12(rxjs@7.5.7)(zone.js@0.11.8))(rxjs@7.5.7)
       '@angular/common':
         specifier: ~13.3.0
         version: 13.3.12(@angular/core@13.3.12(rxjs@7.5.7)(zone.js@0.11.8))(rxjs@7.5.7)
@@ -238,6 +241,13 @@ packages:
     engines: {node: ^12.20.0 || ^14.15.0 || >=16.10.0}
     peerDependencies:
       '@angular/core': 13.3.12
+
+  '@angular/cdk@13.3.9':
+    resolution: {integrity: sha512-XCuCbeuxWFyo3EYrgEYx7eHzwl76vaWcxtWXl00ka8d+WAOtMQ6Tf1D98ybYT5uwF9889fFpXAPw98mVnlo3MA==}
+    peerDependencies:
+      '@angular/common': ^13.0.0 || ^14.0.0-0
+      '@angular/core': ^13.0.0 || ^14.0.0-0
+      rxjs: ^6.5.3 || ^7.4.0
 
   '@angular/cli@13.3.11':
     resolution: {integrity: sha512-LTuQ1wC/VJiHqHx8nYJCx0EJv1Ek7R6VvP/5vmr/+M8oVvJ2zSh/aIbcPg6BTL0YEfMI6nX41mUjPBUfF0q2OA==}
@@ -3271,6 +3281,9 @@ packages:
   parse5-sax-parser@6.0.1:
     resolution: {integrity: sha512-kXX+5S81lgESA0LsDuGjAlBybImAChYRMT+/uKCEXFBFOeEhS52qUCydGhU3qLRD8D9DVjaUo821WK7DM4iCeg==}
 
+  parse5@5.1.1:
+    resolution: {integrity: sha512-ugq4DFI0Ptb+WWjAdOK16+u/nHfiIrcE+sh8kZMaM0WllQKLI9rOUq6c2b7cwPkXdzfQESqvoqK6ug7U/Yyzug==}
+
   parse5@6.0.1:
     resolution: {integrity: sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==}
 
@@ -4598,6 +4611,15 @@ snapshots:
     dependencies:
       '@angular/core': 13.3.12(rxjs@7.5.7)(zone.js@0.11.8)
       tslib: 2.8.1
+
+  '@angular/cdk@13.3.9(@angular/common@13.3.12(@angular/core@13.3.12(rxjs@7.5.7)(zone.js@0.11.8))(rxjs@7.5.7))(@angular/core@13.3.12(rxjs@7.5.7)(zone.js@0.11.8))(rxjs@7.5.7)':
+    dependencies:
+      '@angular/common': 13.3.12(@angular/core@13.3.12(rxjs@7.5.7)(zone.js@0.11.8))(rxjs@7.5.7)
+      '@angular/core': 13.3.12(rxjs@7.5.7)(zone.js@0.11.8)
+      rxjs: 7.5.7
+      tslib: 2.8.1
+    optionalDependencies:
+      parse5: 5.1.1
 
   '@angular/cli@13.3.11':
     dependencies:
@@ -8103,6 +8125,9 @@ snapshots:
   parse5-sax-parser@6.0.1:
     dependencies:
       parse5: 6.0.1
+
+  parse5@5.1.1:
+    optional: true
 
   parse5@6.0.1: {}
 

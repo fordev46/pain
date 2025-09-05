@@ -51,57 +51,60 @@
       <span *ngIf="getSelectedSeatCount() > 0">انتخاب شده: {{ getSelectedSeatCount() }}</span>
     </div>
 
-    <!-- Seat table -->
+    <!-- Seat table with virtual scrolling -->
     <div class="plan__seat-table-wrapper">
       <div class="plan__seat-table-container">
-        <!-- Table rendering mode -->
-        <table
-          class="plan__seat-table"
-          (click)="onSeatGridClick($event)"
-          (keydown)="onSeatGridKeydown($event)"
-          tabindex="-1"
-        >
-          <tbody>
-            <tr
-              *ngFor="let row of seatMap.seats; let rowIndex = index; trackBy: trackByRow"
-              class="plan__seat-row"
-            >
-              <!-- Row number -->
-              <td class="plan__row-label">{{ rowIndex + 1 }}</td>
-
-              <!-- Seats in row -->
-              <td
-                *ngFor="let seat of row; let colIndex = index; trackBy: trackBySeat"
-                class="plan__seat-cell"
+        <!-- Virtual scroll viewport containing table -->
+        <cdk-virtual-scroll-viewport [itemSize]="getRowHeight()" class="plan__virtual-viewport">
+          <table
+            class="plan__seat-table"
+            (click)="onSeatGridClick($event)"
+            (keydown)="onSeatGridKeydown($event)"
+            tabindex="-1"
+          >
+            <tbody>
+              <tr
+                *cdkVirtualFor="let row of seatMap.seats; let rowIndex = index; trackBy: trackByRow"
+                class="plan__seat-row"
               >
-                <div
-                  class="plan__seat-container"
-                  [class]="getSeatClass(rowIndex, colIndex)"
-                  [attr.data-row]="rowIndex"
-                  [attr.data-col]="colIndex"
-                  [attr.aria-label]="'صندلی ردیف ' + (rowIndex + 1) + ' شماره ' + (colIndex + 1)"
-                  [attr.aria-pressed]="getSeatStatus(rowIndex, colIndex) === SeatStatus.SELECTED"
-                  [attr.disabled]="
-                    getSeatStatus(rowIndex, colIndex) === SeatStatus.RESERVED ? true : null
-                  "
-                  tabindex="0"
-                  role="button"
-                >
-                  <svg class="plan__seat-icon">
-                    <use href="assets/icons.svg#seat-icon"></use>
-                  </svg>
-                  <!-- Seat content - can be customized for different seat types -->
-                  <span class="plan__seat-number" *ngIf="seatMap.columns <= 50">
-                    {{ colIndex + 1 }}
-                  </span>
-                </div>
-              </td>
+                <!-- Row number -->
+                <td class="plan__row-label">{{ rowIndex + 1 }}</td>
 
-              <!-- Row number (right side) -->
-              <td class="plan__row-label">{{ rowIndex + 1 }}</td>
-            </tr>
-          </tbody>
-        </table>
+                <!-- Seats in row -->
+                <td
+                  *ngFor="let seat of row; let colIndex = index; trackBy: trackBySeat"
+                  class="plan__seat-cell"
+                >
+                  <div
+                    class="plan__seat-container"
+                    [class]="getSeatClass(rowIndex, colIndex)"
+                    [attr.data-row]="rowIndex"
+                    [attr.data-col]="colIndex"
+                    [attr.aria-label]="'صندلی ردیف ' + (rowIndex + 1) + ' شماره ' + (colIndex + 1)"
+                    [attr.aria-pressed]="getSeatStatus(rowIndex, colIndex) === SeatStatus.SELECTED"
+                    [attr.disabled]="
+                      getSeatStatus(rowIndex, colIndex) === SeatStatus.RESERVED ? true : null
+                    "
+                    [attr.title]="'موقعیت: X=' + colIndex + ', Y=' + rowIndex"
+                    tabindex="0"
+                    role="button"
+                  >
+                    <svg class="plan__seat-icon">
+                      <use href="assets/icons.svg#seat-icon"></use>
+                    </svg>
+                    <!-- Seat content - can be customized for different seat types -->
+                    <span class="plan__seat-number" *ngIf="seatMap.columns <= 50">
+                      {{ colIndex + 1 }}
+                    </span>
+                  </div>
+                </td>
+
+                <!-- Row number (right side) -->
+                <td class="plan__row-label">{{ rowIndex + 1 }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </cdk-virtual-scroll-viewport>
       </div>
     </div>
 
