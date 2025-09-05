@@ -51,66 +51,11 @@
       <span>صحنه / زمین بازی</span>
     </div>
 
-    <!-- Seat grid with conditional virtual scrolling -->
-   <div class="seat-grid-wrapper">
-      <div #seatMapContainer class="seat-grid-container" [class.virtual-scroll]="useVirtualScroll">
-        <!-- Virtual scrolling mode for large maps -->
+    <!-- Seat grid -->
+    <div class="seat-grid-wrapper">
+      <div class="seat-grid-container">
+        <!-- Standard rendering mode -->
         <div
-          *ngIf="useVirtualScroll"
-          class="virtual-seat-grid"
-          [style.height.px]="getTotalHeight()"
-          [style.width.px]="getTotalWidth()"
-          (click)="onSeatGridClick($event)"
-          (keydown)="onSeatGridKeydown($event)"
-        >
-          <div
-            *ngFor="let row of virtualRows; let index = index; trackBy: trackByRow"
-            class="virtual-seat-row"
-            [style.transform]="'translateY(' + getRowOffset(index) + 'px)'"
-          >
-            <!-- Row number -->
-            <div class="row-label">{{ getVirtualRowIndex(index) + 1 }}</div>
-
-            <!-- Visible seats in row -->
-            <div
-              *ngFor="let seatInfo of getVisibleSeats(row); trackBy: trackBySeat"
-              class="seat-wrapper"
-              [style.transform]="'translateX(' + seatInfo.index * 22 + 'px)'"
-            >
-              <div
-                class="seat-container"
-                [class]="getSeatClass(getVirtualRowIndex(index), seatInfo.index)"
-                [attr.data-row]="getVirtualRowIndex(index)"
-                [attr.data-col]="seatInfo.index"
-                [attr.aria-label]="
-                  'صندلی ردیف ' + (getVirtualRowIndex(index) + 1) + ' شماره ' + (seatInfo.index + 1)
-                "
-                [attr.aria-pressed]="
-                  getSeatStatus(getVirtualRowIndex(index), seatInfo.index) === SeatStatus.SELECTED
-                "
-                [attr.disabled]="
-                  getSeatStatus(getVirtualRowIndex(index), seatInfo.index) === SeatStatus.RESERVED
-                    ? true
-                    : null
-                "
-                tabindex="0"
-                role="button"
-              >
-                <svg class="seat-icon">
-                  <use href="assets/icons.svg#seat-icon"></use>
-                </svg>
-                <!-- No seat numbers in virtual mode for performance -->
-              </div>
-            </div>
-
-            <!-- Row number (right side) -->
-            <div class="row-label right">{{ getVirtualRowIndex(index) + 1 }}</div>
-          </div>
-        </div>
-
-        <!-- Standard rendering mode for smaller maps -->
-        <div
-          *ngIf="!useVirtualScroll"
           class="standard-seat-grid"
           [style.--rows]="seatMap.rows"
           [style.--columns]="seatMap.columns"

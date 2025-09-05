@@ -248,7 +248,7 @@
   }
 }
 
-/* Seat grid container - supports both virtual and standard rendering */
+/* Seat grid container */
 .seat-grid-container {
   width: 100%;
   height: 70vh;
@@ -301,60 +301,9 @@
       height: 12px;
     }
   }
-
-  &.virtual-scroll {
-    /* Optimized scrolling for large maps */
-    scroll-behavior: auto;
-    will-change: scroll-position;
-  }
 }
 
-/* Virtual scrolling implementation for large maps */
-.virtual-seat-grid {
-  position: relative;
-  contain: layout style paint;
-}
-
-.virtual-seat-row {
-  position: absolute;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  height: 14px; /* Smaller height for virtual rows */
-  contain: layout style;
-
-  .row-label {
-    position: sticky;
-    left: 0;
-    min-width: 25px;
-    text-align: center;
-    font-size: 0.6rem;
-    color: #999;
-    font-weight: bold;
-    background: #1a1a2e;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &.right {
-      position: sticky;
-      right: 0;
-      left: unset;
-    }
-  }
-
-  .seat-wrapper {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
-/* Standard rendering for smaller maps */
+/* Standard seat grid rendering */
 .standard-seat-grid {
   width: 100%;
   min-width: fit-content;
@@ -439,39 +388,6 @@
     /* Even larger touch targets for small screens */
     min-width: 28px;
     min-height: 28px;
-  }
-
-  /* Virtual scrolling mode optimizations */
-  .virtual-scroll & {
-    width: 12px;
-    height: 12px;
-    margin: 0.5px;
-    border-radius: 2px;
-    transition: none; /* Disable transitions for performance */
-    font-size: 0;
-
-    &:hover {
-      transform: none; /* Disable hover transforms for performance */
-    }
-
-    &.selected {
-      transform: none;
-    }
-
-    /* Mobile virtual scroll adjustments */
-    @media (max-width: 768px) {
-      width: 16px;
-      height: 16px;
-      margin: 1px;
-      border-radius: 3px;
-    }
-
-    @media (max-width: 480px) {
-      width: 18px;
-      height: 18px;
-      margin: 1.5px;
-      border-radius: 4px;
-    }
   }
 
   &.available {
