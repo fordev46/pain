@@ -27,8 +27,13 @@
       (keydown.enter)="onStadiumSelect(stadium)"
       (keydown.space)="onStadiumSelect(stadium)"
     >
-      <span class="salons-list__stadium-name">{{ stadium.name }}</span>
-      <span class="salons-list__stadium-id">{{ stadium.id }}</span>
+      <div class="salons-list__stadium-image">
+        <img [src]="stadium.image" [alt]="stadium.name" />
+      </div>
+      <div class="salons-list__stadium-info">
+        <span class="salons-list__stadium-name">{{ stadium.name }}</span>
+        <span class="salons-list__stadium-id">{{ stadium.id }}</span>
+      </div>
     </div>
   </section>
 

@@ -65,4 +65,5 @@ export interface Stadium {
   id: string;
   name: string;
   mapId: string;
+  image?: string;
 }

@@ -41,6 +41,7 @@ export class SalonsListComponent implements OnInit {
           id: id,
           name: `سالن ${this.convertToFarsiNumber(index + 1)}`,
           mapId: id,
+          image: `assets/bad-static-images-without-cdn/salon-${index + 1}.webp`,
         }));
         this.loading = false;
       },
