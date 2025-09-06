@@ -117,8 +117,8 @@ export class MapService {
     const sizeMap: { [key: string]: { rows: number; cols: number } } = {
       m213: { rows: 20, cols: 30 },
       m654: { rows: 50, cols: 80 },
-      m63: { rows: 100, cols: 200 }, // Large map for performance testing
-      m6888: { rows: 300, cols: 350 }, // Very large map (105k seats)
+      m63: { rows: 100, cols: 200 },
+      m6888: { rows: 10000, cols: 300 },
       m1001: { rows: 25, cols: 40 },
       m2002: { rows: 15, cols: 25 },
     };

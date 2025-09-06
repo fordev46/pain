@@ -278,10 +278,6 @@
     height: 16px;
     margin: 1px;
     font-size: 0.5rem;
-
-    .seat-table__seat-number {
-      display: none; /* Hide numbers on large maps for performance */
-    }
   }
 
   .seat-table__row {
@@ -292,73 +288,6 @@
     .seat-table__row-label {
       min-width: 25px;
       font-size: 0.7rem;
-    }
-  }
-}
-
-/* Performance optimizations for very large maps */
-@supports (contain: layout style paint) {
-  .seat-table__table {
-    contain: layout style paint;
-  }
-
-  .seat-table__row {
-    contain: layout style;
-  }
-
-  .seat-table__seat-container {
-    contain: layout style paint;
-  }
-}
-
-/* High contrast mode */
-@media (prefers-contrast: high) {
-  .seat-table__seat-container {
-    &--available {
-      .seat-table__seat-icon {
-        fill: var(--color-high-contrast-green); /* Bright green for high contrast available */
-        stroke: var(--color-text-black);
-        stroke-width: 8;
-      }
-    }
-
-    &--reserved {
-      .seat-table__seat-icon {
-        fill: var(
-          --color-high-contrast-magenta
-        ); /* Bright magenta/purple for high contrast reserved */
-        stroke: var(--color-text-black);
-        stroke-width: 8;
-      }
-    }
-
-    &--selected {
-      .seat-table__seat-icon {
-        fill: var(--color-high-contrast-gray); /* Gray for high contrast selected/taken */
-        stroke: var(--color-text-black);
-        stroke-width: 8;
-      }
-
-      .seat-table__seat-number {
-        color: var(--color-text-black);
-      }
-    }
-  }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .seat-table__seat-container {
-    transition: none;
-
-    .seat-table__seat-icon {
-      transition: none;
-    }
-
-    &:hover,
-    &--selected {
-      transform: none;
-      filter: none;
     }
   }
 }

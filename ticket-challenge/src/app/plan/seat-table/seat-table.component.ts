@@ -164,13 +164,13 @@ export class SeatTableComponent implements OnChanges {
     // Height matches CSS min-height + border-spacing + any margins
     // Values from CSS: Mobile: 18px, Tablet: 26px, Desktop: 32px
     if (window.innerWidth <= 480) {
-      return 20; // Mobile: 18px min-height + 2px border-spacing
+      return 28; // Mobile: 18px min-height + 2px border-spacing
     } else if (window.innerWidth <= 768) {
-      return 28; // Tablet: 26px min-height + 2px border-spacing
+      return 24; // Tablet: 26px min-height + 2px border-spacing
     } else if (window.innerWidth > 1024) {
-      return 36; // Desktop: 32px min-height + 4px border-spacing
+      return 44; // Desktop: 32px min-height + 4px border-spacing
     }
-    return 26; // Default: ~24px with border-spacing
+    return 44; // Default: ~24px with border-spacing
   }
 
   /**
