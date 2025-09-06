@@ -1,0 +1,60 @@
+openapi: 3.0.3
+info:
+  title: Map IDs API
+  description: API for retrieving available stadium map identifiers
+  version: 1.0.0
+  contact:
+    name: Ticket Challenge API
+    url: https://ticket-challange.herokuapp.com
+
+servers:
+  - url: https://ticket-challange.herokuapp.com
+    description: Production server
+
+paths:
+  /map:
+    get:
+      summary: Get all available map IDs
+      description: Retrieves a list of all available stadium map identifiers
+      operationId: getMapIds
+      tags:
+        - Maps
+      responses:
+        '200':
+          description: Successfully retrieved map IDs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: 'm213'
+                example: ['m213', 'm654', 'm63', 'm6888', 'm1001', 'm2002']
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error type
+          example: 'INTERNAL_SERVER_ERROR'
+        message:
+          type: string
+          description: Human-readable error message
+          example: 'Unable to retrieve map IDs'
+        timestamp:
+          type: string
+          format: date-time
+          description: Error occurrence timestamp
+          example: '2024-01-15T10:30:00Z'

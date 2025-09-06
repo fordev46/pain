@@ -10,7 +10,11 @@
     "lint": "eslint \"src/**/*.{ts,html}\" --fix",
     "lint:check": "eslint \"src/**/*.{ts,html}\"",
     "format": "prettier --write \"src/**/*.{ts,html,scss,css,json}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,html,scss,css,json}\""
+    "format:check": "prettier --check \"src/**/*.{ts,html,scss,css,json}\"",
+    "generate:types": "pnpm run generate:map-ids && pnpm run generate:seat-map && pnpm run generate:ticket-purchase",
+    "generate:map-ids": "swagger-typescript-api generate -p swagger/map-ids-api.yaml -o src/app/generated --name map-ids-api --no-client",
+    "generate:seat-map": "swagger-typescript-api generate -p swagger/seat-map-api.yaml -o src/app/generated --name seat-map-api --no-client",
+    "generate:ticket-purchase": "swagger-typescript-api generate -p swagger/ticket-purchase-api.yaml -o src/app/generated --name ticket-purchase-api --no-client"
   },
   "private": true,
   "dependencies": {
@@ -51,6 +55,7 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
     "prettier": "^3.6.2",
+    "swagger-typescript-api": "^13.2.9",
     "typescript": "~4.6.2"
   }
 }

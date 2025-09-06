@@ -1,0 +1,82 @@
+openapi: 3.0.3
+info:
+  title: Seat Map API
+  description: API for retrieving stadium seat layouts and information
+  version: 1.0.0
+  contact:
+    name: Ticket Challenge API
+    url: https://ticket-challange.herokuapp.com
+
+servers:
+  - url: https://ticket-challange.herokuapp.com
+    description: Production server
+
+paths:
+  /map/{mapId}:
+    get:
+      summary: Get seat map for a specific stadium
+      description: Retrieves the complete seat layout for a stadium by its map ID
+      operationId: getSeatMap
+      tags:
+        - Maps
+      parameters:
+        - name: mapId
+          in: path
+          required: true
+          description: Unique identifier for the stadium map
+          schema:
+            type: string
+            example: 'm213'
+      responses:
+        '200':
+          description: Successfully retrieved seat map
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeatMapResponse'
+        '404':
+          description: Map not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    SeatMapResponse:
+      type: array
+      description: 2D array representing the seat layout where 0 = available, 1 = reserved
+      items:
+        type: array
+        items:
+          type: integer
+          minimum: 0
+          maximum: 1
+          description: Seat status (0 = available, 1 = reserved)
+      example: [[0, 1, 0, 1, 0], [1, 0, 0, 1, 0], [0, 0, 1, 0, 1]]
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error type
+          example: 'MAP_NOT_FOUND'
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Map with ID 'm213' not found"
+        timestamp:
+          type: string
+          format: date-time
+          description: Error occurrence timestamp
+          example: '2024-01-15T10:30:00Z'

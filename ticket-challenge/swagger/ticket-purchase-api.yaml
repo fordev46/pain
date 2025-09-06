@@ -1,0 +1,127 @@
+openapi: 3.0.3
+info:
+  title: Ticket Purchase API
+  description: API for purchasing tickets for specific seats
+  version: 1.0.0
+  contact:
+    name: Ticket Challenge API
+    url: https://ticket-challange.herokuapp.com
+
+servers:
+  - url: https://ticket-challange.herokuapp.com
+    description: Production server
+
+paths:
+  /map/{mapId}/ticket:
+    post:
+      summary: Purchase a ticket for a specific seat
+      description: Processes a ticket purchase request for a seat at the given coordinates
+      operationId: purchaseTicket
+      tags:
+        - Tickets
+      parameters:
+        - name: mapId
+          in: path
+          required: true
+          description: Unique identifier for the stadium map
+          schema:
+            type: string
+            example: 'm213'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketPurchaseRequest'
+      responses:
+        '200':
+          description: Ticket purchase processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketPurchaseResponse'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Map or seat not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Seat already reserved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    TicketPurchaseRequest:
+      type: object
+      required:
+        - x
+        - y
+      properties:
+        x:
+          type: integer
+          minimum: 0
+          description: Column coordinate of the seat
+          example: 5
+        y:
+          type: integer
+          minimum: 0
+          description: Row coordinate of the seat
+          example: 3
+      additionalProperties: false
+
+    TicketPurchaseResponse:
+      type: object
+      required:
+        - success
+        - message
+      properties:
+        success:
+          type: boolean
+          description: Whether the purchase was successful
+          example: true
+        message:
+          type: string
+          description: Human-readable result message
+          example: 'Ticket purchased successfully for seat (5, 3)'
+        ticketId:
+          type: string
+          description: Unique identifier for the purchased ticket (only present if success is true)
+          example: 'ticket_1705319400000_5_3'
+          pattern: '^ticket_\d+_\d+_\d+$'
+      additionalProperties: false
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error type
+          example: 'SEAT_ALREADY_RESERVED'
+        message:
+          type: string
+          description: Human-readable error message
+          example: 'The selected seat is already reserved'
+        timestamp:
+          type: string
+          format: date-time
+          description: Error occurrence timestamp
+          example: '2024-01-15T10:30:00Z'
