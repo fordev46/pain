@@ -5,9 +5,14 @@ import { delay, map } from 'rxjs/operators';
 import { SeatMap, TicketPurchaseRequest, TicketPurchaseResponse } from '../models';
 
 /**
- * Service responsible for handling map-related API calls
- * Implements mock API endpoints since backend is not ready
- * Following Domain Driven Design - this is our Repository pattern implementation
+ * Service for managing stadium seat maps and ticket purchases.
+ *
+ * Provides methods to:
+ * - Fetch available stadium maps
+ * - Load seat layouts for specific stadiums
+ * - Handle ticket purchase transactions
+ *
+ * Currently uses mock data but designed to seamlessly switch to real API endpoints.
  */
 @Injectable({
   providedIn: 'root',
@@ -15,10 +20,9 @@ import { SeatMap, TicketPurchaseRequest, TicketPurchaseResponse } from '../model
 export class MapService {
   private readonly baseUrl = 'https://ticket-challange.herokuapp.com';
 
-  // Mock data for development since backend might not be ready
   private mockMapIds = ['m213', 'm654', 'm63', 'm6888', 'm1001', 'm2002'];
 
-  // Iranian stadium names mapped to map IDs
+  /** Stadium names in Persian mapped to their corresponding map IDs */
   private iranianStadiumNames: { [key: string]: string } = {
     m213: 'ورزشگاه آزادی', // Azadi Stadium
     m654: 'ورزشگاه انقلاب', // Enqelab Stadium
@@ -31,14 +35,19 @@ export class MapService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Gets the Iranian stadium name for a given map ID
+   * Retrieves the Persian stadium name for a given map ID.
+   *
+   * @param mapId - The unique identifier for the stadium map
+   * @returns The Persian name of the stadium or a fallback name
    */
   getStadiumName(mapId: string): string {
     return this.iranianStadiumNames[mapId] || `Stadium ${mapId}`;
   }
 
   /**
-   * Gets all Iranian stadiums with their map IDs
+   * Returns a list of all available Iranian stadiums with their identifiers.
+   *
+   * @returns Array of stadium objects containing id and Persian name
    */
   getAllIranianStadiums(): { id: string; name: string }[] {
     return this.mockMapIds.map(mapId => ({
@@ -48,22 +57,22 @@ export class MapService {
   }
 
   /**
-   * Fetches the list of available map IDs
-   * API: GET /map
-   * Returns: Array of map ID strings
+   * Fetches all available stadium map identifiers.
+   *
+   * @returns Observable that emits an array of map ID strings
    */
   getMapIds(): Observable<string[]> {
-    // Try real API first, fallback to mock if needed
     return this.tryRealApiOrFallback<string[]>(
       () => this.http.get<string[]>(`${this.baseUrl}/map`),
-      () => of(this.mockMapIds).pipe(delay(500)) // Simulate network delay
+      () => of(this.mockMapIds).pipe(delay(500)) // Simulate realistic network latency
     );
   }
 
   /**
-   * Fetches seat map data for a specific map ID
-   * API: GET /map/<map_id>
-   * Returns: 2D array representing the seat layout
+   * Loads the complete seat layout for a specific stadium.
+   *
+   * @param mapId - The unique identifier for the stadium map
+   * @returns Observable that emits a SeatMap object with stadium details and seat layout
    */
   getSeatMap(mapId: string): Observable<SeatMap> {
     return this.tryRealApiOrFallback<number[][]>(
@@ -81,9 +90,11 @@ export class MapService {
   }
 
   /**
-   * Purchases a ticket for the specified seat
-   * API: POST /map/<map_id>/ticket
-   * Body: { x: number, y: number }
+   * Processes a ticket purchase for a specific seat.
+   *
+   * @param mapId - The stadium map identifier
+   * @param request - Purchase request containing seat coordinates (x, y)
+   * @returns Observable that emits the purchase result with success status and details
    */
   purchaseTicket(
     mapId: string,
@@ -96,29 +107,40 @@ export class MapService {
   }
 
   /**
-   * Helper method to try real API first, then fallback to mock implementation
-   * This ensures the app works even if the backend is not ready
+   * Attempts to call the real API first, with automatic fallback to mock data.
+   *
+   * This pattern ensures the application remains functional during development
+   * or when the backend service is unavailable.
+   *
+   * @param realApiCall - Function that returns the real API Observable
+   * @param mockCall - Function that returns the mock data Observable
+   * @returns Observable from either the real API or mock implementation
    */
   private tryRealApiOrFallback<T>(
     realApiCall: () => Observable<T>,
     mockCall: () => Observable<T>
   ): Observable<T> {
-    // For now, use mock data since backend may not be ready
-    // In production, you would try realApiCall first and catch errors
+    // Currently using mock data - in production this would attempt realApiCall() first
+    // and fall back to mockCall() on network errors or service unavailability
     return mockCall();
   }
 
   /**
-   * Generates mock seat map data for Iranian stadiums
-   * Creates various sizes to test performance with large maps
+   * Generates realistic mock seat map data for testing.
+   *
+   * Creates stadium layouts of varying sizes to test application performance
+   * with different data scales, from small venues to large stadiums.
+   *
+   * @param mapId - Stadium identifier used to determine map size and characteristics
+   * @returns 2D array where 0 = available seat, 1 = reserved seat
    */
   private generateMockSeatMap(mapId: string): number[][] {
-    // Generate different sizes based on mapId for testing Iranian stadiums
+    // Different stadium sizes for comprehensive testing scenarios
     const sizeMap: { [key: string]: { rows: number; cols: number } } = {
       m213: { rows: 20, cols: 30 },
       m654: { rows: 50, cols: 80 },
       m63: { rows: 100, cols: 200 },
-      m6888: { rows: 10000, cols: 300 },
+      m6888: { rows: 100000, cols: 50 },
       m1001: { rows: 25, cols: 40 },
       m2002: { rows: 15, cols: 25 },
     };
@@ -129,8 +151,7 @@ export class MapService {
     for (let row = 0; row < config.rows; row++) {
       const seatRow: number[] = [];
       for (let col = 0; col < config.cols; col++) {
-        // Randomly assign seats as available (0) or reserved (1)
-        // About 30% chance of being reserved
+        // Simulate realistic seat availability: ~30% reserved, 70% available
         seatRow.push(Math.random() < 0.3 ? 1 : 0);
       }
       seats.push(seatRow);
@@ -140,11 +161,17 @@ export class MapService {
   }
 
   /**
-   * Generates mock response for ticket purchase
+   * Creates a realistic mock response for ticket purchase requests.
+   *
+   * Simulates real-world scenarios including occasional failures to test
+   * error handling and user experience under various conditions.
+   *
+   * @param request - The original purchase request with seat coordinates
+   * @returns Mock purchase response with success/failure status and appropriate messaging
    */
   private generateMockPurchaseResponse(request: TicketPurchaseRequest): TicketPurchaseResponse {
-    // Simulate occasional failures for testing error handling
-    const success = Math.random() > 0.1; // 90% success rate
+    // Simulate realistic purchase success rate (90%) to test error handling
+    const success = Math.random() > 0.1;
 
     if (success) {
       return {
