@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SeatTableComponent } from './seat-table.component';
-import { SeatMap, SeatStatus } from '../../models';
+import { AppSeatMap, AppSeatStatus } from '../../models';
 
 describe('SeatTableComponent', () => {
   let component: SeatTableComponent;
   let fixture: ComponentFixture<SeatTableComponent>;
 
-  const mockSeatMap: SeatMap = {
+  const mockSeatMap: AppSeatMap = {
     id: 'test-map',
     name: 'Test Stadium',
     rows: 3,
@@ -55,8 +55,8 @@ describe('SeatTableComponent', () => {
   it('should return correct seat status', () => {
     component.selectedSeats = new Set(['0-1']);
 
-    expect(component.getSeatStatus(0, 0)).toBe(SeatStatus.AVAILABLE);
-    expect(component.getSeatStatus(0, 1)).toBe(SeatStatus.SELECTED);
-    expect(component.getSeatStatus(0, 2)).toBe(SeatStatus.RESERVED);
+    expect(component.getSeatStatus(0, 0)).toBe(AppSeatStatus.AVAILABLE);
+    expect(component.getSeatStatus(0, 1)).toBe(AppSeatStatus.SELECTED);
+    expect(component.getSeatStatus(0, 2)).toBe(AppSeatStatus.RESERVED);
   });
 });

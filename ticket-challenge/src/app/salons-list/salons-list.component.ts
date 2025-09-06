@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MapService } from '../services/map.service';
-import { Stadium } from '../models';
+import { AppSalon } from '../models';
 
 /**
- * Component responsible for displaying the list of available Iranian stadiums
- * Fetches stadium data from the API and allows users to select a stadium
+ * Component responsible for displaying the list of available Iranian salons
+ * Fetches salon data from the API and allows users to select a salon
  */
 @Component({
   selector: 'app-salons-list',
@@ -13,7 +13,7 @@ import { Stadium } from '../models';
   styleUrls: ['./salons-list.component.scss'],
 })
 export class SalonsListComponent implements OnInit {
-  stadiums: Stadium[] = [];
+  salons: AppSalon[] = [];
   loading = false;
   error: string | null = null;
 
@@ -23,30 +23,30 @@ export class SalonsListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadStadiums();
+    this.loadSalons();
   }
 
   /**
-   * Loads the list of available Iranian stadiums from the API
-   * Converts map IDs to Stadium objects with proper Iranian names for display
+   * Loads the list of available Iranian salons from the API
+   * Converts map IDs to salon objects with proper Iranian names for display
    */
-  private loadStadiums(): void {
+  private loadSalons(): void {
     this.loading = true;
     this.error = null;
 
     this.mapService.getMapIds().subscribe({
       next: (mapIds: string[]) => {
-        // Convert map IDs to Stadium objects with Iranian stadium names
-        this.stadiums = mapIds.map((id, index) => ({
+        // Convert map IDs to salon objects with Iranian salon names
+        this.salons = mapIds.map((id, index) => ({
           id: id,
-          name: this.mapService.getStadiumName(id),
+          name: this.mapService.getStadiumNameBecauseIsWasNotInTheApi(id),
           mapId: id,
           image: `assets/bad-static-images-without-cdn/salon-${index + 1}.webp`,
         }));
         this.loading = false;
       },
       error: err => {
-        console.error('Error loading stadiums:', err);
+        console.error('Error loading salons:', err);
         this.error = 'خطا در بارگذاری ورزشگاه‌ها. لطفا دوباره تلاش کنید.';
         this.loading = false;
       },
@@ -54,27 +54,27 @@ export class SalonsListComponent implements OnInit {
   }
 
   /**
-   * Navigates to the plan view for the selected stadium
-   * @param stadium The selected stadium
+   * Navigates to the plan view for the selected salon
+   * @param salon The selected salon
    */
-  onStadiumSelect(stadium: Stadium): void {
-    this.router.navigate(['/plan', stadium.mapId]);
+  onSalonSelect(salon: AppSalon): void {
+    this.router.navigate(['/plan', salon.mapId]);
   }
 
   /**
-   * Retries loading stadiums in case of error
+   * Retries loading salons in case of error
    */
   retry(): void {
-    this.loadStadiums();
+    this.loadSalons();
   }
 
   /**
    * TrackBy function for ngFor optimization
    * @param index Index of the item
-   * @param stadium Stadium object
+   * @param salon Salon object
    * @returns Unique identifier for tracking
    */
-  trackByStadium(index: number, stadium: Stadium): string {
-    return stadium.id;
+  trackBySalon(index: number, salon: AppSalon): string {
+    return salon.id;
   }
 }

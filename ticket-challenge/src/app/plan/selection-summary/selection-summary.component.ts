@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { Coordinates } from '../../models';
+import { AppCoordinates } from '../../models';
 
 /**
  * Component for displaying selected seats and handling purchase actions
@@ -30,7 +30,7 @@ export class SelectionSummaryComponent {
    * Gets array of selected seat coordinates for display
    * @returns Array of coordinate objects
    */
-  getSelectedCoordinates(): Coordinates[] {
+  getSelectedCoordinates(): AppCoordinates[] {
     return Array.from(this.selectedSeats).map(seatKey => {
       const [row, col] = seatKey.split('-').map(Number);
       return { x: col, y: row };

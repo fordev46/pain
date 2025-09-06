@@ -7,7 +7,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { SeatMap, SeatStatus, Coordinates } from '../../models';
+import { AppSeatMap, AppSeatStatus, AppCoordinates } from '../../models';
 
 /**
  * High-performance seat table component with virtual scrolling
@@ -20,14 +20,14 @@ import { SeatMap, SeatStatus, Coordinates } from '../../models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SeatTableComponent implements OnChanges {
-  @Input() seatMap: SeatMap | null = null;
+  @Input() seatMap: AppSeatMap | null = null;
   @Input() selectedSeats: Set<string> = new Set();
   @Input() disabled = false;
 
-  @Output() seatClick = new EventEmitter<Coordinates>();
+  @Output() seatClick = new EventEmitter<AppCoordinates>();
 
   // Expose SeatStatus enum to template
-  readonly SeatStatus = SeatStatus;
+  readonly SeatStatus = AppSeatStatus;
 
   ngOnChanges(changes: SimpleChanges): void {
     // Handle any input changes if needed for optimization
@@ -106,12 +106,12 @@ export class SeatTableComponent implements OnChanges {
     const seatStatus = this.seatMap.seats[rowIndex][colIndex];
 
     // Only allow selection of available seats
-    if (seatStatus === SeatStatus.RESERVED) {
+    if (seatStatus === AppSeatStatus.RESERVED) {
       console.log(`Seat (${colIndex}, ${rowIndex}) is reserved and cannot be selected`);
       return;
     }
 
-    const coordinates: Coordinates = { x: colIndex, y: rowIndex };
+    const coordinates: AppCoordinates = { x: colIndex, y: rowIndex };
     this.seatClick.emit(coordinates);
   }
 
@@ -121,17 +121,17 @@ export class SeatTableComponent implements OnChanges {
    * @param colIndex Column position
    * @returns The current seat status
    */
-  getSeatStatus(rowIndex: number, colIndex: number): SeatStatus {
-    if (!this.seatMap) return SeatStatus.AVAILABLE;
+  getSeatStatus(rowIndex: number, colIndex: number): AppSeatStatus {
+    if (!this.seatMap) return AppSeatStatus.AVAILABLE;
 
     const originalStatus = this.seatMap.seats[rowIndex][colIndex];
     const seatKey = `${rowIndex}-${colIndex}`;
 
-    if (originalStatus === SeatStatus.RESERVED) {
-      return SeatStatus.RESERVED;
+    if (originalStatus === AppSeatStatus.RESERVED) {
+      return AppSeatStatus.RESERVED;
     }
 
-    return this.selectedSeats.has(seatKey) ? SeatStatus.SELECTED : SeatStatus.AVAILABLE;
+    return this.selectedSeats.has(seatKey) ? AppSeatStatus.SELECTED : AppSeatStatus.AVAILABLE;
   }
 
   /**
@@ -144,11 +144,11 @@ export class SeatTableComponent implements OnChanges {
     const status = this.getSeatStatus(rowIndex, colIndex);
 
     switch (status) {
-      case SeatStatus.AVAILABLE:
+      case AppSeatStatus.AVAILABLE:
         return 'seat-table__seat-container seat-table__seat-container--available';
-      case SeatStatus.RESERVED:
+      case AppSeatStatus.RESERVED:
         return 'seat-table__seat-container seat-table__seat-container--reserved';
-      case SeatStatus.SELECTED:
+      case AppSeatStatus.SELECTED:
         return 'seat-table__seat-container seat-table__seat-container--selected';
       default:
         return 'seat-table__seat-container';

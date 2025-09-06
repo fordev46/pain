@@ -8,13 +8,13 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { MapService } from '../services/map.service';
-import { ToastService } from '../services/toast.service';
+import { ToastService } from '../services/core/toast.service';
 import {
-  SeatMap,
-  SeatStatus,
-  Coordinates,
-  TicketPurchaseRequest,
-  TicketPurchaseResponse,
+  AppSeatMap,
+  AppSeatStatus,
+  AppCoordinates,
+  AppTicketPurchaseInput,
+  AppTicketPurchaseOutput,
 } from '../models';
 
 /**
@@ -30,7 +30,7 @@ import {
 })
 export class PlanComponent implements OnInit, OnDestroy {
   // Component state
-  seatMap: SeatMap | null = null;
+  seatMap: AppSeatMap | null = null;
   loading = false;
   error: string | null = null;
   mapId: string | null = null;
@@ -45,7 +45,7 @@ export class PlanComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   // Expose SeatStatus enum to template
-  readonly SeatStatus = SeatStatus;
+  readonly SeatStatus = AppSeatStatus;
 
   constructor(
     private route: ActivatedRoute,
@@ -85,7 +85,7 @@ export class PlanComponent implements OnInit, OnDestroy {
       .getSeatMap(mapId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (seatMap: SeatMap) => {
+        next: (seatMap: AppSeatMap) => {
           this.seatMap = seatMap;
           this.loading = false;
           console.log(
@@ -108,14 +108,14 @@ export class PlanComponent implements OnInit, OnDestroy {
    * Handles seat click events from the seat grid component
    * @param coordinates The coordinates of the clicked seat
    */
-  onSeatClick(coordinates: Coordinates): void {
+  onSeatClick(coordinates: AppCoordinates): void {
     if (!this.seatMap) return;
 
     const { x: colIndex, y: rowIndex } = coordinates;
     const seatStatus = this.seatMap.seats[rowIndex][colIndex];
 
     // Only allow selection of available seats
-    if (seatStatus === SeatStatus.RESERVED) {
+    if (seatStatus === AppSeatStatus.RESERVED) {
       console.log(`Seat (${colIndex}, ${rowIndex}) is reserved and cannot be selected`);
       return;
     }
@@ -168,7 +168,7 @@ export class PlanComponent implements OnInit, OnDestroy {
    * Gets array of selected seat coordinates for display
    * @returns Array of coordinate objects
    */
-  getSelectedCoordinates(): Coordinates[] {
+  getSelectedCoordinates(): AppCoordinates[] {
     return Array.from(this.selectedSeats).map(seatKey => {
       const [row, col] = seatKey.split('-').map(Number);
       return { x: col, y: row };
@@ -213,7 +213,7 @@ export class PlanComponent implements OnInit, OnDestroy {
 
     // Purchase each seat individually (as per API specification)
     selectedCoordinates.forEach((coord, _index) => {
-      const request: TicketPurchaseRequest = {
+      const request: AppTicketPurchaseInput = {
         x: coord.x,
         y: coord.y,
       };
@@ -224,7 +224,7 @@ export class PlanComponent implements OnInit, OnDestroy {
         .purchaseTicket(this.mapId!, request)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          next: (response: TicketPurchaseResponse) => {
+          next: (response: AppTicketPurchaseOutput) => {
             completedPurchases++;
 
             if (response.success) {
@@ -237,7 +237,7 @@ export class PlanComponent implements OnInit, OnDestroy {
                 this.seatMap.seats[coord.y] &&
                 this.seatMap.seats[coord.y][coord.x] !== undefined
               ) {
-                this.seatMap.seats[coord.y][coord.x] = SeatStatus.RESERVED;
+                this.seatMap.seats[coord.y][coord.x] = AppSeatStatus.RESERVED;
               }
 
               // Remove from selection

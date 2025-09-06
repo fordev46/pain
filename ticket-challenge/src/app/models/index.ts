@@ -1,39 +1,21 @@
-/**
- * Core domain models for the ticket booking system
- * Following Domain Driven Design principles
- */
-
-/**
- * Represents coordinates in a 2D seat map
- */
-export interface Coordinates {
+export interface AppCoordinates {
   x: number;
   y: number;
 }
 
-/**
- * Enum representing the possible states of a seat
- */
-export enum SeatStatus {
-  AVAILABLE = 0, // Seat is available for purchase
-  RESERVED = 1, // Seat is already reserved/sold
-  SELECTED = 2, // Seat is currently selected by user
+export enum AppSeatStatus {
+  AVAILABLE = 0,
+  RESERVED = 1,
+  SELECTED = 2,
 }
 
-/**
- * Represents a single seat in the stadium
- */
-export interface Seat {
-  coordinates: Coordinates;
-  status: SeatStatus;
+export interface AppSeat {
+  coordinates: AppCoordinates;
+  status: AppSeatStatus;
   id?: string; // Optional unique identifier
 }
 
-/**
- * Represents the complete seat map of a stadium
- * Contains a 2D array where each cell represents a seat
- */
-export interface SeatMap {
+export interface AppSeatMap {
   id: string;
   name?: string;
   seats: number[][]; // 2D array: 0 = available, 1 = reserved
@@ -41,29 +23,22 @@ export interface SeatMap {
   columns: number;
 }
 
-/**
- * Request body for ticket purchase
- */
-export interface TicketPurchaseRequest {
+export interface AppTicketPurchaseInput {
   x: number;
   y: number;
 }
 
-/**
- * Response from ticket purchase API
- */
-export interface TicketPurchaseResponse {
+export interface AppTicketPurchaseOutput {
   success: boolean;
   message: string;
   ticketId?: string;
 }
 
-/**
- * Stadium information
- */
-export interface Stadium {
+export interface AppSalon {
   id: string;
   name: string;
   mapId: string;
   image?: string;
 }
+
+export type AppMapIdList = string[];

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ToastMessage } from '../shared/toast/toast.component';
+import { ToastMessage } from 'src/app/shared';
 
 /**
  * Service for managing toast notifications
@@ -44,34 +44,6 @@ export class ToastService {
   }
 
   /**
-   * Shows a warning toast
-   * @param message The message to display
-   * @param duration Duration in milliseconds (default: 6000)
-   */
-  showWarning(message: string, duration: number = 6000): void {
-    this.addToast({
-      id: this.generateToastId(),
-      message,
-      type: 'warning',
-      duration,
-    });
-  }
-
-  /**
-   * Shows an info toast
-   * @param message The message to display
-   * @param duration Duration in milliseconds (default: 4000)
-   */
-  showInfo(message: string, duration: number = 4000): void {
-    this.addToast({
-      id: this.generateToastId(),
-      message,
-      type: 'info',
-      duration,
-    });
-  }
-
-  /**
    * Dismisses a specific toast
    * @param toastId The ID of the toast to dismiss
    */
@@ -79,13 +51,6 @@ export class ToastService {
     const currentToasts = this.toastsSubject.value;
     const updatedToasts = currentToasts.filter(toast => toast.id !== toastId);
     this.toastsSubject.next(updatedToasts);
-  }
-
-  /**
-   * Clears all toasts
-   */
-  clearAllToasts(): void {
-    this.toastsSubject.next([]);
   }
 
   /**

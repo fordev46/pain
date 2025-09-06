@@ -10,6 +10,12 @@
  * ---------------------------------------------------------------
  */
 
+/**
+ * List of available stadium map identifiers
+ * @example ["m213","m654","m63","m6888","m1001","m2002"]
+ */
+export type MapIdListResponse = string[];
+
 export interface ErrorResponse {
   /**
    * Error type

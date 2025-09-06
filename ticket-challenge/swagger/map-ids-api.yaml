@@ -25,11 +25,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-                  example: 'm213'
-                example: ['m213', 'm654', 'm63', 'm6888', 'm1001', 'm2002']
+                $ref: '#/components/schemas/MapIdListResponse'
         '500':
           description: Internal server error
           content:
@@ -39,6 +35,15 @@ paths:
 
 components:
   schemas:
+    MapIdListResponse:
+      type: array
+      description: List of available stadium map identifiers
+      items:
+        type: string
+        description: Stadium map identifier
+        example: 'm213'
+      example: ['m213', 'm654', 'm63', 'm6888', 'm1001', 'm2002']
+
     ErrorResponse:
       type: object
       required:

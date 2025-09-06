@@ -19,26 +19,26 @@
   <!-- Stadiums list -->
   <section *ngIf="!loading && !error" class="salons-list__stadiums-grid">
     <div
-      *ngFor="let stadium of stadiums; trackBy: trackByStadium"
+      *ngFor="let salon of salons; trackBy: trackBySalon"
       class="salons-list__stadium-card"
-      (click)="onStadiumSelect(stadium)"
-      [attr.aria-label]="'انتخاب ' + stadium.name"
+      (click)="onSalonSelect(salon)"
+      [attr.aria-label]="'انتخاب ' + salon.name"
       tabindex="0"
-      (keydown.enter)="onStadiumSelect(stadium)"
-      (keydown.space)="onStadiumSelect(stadium)"
+      (keydown.enter)="onSalonSelect(salon)"
+      (keydown.space)="onSalonSelect(salon)"
     >
       <div class="salons-list__stadium-image">
-        <img [src]="stadium.image" [alt]="stadium.name" />
+        <img [src]="salon.image" [alt]="salon.name" />
       </div>
       <div class="salons-list__stadium-info">
-        <span class="salons-list__stadium-name">{{ stadium.name }}</span>
-        <span class="salons-list__stadium-id">{{ stadium.id }}</span>
+        <span class="salons-list__stadium-name">{{ salon.name }}</span>
+        <span class="salons-list__stadium-id">{{ salon.id }}</span>
       </div>
     </div>
   </section>
 
   <!-- Empty state -->
-  <div *ngIf="!loading && !error && stadiums.length === 0" class="salons-list__empty-state">
+  <div *ngIf="!loading && !error && salons.length === 0" class="salons-list__empty-state">
     <p>هیچ ورزشگاهی یافت نشد</p>
     <button class="salons-list__retry-btn" (click)="retry()">تلاش مجدد</button>
   </div>
