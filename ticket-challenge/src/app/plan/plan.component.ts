@@ -8,6 +8,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { MapService } from '../services/map.service';
+import { ToastService } from '../services/toast.service';
 import {
   SeatMap,
   SeatStatus,
@@ -50,6 +51,7 @@ export class PlanComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private mapService: MapService,
+    public toastService: ToastService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -277,15 +279,14 @@ export class PlanComponent implements OnInit, OnDestroy {
 
     if (successCount > 0 && failures.length === 0) {
       // All purchases successful
-      alert(`تمام ${successCount} صندلی با موفقیت خریداری شد!`);
+      this.toastService.showSuccess(`تمام ${successCount} صندلی با موفقیت خریداری شد!`);
     } else if (successCount > 0 && failures.length > 0) {
       // Partial success
-      alert(
-        `${successCount} صندلی با موفقیت خریداری شد.\nخطا در خرید ${failures.length} صندلی: ${failures.join(', ')}`
-      );
+      this.toastService.showSuccess(`${successCount} صندلی با موفقیت خریداری شد.`);
+      this.toastService.showError(`خطا در خرید ${failures.length} صندلی: ${failures.join(', ')}`);
     } else {
       // All purchases failed
-      alert(`خطا در خرید تمام صندلی‌ها: ${failures.join(', ')}`);
+      this.toastService.showError(`خطا در خرید تمام صندلی‌ها: ${failures.join(', ')}`);
     }
 
     this.cdr.detectChanges();

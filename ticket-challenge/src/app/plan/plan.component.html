@@ -1,19 +1,24 @@
 <div class="plan">
   <!-- Header with navigation and stadium info -->
   <header class="plan-header">
-    <app-button
+    <!-- <app-button
       text="← بازگشت"
       variant="primary"
       size="medium"
       title="بازگشت به لیست سالن‌ها"
       (clicked)="onBackToStadiums()"
     >
-    </app-button>
+    </app-button> -->
 
     <div class="plan-header__stadium-info" *ngIf="seatMap">
       <h1 class="plan-header__stadium-name">{{ seatMap.name || 'نقشه سالن' }}</h1>
       <span class="plan-header__stadium-id">{{ seatMap.id }}</span>
     </div>
+  </header>
+
+  <!-- Map info -->
+  <div class="plan-header__map-info" *ngIf="seatMap">
+    <span>تعداد صندلی‌ها: {{ seatMap.rows * seatMap.columns }}</span>
 
     <div class="plan-header__legend">
       <div class="plan-header__legend-item">
@@ -29,12 +34,6 @@
         <span>انتخاب شده</span>
       </div>
     </div>
-  </header>
-
-  <!-- Map info -->
-  <div class="plan-header__map-info" *ngIf="seatMap">
-    <span>تعداد صندلی‌ها: {{ seatMap.rows * seatMap.columns }}</span>
-    <span *ngIf="getSelectedSeatCount() > 0">انتخاب شده: {{ getSelectedSeatCount() }}</span>
   </div>
 
   <!-- Loading state -->
@@ -79,4 +78,10 @@
     >
     </app-button>
   </div>
+
+  <!-- Toast notifications -->
+  <app-toast
+    [toasts]="(toastService.toasts$ | async) || []"
+    (dismissToast)="toastService.dismissToast($event)"
+  ></app-toast>
 </div>

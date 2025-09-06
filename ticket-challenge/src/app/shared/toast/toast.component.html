@@ -1,0 +1,26 @@
+<!-- Toast container -->
+<div class="toast-container" *ngIf="toasts.length > 0">
+  <div
+    *ngFor="let toast of toasts; trackBy: trackByToastId"
+    class="toast"
+    [ngClass]="'toast--' + toast.type"
+    role="alert"
+    [attr.aria-live]="toast.type === 'error' ? 'assertive' : 'polite'"
+  >
+    <div class="toast__content">
+      <span class="toast__icon" [attr.aria-hidden]="true">
+        {{ getToastIcon(toast.type) }}
+      </span>
+      <span class="toast__message">{{ toast.message }}</span>
+      <!-- <app-button
+        text="×"
+        variant="ghost"
+        size="small"
+        title="بستن پیام"
+        class="toast__close-btn"
+        (clicked)="onDismissToast(toast.id)"
+      >
+      </app-button> -->
+    </div>
+  </div>
+</div>

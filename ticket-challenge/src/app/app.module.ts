@@ -10,6 +10,7 @@ import { SeatTableComponent } from './plan/seat-table/seat-table.component';
 import { SelectionSummaryComponent } from './plan/selection-summary/selection-summary.component';
 import { SalonsListComponent } from './salons-list/salons-list.component';
 import { ButtonComponent } from './shared/button/button.component';
+import { ToastComponent } from './shared/toast/toast.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { ButtonComponent } from './shared/button/button.component';
     SelectionSummaryComponent,
     SalonsListComponent,
     ButtonComponent,
+    ToastComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, ScrollingModule],
   providers: [],

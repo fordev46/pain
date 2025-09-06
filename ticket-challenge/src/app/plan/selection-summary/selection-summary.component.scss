@@ -32,7 +32,9 @@
   .selection-summary__action-buttons {
     display: flex;
     gap: 1rem;
-    flex-wrap: wrap;
-    align-items: center;
+
+    app-button {
+      flex: 1;
+    }
   }
 }

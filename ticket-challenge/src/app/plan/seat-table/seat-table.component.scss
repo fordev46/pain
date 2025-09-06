@@ -28,38 +28,12 @@
     /* Improve touch scrolling */
     -webkit-overflow-scrolling: touch;
     touch-action: pan-x pan-y;
-
-    /* Larger scrollbars on mobile for easier grabbing */
-    &::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: var(--color-background-primary);
-      border-radius: 4px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: var(--color-disabled-bg);
-      border-radius: 4px;
-
-      &:hover {
-        background: var(--color-border-lighter);
-      }
-    }
   }
 
   @media (max-width: 480px) {
     height: 60vh;
     padding: 0.5rem;
     border-radius: 4px;
-
-    /* Even larger scrollbars for small screens */
-    &::-webkit-scrollbar {
-      width: 12px;
-      height: 12px;
-    }
   }
 }
 
@@ -68,6 +42,10 @@
   width: 100%;
   height: calc(70vh - 2rem); /* Account for padding */
   min-height: 400px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Seat table rendering - updated for virtual scrolling */
@@ -98,6 +76,11 @@
     &.label--freeze-left {
       position: sticky;
       left: 0;
+    }
+
+    @media (max-width: 480px) {
+      width: 15px;
+      min-width: 15px;
     }
   }
 }
