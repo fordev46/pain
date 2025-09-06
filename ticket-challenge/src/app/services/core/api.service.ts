@@ -4,9 +4,6 @@ import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { ErrorHandlerService } from './error-handler.service';
 
-/**
- * Configuration interface for API requests
- */
 export interface ApiRequestConfig<TParams = unknown, TResponse = unknown> {
   endpoint: string;
   method: 'GET' | 'POST';
@@ -18,18 +15,12 @@ export interface ApiRequestConfig<TParams = unknown, TResponse = unknown> {
   mockResponse?: () => Observable<TResponse>;
 }
 
-/**
- * Configuration for the API service
- */
 export interface ApiServiceConfig {
   baseUrl: string;
   useMock: boolean;
   defaultCacheDuration: number;
 }
 
-/**
- * Cache entry interface
- */
 interface CacheEntry<T> {
   data: T;
   timestamp: number;
@@ -62,23 +53,6 @@ export class ApiService {
     private errorHandler: ErrorHandlerService
   ) {}
 
-  /**
-   * Updates the API service configuration
-   */
-  updateConfig(config: Partial<ApiServiceConfig>): void {
-    this.config = { ...this.config, ...config };
-  }
-
-  /**
-   * Gets the current configuration
-   */
-  getConfig(): ApiServiceConfig {
-    return { ...this.config };
-  }
-
-  /**
-   * Makes a GET request with query parameters
-   */
   get<TParams = unknown, TResponse = unknown>(
     endpoint: string,
     queryParams?: TParams,
@@ -94,9 +68,6 @@ export class ApiService {
     return this.makeRequest<TParams, TResponse>(config);
   }
 
-  /**
-   * Makes a POST request with a request body
-   */
   post<TBody = unknown, TResponse = unknown>(
     endpoint: string,
     body: TBody,
@@ -112,23 +83,10 @@ export class ApiService {
     return this.makeRequest<TBody, TResponse>(config);
   }
 
-  /**
-   * Clears all cached responses
-   */
-  clearCache(): void {
-    this.cache.clear();
-  }
-
-  /**
-   * Clears a specific cache entry
-   */
   clearCacheEntry(key: string): void {
     this.cache.delete(key);
   }
 
-  /**
-   * Makes the actual HTTP request or returns mock response
-   */
   private makeRequest<TParams, TResponse>(
     config: ApiRequestConfig<TParams, TResponse>
   ): Observable<TResponse> {
@@ -176,9 +134,6 @@ export class ApiService {
     );
   }
 
-  /**
-   * Builds HttpParams from an object
-   */
   private buildHttpParams(params?: Record<string, unknown>): HttpParams {
     let httpParams = new HttpParams();
 
@@ -194,9 +149,6 @@ export class ApiService {
     return httpParams;
   }
 
-  /**
-   * Retrieves data from cache if still valid
-   */
   private getFromCache<T>(key: string): T | null {
     const entry = this.cache.get(key);
 
@@ -212,9 +164,6 @@ export class ApiService {
     return entry.data as T;
   }
 
-  /**
-   * Saves data to cache
-   */
   private saveToCache<T>(key: string, data: T, duration: number): void {
     const now = Date.now();
     const entry: CacheEntry<T> = {

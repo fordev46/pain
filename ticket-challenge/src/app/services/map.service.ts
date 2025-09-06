@@ -43,7 +43,7 @@ export class MapService {
     return this.apiService.get<undefined, MapIdListResponse>('/map', undefined, {
       cacheKey: 'map-ids',
       cacheDuration: 10 * 60 * 1000, // 10 minutes cache
-      errorContext: 'Failed to fetch stadium map IDs',
+      errorContext: 'خطا در دریافت شناسه‌های نقشه ورزشگاه',
       mockResponse: () => of(this.generateMockMapIdsResponse()).pipe(delay(500)),
     });
   }
@@ -61,7 +61,7 @@ export class MapService {
       this.apiService.get<undefined, SeatMapResponse>(`/map/${mapId}`, undefined, {
         cacheKey: `seat-map-${mapId}`,
         cacheDuration: 5 * 60 * 1000, // 5 minutes cache
-        errorContext: `Failed to fetch seat map for stadium ${mapId}`,
+        errorContext: `خطا در دریافت نقشه صندلی‌ها برای ورزشگاه ${mapId}`,
         mockResponse: () => of(this.generateMockSeatMapResponse(mapId)).pipe(delay(800)),
       }),
       mapId,
@@ -91,7 +91,7 @@ export class MapService {
         `/map/${mapId}/ticket`,
         apiRequest,
         {
-          errorContext: `Failed to purchase ticket for seat (${request.x}, ${request.y})`,
+          errorContext: `خطا در خرید بلیت برای صندلی (${request.x}, ${request.y})`,
           mockResponse: () => of(this.generateMockPurchaseResponse(apiRequest)).pipe(delay(1000)),
         }
       )
@@ -114,13 +114,13 @@ export class MapService {
     if (success) {
       return {
         success: true,
-        message: `Ticket purchased successfully for seat (${request.x}, ${request.y})`,
+        message: `بلیت با موفقیت برای صندلی (${request.x}, ${request.y}) خریداری شد`,
         ticketId: `ticket_${Date.now()}_${request.x}_${request.y}`,
       };
     } else {
       return {
         success: false,
-        message: 'Purchase failed. Please try again.',
+        message: 'خرید ناموفق. لطفاً دوباره تلاش کنید.',
       };
     }
   }
@@ -185,14 +185,14 @@ export class MapService {
   getStadiumNameBecauseIsWasNotInTheApi(mapId: string): string {
     // Mock stadium names for different map IDs
     const stadiumNames: Record<string, string> = {
-      m213: 'Azadi Stadium',
-      m654: 'Takhti Stadium',
-      m63: 'Naghsh-e Jahan Stadium',
-      m6888: 'Foolad Arena',
-      m1001: 'Yadegar-e Emam Stadium',
-      m2002: 'Shahid Dastgerdi Stadium',
+      m213: 'ورزشگاه آزادی',
+      m654: 'ورزشگاه تختی',
+      m63: 'ورزشگاه نقش جهان',
+      m6888: 'فولاد آرنا',
+      m1001: 'ورزشگاه یادگار امام',
+      m2002: 'ورزشگاه شهید دستگردی',
     };
 
-    return stadiumNames[mapId] || `Stadium ${mapId}`;
+    return stadiumNames[mapId] || `ورزشگاه ${mapId}`;
   }
 }

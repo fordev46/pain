@@ -8,7 +8,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { MapService } from '../services/map.service';
-import { ToastService } from '../services/core/toast.service';
+import { ToastService } from '../services/toast.service';
 import {
   AppSeatMap,
   AppSeatStatus,
