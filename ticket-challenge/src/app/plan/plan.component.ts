@@ -39,8 +39,6 @@ export class PlanComponent implements OnInit, OnDestroy {
 
   // Purchase state
   purchasing = false;
-  purchaseError: string | null = null;
-  purchaseSuccess: string | null = null;
 
   // Component lifecycle
   private destroy$ = new Subject<void>();
@@ -183,8 +181,6 @@ export class PlanComponent implements OnInit, OnDestroy {
     this.selectedSeats.clear();
     // Create new Set reference to trigger change detection in child components
     this.selectedSeats = new Set();
-    this.purchaseError = null;
-    this.purchaseSuccess = null;
     console.log('All seat selections cleared');
 
     // Trigger change detection since we're using OnPush strategy
@@ -202,8 +198,6 @@ export class PlanComponent implements OnInit, OnDestroy {
     }
 
     this.purchasing = true;
-    this.purchaseError = null;
-    this.purchaseSuccess = null;
     this.cdr.detectChanges();
 
     // Convert selected seats to coordinate array
@@ -283,38 +277,20 @@ export class PlanComponent implements OnInit, OnDestroy {
 
     if (successCount > 0 && failures.length === 0) {
       // All purchases successful
-      this.purchaseSuccess = `تمام ${successCount} صندلی با موفقیت خریداری شد!`;
-      this.purchaseError = null;
+      alert(`تمام ${successCount} صندلی با موفقیت خریداری شد!`);
     } else if (successCount > 0 && failures.length > 0) {
       // Partial success
-      this.purchaseSuccess = `${successCount} صندلی با موفقیت خریداری شد.`;
-      this.purchaseError = `خطا در خرید ${failures.length} صندلی: ${failures.join(', ')}`;
+      alert(
+        `${successCount} صندلی با موفقیت خریداری شد.\nخطا در خرید ${failures.length} صندلی: ${failures.join(', ')}`
+      );
     } else {
       // All purchases failed
-      this.purchaseSuccess = null;
-      this.purchaseError = `خطا در خرید تمام صندلی‌ها: ${failures.join(', ')}`;
-    }
-
-    // Auto-hide success message after 5 seconds
-    if (this.purchaseSuccess) {
-      setTimeout(() => {
-        this.purchaseSuccess = null;
-        this.cdr.detectChanges();
-      }, 5000);
+      alert(`خطا در خرید تمام صندلی‌ها: ${failures.join(', ')}`);
     }
 
     this.cdr.detectChanges();
     console.log(
       `Purchase process completed: ${successCount} successful, ${failures.length} failed`
     );
-  }
-
-  /**
-   * Handles dismiss messages request from purchase messages component
-   * Dismisses purchase messages
-   */
-  onDismissPurchaseMessages(): void {
-    this.purchaseError = null;
-    this.purchaseSuccess = null;
   }
 }

@@ -1,10 +1,41 @@
 <div class="plan">
   <!-- Header with navigation and stadium info -->
-  <app-plan-header
-    [seatMap]="seatMap"
-    [selectedSeatCount]="getSelectedSeatCount()"
-    (backClicked)="onBackToStadiums()"
-  ></app-plan-header>
+  <header class="plan-header">
+    <app-button
+      text="← بازگشت"
+      variant="primary"
+      size="medium"
+      title="بازگشت به لیست سالن‌ها"
+      (clicked)="onBackToStadiums()"
+    >
+    </app-button>
+
+    <div class="plan-header__stadium-info" *ngIf="seatMap">
+      <h1 class="plan-header__stadium-name">{{ seatMap.name || 'نقشه سالن' }}</h1>
+      <span class="plan-header__stadium-id">{{ seatMap.id }}</span>
+    </div>
+
+    <div class="plan-header__legend">
+      <div class="plan-header__legend-item">
+        <div class="plan-header__legend-color plan-header__legend-color--available"></div>
+        <span>آزاد</span>
+      </div>
+      <div class="plan-header__legend-item">
+        <div class="plan-header__legend-color plan-header__legend-color--reserved"></div>
+        <span>رزرو شده</span>
+      </div>
+      <div class="plan-header__legend-item">
+        <div class="plan-header__legend-color plan-header__legend-color--selected"></div>
+        <span>انتخاب شده</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Map info -->
+  <div class="plan-header__map-info" *ngIf="seatMap">
+    <span>تعداد صندلی‌ها: {{ seatMap.rows * seatMap.columns }}</span>
+    <span *ngIf="getSelectedSeatCount() > 0">انتخاب شده: {{ getSelectedSeatCount() }}</span>
+  </div>
 
   <!-- Loading state -->
   <div *ngIf="loading" class="plan__loading">
@@ -27,13 +58,6 @@
       [disabled]="purchasing"
       (seatClick)="onSeatClick($event)"
     ></app-seat-table>
-
-    <!-- Purchase messages -->
-    <app-purchase-messages
-      [successMessage]="purchaseSuccess"
-      [errorMessage]="purchaseError"
-      (dismissMessages)="onDismissPurchaseMessages()"
-    ></app-purchase-messages>
 
     <!-- Selection summary and purchase -->
     <app-selection-summary

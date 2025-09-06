@@ -8,8 +8,6 @@ import { AppComponent } from './app.component';
 import { PlanComponent } from './plan/plan.component';
 import { SeatTableComponent } from './plan/seat-table/seat-table.component';
 import { SelectionSummaryComponent } from './plan/selection-summary/selection-summary.component';
-import { PurchaseMessagesComponent } from './plan/purchase-messages/purchase-messages.component';
-import { PlanHeaderComponent } from './plan/plan-header/plan-header.component';
 import { SalonsListComponent } from './salons-list/salons-list.component';
 import { ButtonComponent } from './shared/button/button.component';
 
@@ -19,8 +17,6 @@ import { ButtonComponent } from './shared/button/button.component';
     PlanComponent,
     SeatTableComponent,
     SelectionSummaryComponent,
-    PurchaseMessagesComponent,
-    PlanHeaderComponent,
     SalonsListComponent,
     ButtonComponent,
   ],

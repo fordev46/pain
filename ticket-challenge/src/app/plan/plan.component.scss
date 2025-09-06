@@ -313,3 +313,160 @@
     animation: none;
   }
 }
+
+/* Header with navigation and stadium info */
+.plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  position: sticky;
+  top: 0;
+  background: var(--color-background-primary);
+  z-index: 100;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-border-primary);
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0;
+    gap: 0.5rem;
+    flex-direction: column;
+    align-items: stretch;
+
+    /* Stack items vertically on mobile */
+    .plan-header__back-btn {
+      align-self: flex-start;
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-header__stadium-info {
+      order: 2;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-header__legend {
+      order: 3;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0;
+  }
+}
+
+.plan-header__stadium-info {
+  flex: 1;
+  text-align: center;
+
+  .plan-header__stadium-name {
+    font-size: 1.2rem;
+    font-weight: var(--font-weight-bold);
+    margin: 0 0 0.25rem 0;
+  }
+
+  .plan-header__stadium-id {
+    font-size: 0.8rem;
+    color: var(--color-text-lighter);
+    font-family: var(--font-family-monospace);
+    font-weight: var(--font-weight-regular);
+  }
+}
+
+.plan-header__legend {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  .plan-header__legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+
+    .plan-header__legend-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
+      border: 1px solid var(--color-border-primary);
+
+      &--available {
+        background: var(--color-success); /* Green for available */
+      }
+
+      &--reserved {
+        background: var(--color-secondary); /* Gray for reserved */
+      }
+
+      &--selected {
+        background: var(--color-purple); /* Purple for selected/taken */
+      }
+    }
+  }
+}
+
+.plan-header__map-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--color-text-lighter);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Enhanced responsive breakpoints */
+
+/* Small tablets and large phones in landscape */
+@media (min-width: 576px) {
+  .plan-header {
+    flex-direction: row;
+    align-items: center;
+
+    .plan-header__stadium-info {
+      order: 0;
+      margin-bottom: 0;
+    }
+
+    .plan-header__legend {
+      order: 0;
+    }
+  }
+}
+
+/* Tablets */
+@media (min-width: 768px) {
+  .plan-header {
+    margin-bottom: 2rem;
+    flex-direction: row;
+
+    .plan-header__back-btn {
+      margin-bottom: 0;
+    }
+  }
+
+  .plan-header__stadium-info .plan-header__stadium-name {
+    font-size: 1.5rem;
+  }
+
+  .plan-header__legend {
+    gap: 1.5rem;
+
+    .plan-header__legend-item {
+      font-size: 0.9rem;
+
+      .plan-header__legend-color {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}

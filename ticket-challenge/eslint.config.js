@@ -35,6 +35,7 @@ module.exports = [
         setInterval: 'readonly',
         clearInterval: 'readonly',
         document: 'readonly',
+        alert: 'readonly',
       },
     },
     plugins: {
