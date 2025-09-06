@@ -1,5 +1,5 @@
 <button
-  [type]="type"
+  type="button"
   [class]="getButtonClasses()"
   [disabled]="disabled || loading"
   [attr.aria-label]="ariaLabel || text"
@@ -9,23 +9,9 @@
   <!-- Loading spinner -->
   <span *ngIf="loading" class="app-button__spinner"></span>
 
-  <!-- Icon (left side) -->
-  <span *ngIf="icon && !iconRight && !loading" class="app-button__icon">
-    <svg class="app-button__icon-svg">
-      <use [attr.href]="'assets/icons.svg#' + icon"></use>
-    </svg>
-  </span>
-
   <!-- Button text or content -->
   <span class="app-button__text">
     <ng-content *ngIf="!text"></ng-content>
     <span *ngIf="text">{{ loading ? loadingText : text }}</span>
-  </span>
-
-  <!-- Icon (right side) -->
-  <span *ngIf="icon && iconRight && !loading" class="app-button__icon">
-    <svg class="app-button__icon-svg">
-      <use [attr.href]="'assets/icons.svg#' + icon"></use>
-    </svg>
   </span>
 </button>
