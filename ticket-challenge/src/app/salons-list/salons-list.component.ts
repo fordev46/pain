@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MapService } from '../services/map.service';
-import { AppSalon } from '../models';
+import { AppMapIdList, AppSalon } from '../models';
 
-/**
- * Component responsible for displaying the list of available Iranian salons
- * Fetches salon data from the API and allows users to select a salon
- */
 @Component({
   selector: 'app-salons-list',
   templateUrl: './salons-list.component.html',
@@ -26,18 +22,14 @@ export class SalonsListComponent implements OnInit {
     this.loadSalons();
   }
 
-  /**
-   * Loads the list of available Iranian salons from the API
-   * Converts map IDs to salon objects with proper Iranian names for display
-   */
   private loadSalons(): void {
     this.loading = true;
     this.error = null;
 
     this.mapService.getMapIds().subscribe({
-      next: (mapIds: string[]) => {
-        // Convert map IDs to salon objects with Iranian salon names
+      next: (mapIds: AppMapIdList) => {
         this.salons = mapIds.map((id, index) => ({
+          // Add more properties just for better display
           id: id,
           name: this.mapService.getStadiumNameBecauseIsWasNotInTheApi(id),
           mapId: id,
@@ -53,27 +45,14 @@ export class SalonsListComponent implements OnInit {
     });
   }
 
-  /**
-   * Navigates to the plan view for the selected salon
-   * @param salon The selected salon
-   */
   onSalonSelect(salon: AppSalon): void {
     this.router.navigate(['/plan', salon.mapId]);
   }
 
-  /**
-   * Retries loading salons in case of error
-   */
   retry(): void {
     this.loadSalons();
   }
 
-  /**
-   * TrackBy function for ngFor optimization
-   * @param index Index of the item
-   * @param salon Salon object
-   * @returns Unique identifier for tracking
-   */
   trackBySalon(index: number, salon: AppSalon): string {
     return salon.id;
   }

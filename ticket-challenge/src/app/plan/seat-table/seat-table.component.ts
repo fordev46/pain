@@ -1,48 +1,39 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ChangeDetectionStrategy,
-  OnChanges,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { AppSeatMap, AppSeatStatus, AppCoordinates } from '../../models';
 
-/**
- * High-performance seat table component with virtual scrolling
- * Handles seat visualization and click events efficiently for large maps
- */
 @Component({
   selector: 'app-seat-table',
   templateUrl: './seat-table.component.html',
   styleUrls: ['./seat-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SeatTableComponent implements OnChanges {
+export class SeatTableComponent {
   @Input() seatMap: AppSeatMap | null = null;
   @Input() selectedSeats: Set<string> = new Set();
   @Input() disabled = false;
 
   @Output() seatClick = new EventEmitter<AppCoordinates>();
 
-  // Expose SeatStatus enum to template
   readonly SeatStatus = AppSeatStatus;
 
-  ngOnChanges(changes: SimpleChanges): void {
-    // Handle any input changes if needed for optimization
-    if (changes['seatMap'] && this.seatMap) {
-      console.log(
-        `Seat table updated: ${this.seatMap.rows}x${this.seatMap.columns} (${
-          this.seatMap.rows * this.seatMap.columns
-        } seats)`
-      );
-    }
-  }
-
   /**
-   * Handles seat table click events using event delegation
-   * @param event The click event from the seat table container
+   * Handles seat table click events using event delegation pattern.
+   *
+   * This function uses event delegation to efficiently handle clicks on any seat within
+   * the seat table container. Instead of adding individual click listeners to each seat,
+   * a single listener is attached to the parent container, which then determines which
+   * specific seat was clicked based on the event target.
+   *
+   * **How it works:**
+   * 1. Checks if the component is disabled - if so, ignores the click
+   * 2. Gets the actual HTML element that was clicked (event.target)
+   * 3. Traverses up the DOM tree to find the closest seat container element
+   * 4. Extracts row and column indices from the seat container's data attributes
+   * 5. Delegates to the onSeatClick method with the determined coordinates
+   *
+   * @param event - The click event from anywhere within the seat table container
+   * @returns void
+   *
    */
   onSeatTableClick(event: Event): void {
     if (this.disabled) return;
@@ -59,7 +50,7 @@ export class SeatTableComponent implements OnChanges {
   }
 
   /**
-   * Handles seat table keydown events using event delegation
+   * Handles seat table keydown events using event delegation as described in onSeatTableClick
    * @param event The keydown event from the seat table container
    */
   onSeatTableKeydown(event: KeyboardEvent): void {
@@ -134,12 +125,6 @@ export class SeatTableComponent implements OnChanges {
     return this.selectedSeats.has(seatKey) ? AppSeatStatus.SELECTED : AppSeatStatus.AVAILABLE;
   }
 
-  /**
-   * Gets CSS class for seat styling based on its status
-   * @param rowIndex Row position
-   * @param colIndex Column position
-   * @returns CSS class name
-   */
   getSeatClass(rowIndex: number, colIndex: number): string {
     const status = this.getSeatStatus(rowIndex, colIndex);
 
@@ -156,29 +141,41 @@ export class SeatTableComponent implements OnChanges {
   }
 
   /**
-   * Gets the height of each row for virtual scrolling
-   * This should match the CSS height of .seat-table__seat-row
-   * @returns Height in pixels
+   * Gets the height of each row for virtual scrolling with hard-coded values.
+   *
+   * **⚠️ HARD-CODED VALUES WARNING:**
+   * This function uses hard-coded height values which is not optimal practice.
+   * However, this approach was chosen after evaluating three alternatives:
+   *
+   * 1. **Calculate dynamically**: Too costly for performance (requires DOM measurements)
+   * 2. **Avoid CSS properties**: Remove margins/borders/border-spacing - limits design flexibility
+   * 3. **Hard-code values**: Current approach - requires manual maintenance but performant
+   *
+   * **Why hard-coding was chosen:**
+   * - Virtual scrolling requires precise, consistent row heights for performance
+   * - Tables with margins, borders, and border-spacing create complex box-sizing calculations
+   * - CSS `height` property doesn't account for border-spacing and other table-specific styling
+   * - Dynamic calculation would impact scroll performance due to frequent DOM queries
+   
+   * @warning This is a hard-coded value and must be manually updated when CSS changes
+   * @warning Breakpoints must match CSS media queries exactly
+
+   * @returns Height in pixels for each table row at current viewport size
+   *
+   * @todo Consider using CSS custom properties or a design token system
+   * @todo Investigate CSS `container-query` for more maintainable responsive heights
    */
   getRowHeight(): number {
-    // Height matches CSS min-height + border-spacing + any margins
-    // Values from CSS: Mobile: 18px, Tablet: 26px, Desktop: 32px
     if (window.innerWidth <= 480) {
-      return 28; // Mobile: 18px min-height + 2px border-spacing
+      return 28;
     } else if (window.innerWidth <= 768) {
-      return 24; // Tablet: 26px min-height + 2px border-spacing
+      return 24;
     } else if (window.innerWidth > 1024) {
-      return 44; // Desktop: 32px min-height + 4px border-spacing
+      return 44;
     }
-    return 44; // Default: ~24px with border-spacing
+    return 44;
   }
 
-  /**
-   * TrackBy function for ngFor optimization in seat rendering
-   * @param index Row index
-   * @param row Row data
-   * @returns Unique identifier for the row
-   */
   trackByRow(index: number, _row: number[]): number {
     return index;
   }

@@ -34,20 +34,6 @@ export class MapService {
     private ticketAdapter: TicketAdapterService
   ) {}
 
-  getStadiumNameBecauseIsWasNotInTheApi(mapId: string): string {
-    // Mock stadium names for different map IDs
-    const stadiumNames: Record<string, string> = {
-      m213: 'Azadi Stadium',
-      m654: 'Takhti Stadium',
-      m63: 'Naghsh-e Jahan Stadium',
-      m6888: 'Foolad Arena',
-      m1001: 'Yadegar-e Emam Stadium',
-      m2002: 'Shahid Dastgerdi Stadium',
-    };
-
-    return stadiumNames[mapId] || `Stadium ${mapId}`;
-  }
-
   /**
    * Fetches all available stadium map identifiers.
    *
@@ -195,5 +181,18 @@ export class MapService {
     }
 
     return seatMap;
+  }
+  getStadiumNameBecauseIsWasNotInTheApi(mapId: string): string {
+    // Mock stadium names for different map IDs
+    const stadiumNames: Record<string, string> = {
+      m213: 'Azadi Stadium',
+      m654: 'Takhti Stadium',
+      m63: 'Naghsh-e Jahan Stadium',
+      m6888: 'Foolad Arena',
+      m1001: 'Yadegar-e Emam Stadium',
+      m2002: 'Shahid Dastgerdi Stadium',
+    };
+
+    return stadiumNames[mapId] || `Stadium ${mapId}`;
   }
 }

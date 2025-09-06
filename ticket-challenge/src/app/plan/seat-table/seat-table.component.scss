@@ -1,6 +1,5 @@
-/* Seat table component styles - extracted from plan component */
 .seat-table__wrapper {
-  padding-top: 4rem;
+  padding-top: 1.5rem;
   width: 100%;
   background-image: url('../../../assets/icon/screen.svg');
   background-size: contain;
@@ -9,46 +8,27 @@
   position: relative;
 }
 
-/* Seat table container */
 .seat-table__container {
   width: 100%;
-  height: 70vh;
-  border: 1px solid var(--color-border-primary);
-  border-radius: 8px;
-  padding: 1rem;
+  height: 60vh;
+  padding: 0.5rem;
   position: relative;
   flex: 1;
-
-  /* Mobile optimizations */
-  @media (max-width: 768px) {
-    height: 65vh;
-    padding: 0.75rem;
-    border-radius: 6px;
-
-    /* Improve touch scrolling */
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-x pan-y;
-  }
-
-  @media (max-width: 480px) {
-    height: 60vh;
-    padding: 0.5rem;
-    border-radius: 4px;
-  }
+  border-radius: 4px;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
 }
 
-/* Virtual scroll viewport */
 .seat-table__virtual-viewport {
   width: 100%;
-  height: calc(70vh - 2rem); /* Account for padding */
-  min-height: 400px;
+  height: calc(60vh - 1rem);
+  min-height: 300px;
 
   &::-webkit-scrollbar {
     display: none;
   }
 }
 
-/* Seat table rendering - updated for virtual scrolling */
 .seat-table__table {
   width: 100%;
   min-width: fit-content;
@@ -57,12 +37,15 @@
 }
 
 .seat-table__row {
+  max-height: 44px;
+  height: 44px;
+
   .seat-table__row-label {
     background-color: var(--color-background-primary);
-    min-width: 30px;
-    width: 30px;
+    min-width: 15px;
+    width: 15px;
     text-align: center;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     color: var(--color-text-light);
     font-weight: var(--font-weight-demi-bold);
     vertical-align: middle;
@@ -73,23 +56,18 @@
       position: sticky;
       right: 0;
     }
+
     &.label--freeze-left {
       position: sticky;
       left: 0;
     }
-
-    @media (max-width: 480px) {
-      width: 15px;
-      min-width: 15px;
-    }
   }
 }
 
-/* Seat styling with SVG sprite approach */
 .seat-table__seat-container {
-  width: 20px;
-  height: 20px;
-  margin: 1px;
+  width: 48px;
+  height: 48px;
+  margin: 2px;
   cursor: pointer;
   transition: all 0.2s ease;
   align-items: center;
@@ -97,8 +75,10 @@
   position: relative;
   user-select: none;
   padding: 8px;
-
-  /* Touch-friendly optimizations */
+  border-radius: 5px;
+  font-size: 0.8rem;
+  min-width: 48px;
+  min-height: 48px;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 
@@ -109,39 +89,15 @@
     transition: fill 0.2s ease;
   }
 
-  @media (max-width: 1024px) {
-    padding: 4px;
-  }
-
-  /* Mobile-specific seat sizing */
-  @media (max-width: 768px) {
-    width: 24px;
-    height: 24px;
-    margin: 1.5px;
-    border-radius: 4px;
-    font-size: 0.7rem;
-    padding: 0px;
-
-    /* Larger touch targets for easier interaction */
-    min-width: 24px;
-    min-height: 24px;
-  }
-
-  @media (max-width: 480px) {
-    width: 28px;
-    height: 28px;
-    margin: 2px;
-    border-radius: 5px;
-    font-size: 0.8rem;
-
-    /* Even larger touch targets for small screens */
-    min-width: 28px;
-    min-height: 28px;
+  &:focus {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 1px;
+    z-index: 15;
   }
 
   &--available {
     .seat-table__seat-icon {
-      fill: var(--color-success); /* Green for available */
+      fill: var(--color-success);
     }
 
     &:hover {
@@ -150,7 +106,7 @@
       filter: drop-shadow(0 2px 8px var(--color-shadow-success));
 
       .seat-table__seat-icon {
-        fill: var(--color-success-light); /* Lighter green on hover */
+        fill: var(--color-success-light);
       }
     }
 
@@ -164,7 +120,7 @@
     opacity: 0.7;
 
     .seat-table__seat-icon {
-      fill: var(--color-secondary); /* Gray for selected/taken */
+      fill: var(--color-secondary);
     }
 
     &:hover {
@@ -179,49 +135,49 @@
     filter: drop-shadow(0 2px 8px var(--color-shadow-selected));
 
     .seat-table__seat-icon {
-      fill: var(--color-purple); /* Purple for reserved */
+      fill: var(--color-purple);
     }
 
     &:hover {
       .seat-table__seat-icon {
-        fill: var(--color-purple); /* Lighter gray on hover */
+        fill: var(--color-purple);
       }
     }
   }
-
-  &:focus {
-    outline: 2px solid var(--color-focus);
-    outline-offset: 1px;
-    z-index: 15;
-  }
-
-  .seat-table__seat-number {
-    color: var(--color-text-white);
-    font-size: 0.6rem;
-    font-weight: var(--font-weight-bold);
-    text-shadow: 1px 1px 2px var(--color-shadow-text);
-    pointer-events: none;
-    position: absolute;
-    z-index: 1;
-  }
 }
 
-/* Enhanced responsive breakpoints */
+@media (min-width: 481px) {
+  .seat-table__wrapper {
+    padding-top: 2.5rem;
+  }
 
-/* Small tablets and large phones in landscape */
-@media (min-width: 576px) {
   .seat-table__container {
-    height: 68vh;
+    height: 65vh;
+    padding: 0.75rem;
+    border-radius: 6px;
   }
 
   .seat-table__virtual-viewport {
-    height: calc(68vh - 1.5rem);
-    min-height: 300px;
+    height: calc(65vh - 1.5rem);
+    min-height: 350px;
+  }
+
+  .seat-table__seat-container {
+    width: 36px;
+    height: 36px;
+    margin: 1.5px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    min-width: 36px;
+    min-height: 36px;
   }
 }
 
-/* Tablets */
 @media (min-width: 768px) {
+  .seat-table__wrapper {
+    padding-top: 3rem;
+  }
+
   .seat-table__container {
     height: 70vh;
     padding: 1rem;
@@ -233,10 +189,12 @@
   }
 
   .seat-table__seat-container {
-    width: 22px;
-    height: 22px;
+    width: 32px;
+    height: 32px;
     margin: 1.5px;
     font-size: 0.7rem;
+    min-width: 32px;
+    min-height: 32px;
   }
 
   .seat-table__row {
@@ -246,17 +204,25 @@
 
     .seat-table__row-label {
       min-width: 35px;
+      width: 35px;
       font-size: 0.8rem;
     }
   }
 }
 
 @media (min-width: 1024px) {
+  .seat-table__wrapper {
+    padding-top: 4rem;
+  }
+
   .seat-table__seat-container {
     width: 28px;
     height: 28px;
     margin: 2px;
     font-size: 0.8rem;
+    padding: 4px;
+    min-width: 28px;
+    min-height: 28px;
   }
 
   .seat-table__row {
@@ -266,28 +232,8 @@
 
     .seat-table__row-label {
       min-width: 40px;
+      width: 40px;
       font-size: 0.9rem;
-    }
-  }
-}
-
-/* Large maps optimization */
-@media (min-width: 1440px) {
-  .seat-table__seat-container {
-    width: 16px;
-    height: 16px;
-    margin: 1px;
-    font-size: 0.5rem;
-  }
-
-  .seat-table__row {
-    gap: 1px;
-    margin-bottom: 1px;
-    min-height: 18px;
-
-    .seat-table__row-label {
-      min-width: 25px;
-      font-size: 0.7rem;
     }
   }
 }

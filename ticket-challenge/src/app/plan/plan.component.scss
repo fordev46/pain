@@ -1,65 +1,25 @@
-/* Mobile-first responsive design for seat map visualization */
 .plan {
   width: 100%;
   min-height: 100vh;
   background: var(--color-background-primary);
   color: var(--color-text-white);
-  padding: 0.75rem;
+  padding: 0.25rem;
   font-family: var(--font-family-primary);
   direction: rtl;
   overflow-x: hidden;
   position: relative;
-
-  /* Mobile-specific optimizations */
-  @media (max-width: 768px) {
-    padding: 0.5rem;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-
-    /* Prevent zoom on double tap */
-    touch-action: manipulation;
-
-    /* Improve scrolling on iOS */
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Very small screens */
-  @media (max-width: 480px) {
-    padding: 0.25rem;
-  }
-}
-
-/* Main plan layout styles */
-
-/* Loading and error states */
-.plan__loading {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 300px;
-
-  .plan__spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid var(--color-border-primary);
-    border-top: 4px solid var(--color-success);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1rem;
-  }
+  touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.plan__seat-map {
+  width: 100%;
+  max-width: 100%;
 }
 
+.plan__loading,
 .plan__error,
 .plan__empty-state {
   display: flex;
@@ -75,290 +35,51 @@
   }
 }
 
-.plan__retry-btn {
-  background: var(--color-primary);
-  color: var(--color-text-white);
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-  min-height: 44px;
+.plan__spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--color-border-primary);
+  border-top: 4px solid var(--color-success);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
 
-  &:hover {
-    background: var(--color-primary-dark);
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 
-/* Seat map wrapper */
-.plan__seat-map {
-  width: 100%;
-  max-width: 100%;
-}
-
-/* Enhanced responsive breakpoints with mobile-first improvements */
-
-/* Small tablets and large phones in landscape */
-@media (min-width: 576px) {
-  .plan {
-    padding: 1rem;
-  }
-
-  .plan__header {
-    flex-direction: row;
-    align-items: center;
-
-    .plan__stadium-info {
-      order: 0;
-      margin-bottom: 0;
-    }
-
-    .plan__legend {
-      order: 0;
-    }
-  }
-
-  .plan__seat-table-container {
-    height: 68vh;
-  }
-
-  .plan__virtual-viewport {
-    height: calc(68vh - 1.5rem);
-    min-height: 300px;
-  }
-}
-
-/* Tablets */
-@media (min-width: 768px) {
-  .plan {
-    padding: 2rem;
-  }
-
-  .plan__header {
-    margin-bottom: 2rem;
-    flex-direction: row;
-
-    .plan__back-btn {
-      margin-bottom: 0;
-    }
-  }
-
-  .plan__stadium-info .plan__stadium-name {
-    font-size: 1.5rem;
-  }
-
-  .plan__seat-table-container {
-    height: 70vh;
-    padding: 1rem;
-  }
-
-  .plan__virtual-viewport {
-    height: calc(70vh - 2rem);
-    min-height: 400px;
-  }
-
-  .plan__seat-container {
-    width: 22px;
-    height: 22px;
-    margin: 1.5px;
-    font-size: 0.7rem;
-  }
-
-  .plan__seat-row {
-    gap: 3px;
-    margin-bottom: 3px;
-    min-height: 26px;
-
-    .plan__row-label {
-      min-width: 35px;
-      font-size: 0.8rem;
-    }
-  }
-
-  .plan__legend {
-    gap: 1.5rem;
-
-    .plan__legend-item {
-      font-size: 0.9rem;
-
-      .plan__legend-color {
-        width: 18px;
-        height: 18px;
-      }
-    }
-  }
-}
-
-@media (min-width: 1024px) {
-  .plan {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 3rem 2rem;
-  }
-
-  .plan__seat-container {
-    width: 28px;
-    height: 28px;
-    margin: 2px;
-    font-size: 0.8rem;
-  }
-
-  .plan__seat-row {
-    gap: 4px;
-    margin-bottom: 4px;
-    min-height: 32px;
-
-    .plan__row-label {
-      min-width: 40px;
-      font-size: 0.9rem;
-    }
-  }
-
-  .stage {
-    max-width: 60%;
-  }
-}
-
-/* Large maps optimization */
-@media (min-width: 1440px) {
-  .plan__seat-container {
-    width: 16px;
-    height: 16px;
-    margin: 1px;
-    font-size: 0.5rem;
-
-    .plan__seat-number {
-      display: none; /* Hide numbers on large maps for performance */
-    }
-  }
-
-  .plan__seat-row {
-    gap: 1px;
-    margin-bottom: 1px;
-    min-height: 18px;
-
-    .plan__row-label {
-      min-width: 25px;
-      font-size: 0.7rem;
-    }
-  }
-}
-
-/* Performance optimizations for very large maps */
-@supports (contain: layout style paint) {
-  .plan__seat-table {
-    contain: layout style paint;
-  }
-
-  .plan__seat-row {
-    contain: layout style;
-  }
-
-  .plan__seat-container {
-    contain: layout style paint;
-  }
-}
-
-/* High contrast mode */
-@media (prefers-contrast: high) {
-  .plan__seat-container {
-    &--available {
-      .plan__seat-icon {
-        fill: var(--color-high-contrast-green); /* Bright green for high contrast available */
-        stroke: var(--color-text-black);
-        stroke-width: 8;
-      }
-    }
-
-    &--reserved {
-      .plan__seat-icon {
-        fill: var(
-          --color-high-contrast-magenta
-        ); /* Bright magenta/purple for high contrast reserved */
-        stroke: var(--color-text-black);
-        stroke-width: 8;
-      }
-    }
-
-    &--selected {
-      .plan__seat-icon {
-        fill: var(--color-high-contrast-gray); /* Gray for high contrast selected/taken */
-        stroke: var(--color-text-black);
-        stroke-width: 8;
-      }
-
-      .plan__seat-number {
-        color: var(--color-text-black);
-      }
-    }
-  }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .plan__seat-container {
-    transition: none;
-
-    .plan__seat-icon {
-      transition: none;
-    }
-
-    &:hover,
-    &--selected {
-      transform: none;
-      filter: none;
-    }
-  }
-
-  .plan__spinner {
-    animation: none;
-  }
-}
-
-/* Header with navigation and stadium info */
 .plan-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.5rem;
   position: sticky;
   top: 0;
   background: var(--color-background-primary);
   z-index: 100;
-  padding: 0.75rem 0;
+  padding: 0.25rem 0;
   border-bottom: 1px solid var(--color-border-primary);
+  flex-direction: column;
+  align-items: stretch;
 
-  /* Mobile optimizations */
-  @media (max-width: 768px) {
-    margin-bottom: 0.75rem;
-    padding: 0.5rem 0;
-    gap: 0.5rem;
-    flex-direction: column;
-    align-items: stretch;
-
-    /* Stack items vertically on mobile */
-    .plan-header__back-btn {
-      align-self: flex-start;
-      margin-bottom: 0.5rem;
-    }
-
-    .plan-header__stadium-info {
-      order: 2;
-      text-align: center;
-      margin-bottom: 0.5rem;
-    }
-
-    .plan-header__legend {
-      order: 3;
-      justify-content: center;
-      gap: 0.5rem;
-    }
+  .plan-header__stadium-info {
+    order: 2;
+    text-align: center;
+    margin-bottom: 0.5rem;
   }
 
-  @media (max-width: 480px) {
-    margin-bottom: 0.5rem;
-    padding: 0.25rem 0;
+  .plan-header__legend {
+    order: 3;
+    justify-content: center;
+    gap: 0.5rem;
   }
 }
 
@@ -398,15 +119,15 @@
       border: 1px solid var(--color-border-primary);
 
       &--available {
-        background: var(--color-success); /* Green for available */
+        background: var(--color-success);
       }
 
       &--reserved {
-        background: var(--color-secondary); /* Gray for reserved */
+        background: var(--color-secondary);
       }
 
       &--selected {
-        background: var(--color-purple); /* Purple for selected/taken */
+        background: var(--color-purple);
       }
     }
   }
@@ -423,50 +144,62 @@
   gap: 1rem;
 }
 
-/* Enhanced responsive breakpoints */
+@media (min-width: 481px) {
+  .plan {
+    padding: 0.5rem;
+  }
 
-/* Small tablets and large phones in landscape */
-@media (min-width: 576px) {
   .plan-header {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem 0;
+    gap: 0.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .plan {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: block;
+    touch-action: auto;
+    -webkit-overflow-scrolling: auto;
+  }
+
+  .plan-header {
+    margin-bottom: 2rem;
     flex-direction: row;
     align-items: center;
+    gap: 0.75rem;
 
     .plan-header__stadium-info {
       order: 0;
       margin-bottom: 0;
+
+      .plan-header__stadium-name {
+        font-size: 1.5rem;
+      }
     }
 
     .plan-header__legend {
       order: 0;
+      gap: 1.5rem;
+      justify-content: flex-end;
+
+      .plan-header__legend-item {
+        font-size: 0.9rem;
+
+        .plan-header__legend-color {
+          width: 18px;
+          height: 18px;
+        }
+      }
     }
   }
 }
 
-/* Tablets */
-@media (min-width: 768px) {
-  .plan-header {
-    margin-bottom: 2rem;
-    flex-direction: row;
-
-    .plan-header__back-btn {
-      margin-bottom: 0;
-    }
-  }
-
-  .plan-header__stadium-info .plan-header__stadium-name {
-    font-size: 1.5rem;
-  }
-
-  .plan-header__legend {
-    gap: 1.5rem;
-
-    .plan-header__legend-item {
-      font-size: 0.9rem;
-
-      .plan-header__legend-color {
-        width: 18px;
-        height: 18px;
-      }
-    }
+@media (min-width: 1024px) {
+  .plan {
+    padding: 3rem 2rem;
   }
 }

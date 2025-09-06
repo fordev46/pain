@@ -1,14 +1,6 @@
 <div class="plan">
   <!-- Header with navigation and stadium info -->
   <header class="plan-header">
-    <!-- <app-button
-      text="← بازگشت"
-      variant="primary"
-      size="medium"
-      title="بازگشت به لیست سالن‌ها"
-      (clicked)="onBackToStadiums()"
-    >
-    </app-button> -->
 
     <div class="plan-header__stadium-info" *ngIf="seatMap">
       <h1 class="plan-header__stadium-name">{{ seatMap.name || 'نقشه سالن' }}</h1>
@@ -70,13 +62,6 @@
   <!-- Empty state -->
   <div *ngIf="!loading && !error && !seatMap" class="plan__empty-state">
     <p>نقشه‌ای یافت نشد</p>
-    <app-button
-      text="بازگشت به لیست سالن‌ها"
-      variant="primary"
-      size="medium"
-      (clicked)="onBackToStadiums()"
-    >
-    </app-button>
   </div>
 
   <!-- Toast notifications -->

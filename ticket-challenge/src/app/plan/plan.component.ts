@@ -17,11 +17,6 @@ import {
   AppTicketPurchaseOutput,
 } from '../models';
 
-/**
- * Main plan component that orchestrates seat map functionality
- * Uses sub-components for better organization and maintainability
- * Manages state and coordinates interactions between child components
- */
 @Component({
   selector: 'app-plan',
   templateUrl: './plan.component.html',
@@ -41,10 +36,8 @@ export class PlanComponent implements OnInit, OnDestroy {
   // Purchase state
   purchasing = false;
 
-  // Component lifecycle
   private destroy$ = new Subject<void>();
 
-  // Expose SeatStatus enum to template
   readonly SeatStatus = AppSeatStatus;
 
   constructor(
@@ -56,7 +49,6 @@ export class PlanComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Get map ID from route parameters
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.mapId = params.get('mapId');
       if (this.mapId) {
@@ -76,7 +68,7 @@ export class PlanComponent implements OnInit, OnDestroy {
    * Loads the seat map data for the specified map ID
    * @param mapId The map identifier to load
    */
-  private loadSeatMap(mapId: string): void {
+  private loadSeatMap(mapId: AppSeatMap['id']): void {
     this.loading = true;
     this.error = null;
     this.selectedSeats.clear();
@@ -104,10 +96,6 @@ export class PlanComponent implements OnInit, OnDestroy {
       });
   }
 
-  /**
-   * Handles seat click events from the seat grid component
-   * @param coordinates The coordinates of the clicked seat
-   */
   onSeatClick(coordinates: AppCoordinates): void {
     if (!this.seatMap) return;
 
@@ -136,20 +124,9 @@ export class PlanComponent implements OnInit, OnDestroy {
       console.log(`Seat selected at coordinates:`, coordinates);
     }
 
-    // Trigger change detection since we're using OnPush strategy
     this.cdr.detectChanges();
   }
 
-  /**
-   * Navigates back to the stadium selection
-   */
-  onBackToStadiums(): void {
-    this.router.navigate(['/salons']);
-  }
-
-  /**
-   * Retries loading the seat map in case of error
-   */
   retry(): void {
     if (this.mapId) {
       this.loadSeatMap(this.mapId);
@@ -175,25 +152,15 @@ export class PlanComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Handles clear selection request from selection summary component
-   * Clears all selected seats
-   */
   onClearSelection(): void {
     this.selectedSeats.clear();
     // Create new Set reference to trigger change detection in child components
     this.selectedSeats = new Set();
     console.log('All seat selections cleared');
 
-    // Trigger change detection since we're using OnPush strategy
     this.cdr.detectChanges();
   }
 
-  /**
-   * Handles purchase request from selection summary component
-   * Purchases tickets for all selected seats
-   * Implements the POST /map/<map_id>/ticket requirement
-   */
   onPurchaseSelectedSeats(): void {
     if (!this.mapId || this.selectedSeats.size === 0 || this.purchasing) {
       return;
@@ -202,7 +169,6 @@ export class PlanComponent implements OnInit, OnDestroy {
     this.purchasing = true;
     this.cdr.detectChanges();
 
-    // Convert selected seats to coordinate array
     const selectedCoordinates = this.getSelectedCoordinates();
     const totalSeats = selectedCoordinates.length;
     let completedPurchases = 0;

@@ -8,7 +8,7 @@
 
   h3 {
     margin: 0 0 1rem 0;
-    color: var(--color-secondary); /* Gray to match selected seats */
+    color: var(--color-secondary);
     font-size: 1rem;
   }
 
@@ -19,7 +19,7 @@
     margin-bottom: 1.5rem;
 
     .selection-summary__selected-coord {
-      background: var(--color-secondary); /* Gray to match selected seats */
+      background: var(--color-secondary);
       color: var(--color-text-white);
       padding: 0.25rem 0.5rem;
       border-radius: 4px;
